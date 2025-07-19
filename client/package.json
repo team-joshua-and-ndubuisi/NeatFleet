@@ -8,13 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server db.json --port 3001",
-    "generate:feature": "tsx scaffolder/generateFeature.ts",
-    "generate:hook": "tsx scaffolder/scripts/generateHook.ts",
-    "generate:api": "tsx scaffolder/scripts/generateApi.ts",
-    "generate:slice": "tsx scaffolder/scripts/generateSlice.ts",
-    "generate:type": "tsx scaffolder/scripts/generateTypes.ts",
-    "generate:component": "tsx scaffolder/scripts/generateComponent.ts"
+    "server": "json-server db.json --port 3001"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
