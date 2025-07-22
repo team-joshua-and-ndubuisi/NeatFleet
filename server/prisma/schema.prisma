@@ -16,16 +16,17 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid()) @db.Uuid
-  first_name String   @db.VarChar(255)
-  last_name  String   @db.VarChar(255)
-  email      String   @unique @db.VarChar(255)
-  phone      String   @unique @db.VarChar(255)
-  password   String   @db.VarChar(255)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  is_active  Boolean  @default(true)
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name String    @db.VarChar(255)
+  last_name  String    @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  phone      String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  is_active  Boolean   @default(true)
   admin      Admin? // <-- Opposite relation field
+  Address    Address[] // Opposite relation field
 
   @@map("users")
 }
@@ -36,4 +37,20 @@ model Admin {
   user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("admins") // This tells Prisma the actual table name is "admins"
+}
+
+model Address {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  street    String
+  city      String
+  state     String
+  zip       String
+  latitude  Float?   @db.DoublePrecision
+  longitude Float?   @db.DoublePrecision
+  isPrimary Boolean? @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("addresses")
 }
