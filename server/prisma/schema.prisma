@@ -41,7 +41,7 @@ model Admin {
 
 model Address {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    String   @db.Uuid
+  user_id   String   @db.Uuid
   street    String
   city      String
   state     String
@@ -50,7 +50,7 @@ model Address {
   longitude Float?   @db.DoublePrecision
   isPrimary Boolean? @default(false)
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [user_id], references: [id])
 
   @@map("addresses")
 }
