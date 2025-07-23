@@ -67,4 +67,4 @@ const createUser = async ({
   }
 };
 
-export { getUserIdByEmail, createUser, deactivateUserByEmail, setUserAsAdmin };
+export { getUserIdByEmail, createUser, deactivateUserByEmail };
