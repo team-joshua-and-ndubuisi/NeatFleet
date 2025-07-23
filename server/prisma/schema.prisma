@@ -26,8 +26,10 @@ model User {
   updated_at DateTime @updatedAt
   is_active  Boolean  @default(true)
 
-  admin   Admin? // <-- Opposite relation field
-  address Address[] // Opposite relation field
+  // Opposite relation field, for type saftey
+  admin      Admin?
+  address    Address[]
+  technician Technician?
 
   @@map("users")
 }
@@ -38,6 +40,16 @@ model Admin {
   user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("admins") // This tells Prisma the actual table name is "admins"
+}
+
+model Technician {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String   @unique @db.Uuid
+  current_rating Decimal? @db.Decimal(2, 1)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("technicians")
 }
 
 model Address {
