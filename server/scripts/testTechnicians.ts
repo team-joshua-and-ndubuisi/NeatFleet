@@ -1,5 +1,5 @@
 import { createUser, getUserIdByEmail } from '../src/services/userService';
-// import { createTechnician } from '../src/services/technicianService';
+import { createTechnician } from '../src/services/technicianService';
 import prisma from '../src/config/prisma';
 
 const userCreationObj = {
@@ -16,7 +16,8 @@ async function main() {
 
   let userId = await getUserIdByEmail(userCreationObj.email);
   // //Test 1
-  // const technician = await createTechnician(userId);
+  // const technician = await createTechnician(userId!);
+  // console.log(technician);
 
   // //Test 2: check to see if a user is a technician or not
   // const userIsTechnician = await isTechnician();
