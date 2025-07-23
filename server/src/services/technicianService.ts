@@ -41,6 +41,10 @@ const getTechnicianRating = async (userId: string) => {
       select: { current_rating: true },
     });
 
+    if (!technician) {
+      throw new Error(`Technician with user_id ${userId} not found`);
+    }
+
     return technician;
   } catch (error: any) {
     throw new Error(
@@ -48,4 +52,6 @@ const getTechnicianRating = async (userId: string) => {
     );
   }
 };
-export { createTechnician, isTechnician, getTechnicianRating };
+
+const updateRating;
+export { createTechnician, isTechnician, getTechnicianRating, updateRating };
