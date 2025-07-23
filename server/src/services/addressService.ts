@@ -1,5 +1,19 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
 
+const getUserAddresses = async (userId: string) => {
+  try {
+    const addresses = await prismaClient.address.findMany({
+      where: { user_id: userId },
+    });
+
+    return addresses;
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching addresses for userId ${userId}: ${error.message}`
+    );
+  }
+};
+
 const createAddress = async ({
   userId,
   street,
@@ -35,4 +49,4 @@ const createAddress = async ({
   }
 };
 
-export { createAddress };
+export { createAddress, getUserAddresses };
