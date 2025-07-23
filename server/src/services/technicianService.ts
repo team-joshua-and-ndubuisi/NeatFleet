@@ -69,4 +69,7 @@ const updateRating = async (userId: string, newRating: number) => {
   }
 };
 
+// const getAllTechniciansInfo;
+// const getTechAvailability;
+
 export { createTechnician, isTechnician, getTechnicianRating, updateRating };

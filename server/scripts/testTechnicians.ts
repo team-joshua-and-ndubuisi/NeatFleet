@@ -7,7 +7,7 @@ import {
 } from '../src/services/technicianService';
 import prisma from '../src/config/prisma';
 
-const userCreationObj = {
+const userObjOne = {
   first_name: 'Bob',
   last_name: 'Thebuilder',
   email: 'herewego@example.com',
@@ -15,35 +15,47 @@ const userCreationObj = {
   password: 'hashed_pw_123',
 };
 
+const userObjTwo = {
+  first_name: 'Joe',
+  last_name: 'Swole',
+  email: 'buffCleaningMaid@example.com',
+  phone: '999-456-7890',
+  password: 'hashed_pw_456',
+};
+
 async function main() {
   // //Set up, create user
-  // const user = await createUser(userCreationObj);
+  // const user = await createUser(userObjOne);
 
-  let userId = await getUserIdByEmail(userCreationObj.email);
+  let userOneId = await getUserIdByEmail(userObjOne.email);
   // //Test 1
-  // const technician = await createTechnician(userId!);
+  // const technician = await createTechnician(userOneId!);
   // console.log(technician);
 
   // //Test 2: check to see if a user is a technician or not
-  // let userIsTechnician = await isTechnician(userCreationObj.email);
+  // let userIsTechnician = await isTechnician(userObjOne.email);
   // console.log(userIsTechnician === true); // true
   // userIsTechnician = await isTechnician('randemail@email.com');
   // console.log(userIsTechnician === false); // true
 
   // //Test 3
-  // let techRating = await getTechnicianRating(userId!);
+  // let techRating = await getTechnicianRating(userOneId!);
   // console.log(techRating);
 
   // //Test 4
   // const DUMMY_RATING = 4.3;
-  // await updateRating(userId!, DUMMY_RATING);
-  // techRating = await getTechnicianRating(userId!);
+  // await updateRating(userOneId!, DUMMY_RATING);
+  // techRating = await getTechnicianRating(userOneId!);
   // console.log(techRating);
 
-  // //Test 5
+  // //Test 5 (NOT DONE)
+  // // setup: create another user and set as technician and give rating
+  // let userTwo = await createUser(userObjTwo);
+  // let userTwoId = await getuserOneIdByEmail(userObjTwo.email);
+  // await createTechnician(userTwoId);
   // const allTechRatings = await getAllTechniciansWithRatings();
 
-  // //Test 6 (Need Tweaking, unsure about availabilities)
+  // //Test 6 (NOT DONE, unsure about availabilities)
   // const techAvailability = await getTechnicianAvailabilities();
 }
 
