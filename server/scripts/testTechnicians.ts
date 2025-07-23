@@ -2,6 +2,7 @@ import { createUser, getUserIdByEmail } from '../src/services/userService';
 import {
   createTechnician,
   isTechnician,
+  getTechnicianRating,
 } from '../src/services/technicianService';
 import prisma from '../src/config/prisma';
 
@@ -28,19 +29,20 @@ async function main() {
   // userIsTechnician = await isTechnician('randemail@email.com');
   // console.log(userIsTechnician === false); // true
 
-  // //Test 3
-  // const techRating = await getTechnicianRating();
+  //Test 3
+  const techRating = await getTechnicianRating(userId!);
+  console.log(techRating);
 
   // //Test 4
-  // const allTechRatings = await getAllTechniciansWithRatings();
-
-  // //Test 5 (Need Tweaking, unsure about availabilities)
-  // const techAvailability = await getTechnicianAvailabilities();
-
-  // //Test 6
   // await updateRating();
   // const techRating = await getTechnicianRating();
   // console.log(techRating);
+
+  // //Test 5
+  // const allTechRatings = await getAllTechniciansWithRatings();
+
+  // //Test 6 (Need Tweaking, unsure about availabilities)
+  // const techAvailability = await getTechnicianAvailabilities();
 }
 
 main()

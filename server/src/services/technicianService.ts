@@ -33,4 +33,19 @@ const isTechnician = async (email: string) => {
     );
   }
 };
-export { createTechnician, isTechnician };
+
+const getTechnicianRating = async (userId: string) => {
+  try {
+    const technician = await prismaClient.technician.findUnique({
+      where: { user_id: userId },
+      select: { current_rating: true },
+    });
+
+    return technician;
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching technician with id ${userId}  Message: ${error.message}`
+    );
+  }
+};
+export { createTechnician, isTechnician, getTechnicianRating };
