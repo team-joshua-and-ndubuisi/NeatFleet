@@ -50,7 +50,7 @@ model Address {
   longitude Float?   @db.DoublePrecision
   isPrimary Boolean? @default(false)
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("addresses")
 }
