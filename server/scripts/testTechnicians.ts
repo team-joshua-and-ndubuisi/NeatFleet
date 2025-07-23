@@ -3,6 +3,7 @@ import {
   createTechnician,
   isTechnician,
   getTechnicianRating,
+  updateRating,
 } from '../src/services/technicianService';
 import prisma from '../src/config/prisma';
 
@@ -29,13 +30,14 @@ async function main() {
   // userIsTechnician = await isTechnician('randemail@email.com');
   // console.log(userIsTechnician === false); // true
 
-  //Test 3
-  const techRating = await getTechnicianRating(userId!);
-  console.log(techRating);
+  // //Test 3
+  // let techRating = await getTechnicianRating(userId!);
+  // console.log(techRating);
 
   // //Test 4
-  // await updateRating();
-  // const techRating = await getTechnicianRating();
+  // const DUMMY_RATING = 4.3;
+  // await updateRating(userId!, DUMMY_RATING);
+  // techRating = await getTechnicianRating(userId!);
   // console.log(techRating);
 
   // //Test 5

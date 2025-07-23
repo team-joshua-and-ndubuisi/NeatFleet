@@ -53,5 +53,20 @@ const getTechnicianRating = async (userId: string) => {
   }
 };
 
-const updateRating;
+const updateRating = async (userId: string, newRating: number) => {
+  try {
+    const updatedTechnician = await prismaClient.technician.update({
+      where: { user_id: userId },
+      data: { current_rating: newRating },
+      select: { current_rating: true },
+    });
+
+    return updatedTechnician.current_rating;
+  } catch (error: any) {
+    throw new Error(
+      `Error updating rating for technician with user_id ${userId}: ${error.message}`
+    );
+  }
+};
+
 export { createTechnician, isTechnician, getTechnicianRating, updateRating };
