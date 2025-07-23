@@ -52,5 +52,6 @@ model Address {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@unique([user_id, street, city, state, zip]) // Enforces no duplicate addresses per user
   @@map("addresses")
 }
