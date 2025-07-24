@@ -69,7 +69,73 @@ const updateRating = async (userId: string, newRating: number) => {
   }
 };
 
+const setTechnicianAvailability = async ({
+  techId,
+  availableDate,
+  startTime,
+  endTime,
+}: {
+  techId: string;
+  availableDate: string;
+  startTime: string;
+  endTime: string;
+}) => {
+  try {
+    const availability = await prismaClient.technicianAvailability.create({
+      data: {
+        technician_id: techId,
+        available_date: availableDate,
+        start_time: startTime,
+        end_time: endTime,
+      },
+    });
+
+    return availability;
+  } catch (error: any) {
+    throw new Error(
+      `Error setting availability for technician ${techId}: ${error.message}`
+    );
+  }
+};
+
 // const getAllTechniciansInfo;
+// const getTechnicianWithAvailabilities = await prismaClient.technician.findUnique({
+//   where: { id: 'some-technician-id' },
+//   include: { availabilities: true },
+// });
+
 // const getTechAvailability;
 
-export { createTechnician, isTechnician, getTechnicianRating, updateRating };
+const getTechIdByEmail = async (email: string) => {
+  try {
+    const techId = await prismaClient.technician.findFirst({
+      where: {
+        user: {
+          email,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!techId) {
+      throw new Error(`Technician with email ${email} not found`);
+    }
+
+    return techId.id;
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching technician with email ${email}   Message: ${error.message}`
+    );
+  }
+};
+
+export {
+  createTechnician,
+  isTechnician,
+  getTechnicianRating,
+  updateRating,
+  setTechnicianAvailability,
+  getTechIdByEmail,
+};
