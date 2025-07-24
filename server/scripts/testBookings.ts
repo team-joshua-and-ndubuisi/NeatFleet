@@ -1,6 +1,9 @@
-import { createBooking } from '../src/services/bookingService';
+import {
+  createBooking,
+  getAllUserBookings,
+} from '../src/services/bookingService';
 import { createAddress } from '../src/services/addressService';
-import { createUser } from '../src/services/userService';
+import { createUser, getUserIdByEmail } from '../src/services/userService';
 import { getTechIdByEmail } from '../src/services/technicianService';
 import { ServiceStatus, PaymentStatus } from '../generated/prisma';
 
@@ -31,32 +34,42 @@ const addressCreationObj = {
 };
 
 async function main() {
-  // Setup
-  // 1. create customer user
-  let customerUser = await createUser(customerUserObj);
-  // 2. create address for that customer user
-  addressCreationObj.userId = customerUser.id;
-  let address = await createAddress(addressCreationObj);
-  // 3. get technician id by email
-  const bookingOne = {
-    userId: '',
-    serviceId: '',
-    technicianId: '',
-    serviceDate: '2025-08-25',
-    addressStreet: '123 Main St',
-    addressCity: 'Springfield',
-    addressState: 'CA',
-    addressZip: '12345',
-    serviceNotes: 'Customer requests eco-friendly products.',
-    serviceStatus: ServiceStatus.scheduled,
-    paymentStatus: PaymentStatus.paid,
-  };
-  bookingOne.userId = customerUser.id;
-  bookingOne.serviceId = '2603cc04-26b9-4094-8196-ccedee8afe1e'; //quick test
-  bookingOne.technicianId = await getTechIdByEmail(technicianUserObj.email);
-  // Test1
-  const booking = await createBooking(bookingOne);
-  console.log(booking);
+  // // Setup
+  // // 1. create customer user
+  // let customerUser = await createUser(customerUserObj);
+  // // 2. create address for that customer user
+  // addressCreationObj.userId = customerUser.id;
+  // let address = await createAddress(addressCreationObj);
+  // // 3. get technician id by email
+  // const bookingOne = {
+  //   userId: '',
+  //   serviceId: '',
+  //   technicianId: '',
+  //   serviceDate: '2025-08-25',
+  //   addressStreet: '123 Main St',
+  //   addressCity: 'Springfield',
+  //   addressState: 'CA',
+  //   addressZip: '12345',
+  //   serviceNotes: 'Customer requests eco-friendly products.',
+  //   serviceStatus: ServiceStatus.scheduled,
+  //   paymentStatus: PaymentStatus.paid,
+  // };
+  // bookingOne.userId = customerUser.id;
+  // bookingOne.serviceId = '2603cc04-26b9-4094-8196-ccedee8afe1e'; //quick test
+  // bookingOne.technicianId = await getTechIdByEmail(technicianUserObj.email);
+  // // TEST 1
+  // const booking = await createBooking(bookingOne);
+  // console.log(booking);
+  // // TEST 2
+  // let theCustomerId = await getUserIdByEmail(customerUserObj.email);
+  // let customerBookings = await getAllUserBookings(theCustomerId!);
+  // console.log(customerBookings);
+  // // TEST 3
+  // await getAllTechnicianBookings(techId);
+  // await rateBooking(bookingId);
+  // await rateComment(bookingId);
+  // await updateServiceStatus(bookingId, serviceStatus);
+  // await updatePaymentStatus(bookingId, paymentStatus);
 }
 
 main()

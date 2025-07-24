@@ -44,4 +44,20 @@ const createBooking = async (data: CreateBookingInput) => {
   }
 };
 
-export { createBooking };
+const getAllUserBookings = async (userId: string) => {
+  try {
+    const bookings = await prismaClient.booking.findMany({
+      where: {
+        user_id: userId,
+      },
+    });
+
+    return bookings;
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching bookings for user ${userId}: ${error.message}`
+    );
+  }
+};
+
+export { createBooking, getAllUserBookings };
