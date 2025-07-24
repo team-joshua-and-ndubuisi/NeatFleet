@@ -60,4 +60,20 @@ const getAllUserBookings = async (userId: string) => {
   }
 };
 
-export { createBooking, getAllUserBookings };
+const getAllTechnicianBookings = async (technicianId: string) => {
+  try {
+    const bookings = await prismaClient.booking.findMany({
+      where: {
+        technician_id: technicianId,
+      },
+    });
+
+    return bookings;
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching bookings for technician ${technicianId}: ${error.message}`
+    );
+  }
+};
+
+export { createBooking, getAllUserBookings, getAllTechnicianBookings };

@@ -1,6 +1,7 @@
 import {
   createBooking,
   getAllUserBookings,
+  getAllTechnicianBookings,
 } from '../src/services/bookingService';
 import { createAddress } from '../src/services/addressService';
 import { createUser, getUserIdByEmail } from '../src/services/userService';
@@ -65,7 +66,10 @@ async function main() {
   // let customerBookings = await getAllUserBookings(theCustomerId!);
   // console.log(customerBookings);
   // // TEST 3
-  // await getAllTechnicianBookings(techId);
+  // // set up
+  // let techId = await getTechIdByEmail(technicianUserObj.email);
+  // let techBookings = await getAllTechnicianBookings(techId!);
+  // console.log(techBookings);
   // await rateBooking(bookingId);
   // await rateComment(bookingId);
   // await updateServiceStatus(bookingId, serviceStatus);
