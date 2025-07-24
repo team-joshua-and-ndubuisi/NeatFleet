@@ -129,7 +129,8 @@ model Booking {
   user_id        String        @db.Uuid
   service_id     String        @db.Uuid
   technician_id  String        @db.Uuid
-  service_date   DateTime
+  service_date   String // Store as 'YYYY-MM-DD'
+  service_time   String? // Store as 'HH:MM:SS'
   address_street String
   address_city   String
   address_state  String
