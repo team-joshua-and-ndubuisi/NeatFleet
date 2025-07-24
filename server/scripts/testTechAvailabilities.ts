@@ -5,6 +5,7 @@ import {
   getTechnicianRating,
   updateRating,
   setTechnicianAvailability,
+  getTechAvailabilities,
   getTechIdByEmail,
 } from '../src/services/technicianService';
 import prisma from '../src/config/prisma';
@@ -34,9 +35,13 @@ async function main() {
     startTime: '09:00:00',
     endTime: '17:00:00',
   };
-  //Test 1
-  let availability = await setTechnicianAvailability(availabilityObj);
-  console.log(availability);
+  // //Test 1
+  // let setUpavailability = await setTechnicianAvailability(availabilityObj);
+  // console.log(setUpavailability);
+
+  // //Test 2
+  // let availability = await getTechAvailabilities(techId!);
+  // console.log(availability);
 }
 
 main()

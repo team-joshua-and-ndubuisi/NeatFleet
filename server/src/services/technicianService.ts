@@ -104,7 +104,28 @@ const setTechnicianAvailability = async ({
 //   include: { availabilities: true },
 // });
 
-// const getTechAvailability;
+//This returns the entire row, until we figure what we exactly need
+const getTechAvailabilities = async (techId: string) => {
+  try {
+    const availabilities = await prismaClient.technicianAvailability.findMany({
+      where: {
+        technician_id: techId,
+      },
+    });
+
+    if (!availabilities || availabilities.length === 0) {
+      throw new Error(
+        `No availabilities found for technician with ID ${techId}`
+      );
+    }
+
+    return availabilities;
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching availabilities for technician with ID ${techId}: ${error.message}`
+    );
+  }
+};
 
 const getTechIdByEmail = async (email: string) => {
   try {
@@ -138,4 +159,5 @@ export {
   updateRating,
   setTechnicianAvailability,
   getTechIdByEmail,
+  getTechAvailabilities,
 };
