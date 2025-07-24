@@ -15,6 +15,19 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum ServiceStatus {
+  scheduled
+  in_progress
+  completed
+  cancelled
+}
+
+//No unpaid, because only book when booking is paid
+enum PaymentStatus {
+  paid
+  refunded
+}
+
 model User {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   first_name String   @db.VarChar(255)
@@ -30,6 +43,7 @@ model User {
   admin      Admin?
   address    Address[]
   technician Technician?
+  Booking    Booking[]
 
   @@map("users")
 }
@@ -82,15 +96,18 @@ model Technician {
 
   availabilities TechnicianAvailability[]
   services       TechnicianService[]
+  Booking        Booking[]
 
   @@map("technicians")
 }
 
 model Service {
-  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name              String              @db.VarChar(255)
-  description       String              @db.Text
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.Text
+
   technicianService TechnicianService[]
+  Booking           Booking[]
 
   @@map("services")
 }
@@ -104,4 +121,29 @@ model TechnicianService {
 
   @@id([technician_id, service_id])
   @@map("technicians_services")
+}
+
+// Set up so that one booking can have only ONE service, ONE technician for MVP purpose
+model Booking {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String        @db.Uuid
+  service_id     String        @db.Uuid
+  technician_id  String        @db.Uuid
+  service_date   DateTime
+  address_street String
+  address_city   String
+  address_state  String
+  address_zip    String
+  service_status ServiceStatus @default(scheduled)
+  service_notes  String?
+  payment_status PaymentStatus @default(paid)
+  created_at     DateTime      @default(now())
+  rating_score   Int?
+  rating_comment String?
+
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  service    Service    @relation(fields: [service_id], references: [id], onDelete: Cascade)
+  technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
+
+  @@map("bookings")
 }
