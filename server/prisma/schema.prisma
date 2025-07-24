@@ -54,12 +54,13 @@ model Technician {
   @@map("technicians")
 }
 
+//Change date and time into string type to prevent Prisma's issue of auto converting to zulu time
 model TechnicianAvailability {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   technician_id  String   @db.Uuid
-  available_date DateTime @db.Date
-  start_time     DateTime @db.Time
-  end_time       DateTime @db.Time
+  available_date String // Store as 'YYYY-MM-DD'
+  start_time     String // Store as 'HH:MM:SS'
+  end_time       String // Store as 'HH:MM:SS'
   created_at     DateTime @default(now()) @db.Timestamp
 
   technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
