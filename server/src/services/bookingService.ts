@@ -76,4 +76,35 @@ const getAllTechnicianBookings = async (technicianId: string) => {
   }
 };
 
-export { createBooking, getAllUserBookings, getAllTechnicianBookings };
+const rateBooking = async (
+  bookingId: string,
+  ratingScore: number,
+  ratingComment?: string
+) => {
+  try {
+    const existing = await prismaClient.booking.findUnique({
+      where: { id: bookingId },
+    });
+
+    if (!existing) {
+      throw new Error(`Booking ${bookingId} does not exist`);
+    }
+
+    return await prismaClient.booking.update({
+      where: { id: bookingId },
+      data: {
+        rating_score: ratingScore,
+        rating_comment: ratingComment,
+      },
+    });
+  } catch (error: any) {
+    throw new Error(`Failed to rate booking: ${error.message}`);
+  }
+};
+
+export {
+  createBooking,
+  getAllUserBookings,
+  getAllTechnicianBookings,
+  rateBooking,
+};
