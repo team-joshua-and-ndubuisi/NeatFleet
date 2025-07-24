@@ -48,10 +48,10 @@ async function main() {
   //   await addServiceToTechnician(techId, service.id);
   // }
 
-//   // Test 4
-//   let techServices = await getTechnicianServices(techId);
-//   console.log(techServices);
-// }
+  //   // Test 4
+  //   let techServices = await getTechnicianServices(techId);
+  //   console.log(techServices);
+}
 
 main()
   .catch(err => {
