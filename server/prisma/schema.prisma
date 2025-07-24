@@ -84,3 +84,11 @@ model Address {
   @@unique([user_id, street, city, state, zip]) // Enforces no duplicate addresses per user
   @@map("addresses")
 }
+
+model Service {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.Text
+
+  @@map("services")
+}
