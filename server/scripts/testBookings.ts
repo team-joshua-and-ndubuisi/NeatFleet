@@ -76,7 +76,9 @@ async function main() {
   const RATING_COMMENT = 'Super Clean, love it';
   const RATING_SCORE = 5;
   await rateBooking(customerBooking, RATING_SCORE, RATING_COMMENT);
+  // NEED TO DO
   // await updateServiceStatus(bookingId, serviceStatus);
+  // NEED TO DO
   // await updatePaymentStatus(bookingId, paymentStatus);
 }
 
