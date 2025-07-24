@@ -37,4 +37,46 @@ const createService = async ({
   }
 };
 
-export { getAllServices, createService };
+const addServiceToTechnician = async (
+  technicianId: string,
+  serviceId: string
+) => {
+  try {
+    await prismaClient.technicianService.create({
+      data: {
+        technician_id: technicianId,
+        service_id: serviceId,
+      },
+    });
+  } catch (error: any) {
+    throw new Error(
+      `Error linking technician ${technicianId} to service ${serviceId}: ${error.message}`
+    );
+  }
+};
+
+const getTechnicianServices = async (technicianId: string) => {
+  try {
+    const services = await prismaClient.technicianService.findMany({
+      where: {
+        technician_id: technicianId,
+      },
+      include: {
+        service: true, // fetch full service object
+      },
+    });
+
+    return services.map(entry => entry.service);
+  } catch (error: any) {
+    throw new Error(
+      `Error fetching services for technician ${technicianId}: ${error.message}`
+    );
+  }
+};
+
+export {
+  getAllServices,
+  createService,
+  addServiceToTechnician,
+  getTechnicianServices,
+};
