@@ -146,5 +146,19 @@ model Booking {
   service    Service    @relation(fields: [service_id], references: [id], onDelete: Cascade)
   technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
 
+  invoice Invoice? // Optional because it might not be created yet
+
   @@map("bookings")
+}
+
+model Invoice {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  booking_id  String  @unique @db.Uuid
+  cost        Decimal @db.Decimal(10, 2)
+  tax_percent Decimal @db.Decimal(5, 2)
+  total_cost  Decimal @db.Decimal(10, 2)
+
+  booking Booking @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
 }
