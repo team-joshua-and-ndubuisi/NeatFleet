@@ -99,10 +99,6 @@ const setTechnicianAvailability = async ({
 };
 
 // const getAllTechniciansInfo;
-// const getTechnicianWithAvailabilities = await prismaClient.technician.findUnique({
-//   where: { id: 'some-technician-id' },
-//   include: { availabilities: true },
-// });
 
 //This returns the entire row, until we figure what we exactly need
 const getTechAvailabilities = async (techId: string) => {
