@@ -124,10 +124,33 @@ const updateServiceStatus = async (
   }
 };
 
+const updatePaymentStatus = async (
+  bookingId: string,
+  status: PaymentStatus
+) => {
+  try {
+    const booking = await prismaClient.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        payment_status: status,
+      },
+    });
+
+    return booking;
+  } catch (error: any) {
+    throw new Error(
+      `Error updating payment status for booking ${bookingId}: ${error.message}`
+    );
+  }
+};
+
 export {
   createBooking,
   getAllUserBookings,
   getAllTechnicianBookings,
   rateBooking,
   updateServiceStatus,
+  updatePaymentStatus,
 };

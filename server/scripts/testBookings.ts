@@ -4,6 +4,7 @@ import {
   getAllTechnicianBookings,
   rateBooking,
   updateServiceStatus,
+  updatePaymentStatus,
 } from '../src/services/bookingService';
 import { createAddress } from '../src/services/addressService';
 import { createUser, getUserIdByEmail } from '../src/services/userService';
@@ -91,8 +92,12 @@ async function main() {
   curServiceStatus = (await getAllUserBookings(theCustomerId!))[0]
     .service_status;
   console.log(curServiceStatus);
-  // NEED TO DO
-  // await updatePaymentStatus(bookingId, paymentStatus);
+
+  // TEST 6
+  await updatePaymentStatus(customerBookings[0].id, PaymentStatus.refunded);
+  let curPaymentStatus = (await getAllUserBookings(theCustomerId!))[0]
+    .payment_status;
+  console.log(curPaymentStatus);
 }
 
 main()
