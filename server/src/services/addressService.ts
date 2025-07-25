@@ -1,6 +1,7 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
+import { Address } from '../../generated/prisma';
 
-const getUserAddresses = async (userId: string) => {
+const getUserAddresses = async (userId: string): Promise<Address[]> => {
   try {
     const addresses = await prismaClient.address.findMany({
       where: { user_id: userId },
@@ -14,6 +15,16 @@ const getUserAddresses = async (userId: string) => {
   }
 };
 
+type CreateAddressInput = {
+  userId: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  latitude?: number;
+  longitude?: number;
+};
+
 const createAddress = async ({
   userId,
   street,
@@ -22,15 +33,7 @@ const createAddress = async ({
   zip,
   latitude,
   longitude,
-}: {
-  userId: string;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  latitude?: number;
-  longitude?: number;
-}) => {
+}: CreateAddressInput): Promise<Address> => {
   try {
     const address = await prismaClient.address.create({
       data: {
@@ -43,6 +46,7 @@ const createAddress = async ({
         longitude,
       },
     });
+
     return address;
   } catch (error: any) {
     throw new Error(`Error creating user: ${error.message}`);
