@@ -102,9 +102,32 @@ const rateBooking = async (
   }
 };
 
+const updateServiceStatus = async (
+  bookingId: string,
+  status: ServiceStatus
+) => {
+  try {
+    const booking = await prismaClient.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        service_status: status,
+      },
+    });
+
+    return booking;
+  } catch (error: any) {
+    throw new Error(
+      `Error updating service status for booking ${bookingId}: ${error.message}`
+    );
+  }
+};
+
 export {
   createBooking,
   getAllUserBookings,
   getAllTechnicianBookings,
   rateBooking,
+  updateServiceStatus,
 };

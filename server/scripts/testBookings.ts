@@ -3,6 +3,7 @@ import {
   getAllUserBookings,
   getAllTechnicianBookings,
   rateBooking,
+  updateServiceStatus,
 } from '../src/services/bookingService';
 import { createAddress } from '../src/services/addressService';
 import { createUser, getUserIdByEmail } from '../src/services/userService';
@@ -59,25 +60,37 @@ async function main() {
   // bookingOne.userId = customerUser.id;
   // bookingOne.serviceId = '2603cc04-26b9-4094-8196-ccedee8afe1e'; //quick test
   // bookingOne.technicianId = await getTechIdByEmail(technicianUserObj.email);
+
   // // TEST 1
   // const booking = await createBooking(bookingOne);
   // console.log(booking);
+
   // TEST 2
   let theCustomerId = await getUserIdByEmail(customerUserObj.email);
   let customerBookings = await getAllUserBookings(theCustomerId!);
   console.log(customerBookings);
+
   // // TEST 3
   // // set up
   // let techId = await getTechIdByEmail(technicianUserObj.email);
   // let techBookings = await getAllTechnicianBookings(techId!);
   // console.log(techBookings);
-  // TEST 4
-  let customerBooking = customerBookings[0].id;
-  const RATING_COMMENT = 'Super Clean, love it';
-  const RATING_SCORE = 5;
-  await rateBooking(customerBooking, RATING_SCORE, RATING_COMMENT);
-  // NEED TO DO
-  // await updateServiceStatus(bookingId, serviceStatus);
+
+  // // TEST 4
+  // let customerBooking = customerBookings[0].id;
+  // const RATING_COMMENT = 'Super Clean, love it';
+  // const RATING_SCORE = 5;
+  // await rateBooking(customerBooking, RATING_SCORE, RATING_COMMENT);
+
+  // TEST 5
+  let curServiceStatus = (await getAllUserBookings(theCustomerId!))[0]
+    .service_status;
+  console.log(curServiceStatus);
+
+  await updateServiceStatus(customerBookings[0].id, ServiceStatus.in_progress);
+  curServiceStatus = (await getAllUserBookings(theCustomerId!))[0]
+    .service_status;
+  console.log(curServiceStatus);
   // NEED TO DO
   // await updatePaymentStatus(bookingId, paymentStatus);
 }
