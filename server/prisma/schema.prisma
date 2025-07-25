@@ -151,12 +151,14 @@ model Booking {
   @@map("bookings")
 }
 
+// Can include pdf_url for cloud storage integration
 model Invoice {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  booking_id  String  @unique @db.Uuid
-  cost        Decimal @db.Decimal(10, 2)
-  tax_percent Decimal @db.Decimal(5, 2)
-  total_cost  Decimal @db.Decimal(10, 2)
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  booking_id  String   @unique @db.Uuid
+  cost        Decimal  @db.Decimal(10, 2)
+  tax_percent Decimal  @db.Decimal(5, 2)
+  total_cost  Decimal  @db.Decimal(10, 2)
+  created_at  DateTime @default(now())
 
   booking Booking @relation(fields: [booking_id], references: [id], onDelete: Cascade)
 
