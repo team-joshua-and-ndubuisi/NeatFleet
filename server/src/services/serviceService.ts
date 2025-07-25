@@ -1,6 +1,7 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
+import { Service } from '../../generated/prisma';
 
-const getAllServices = async () => {
+const getAllServices = async (): Promise<Service[]> => {
   try {
     const services = await prismaClient.service.findMany();
 
@@ -20,7 +21,7 @@ const createService = async ({
 }: {
   name: string;
   description: string;
-}) => {
+}): Promise<Service> => {
   try {
     const service = await prismaClient.service.create({
       data: {
@@ -40,7 +41,7 @@ const createService = async ({
 const addServiceToTechnician = async (
   technicianId: string,
   serviceId: string
-) => {
+): Promise<void> => {
   try {
     await prismaClient.technicianService.create({
       data: {
@@ -55,7 +56,9 @@ const addServiceToTechnician = async (
   }
 };
 
-const getTechnicianServices = async (technicianId: string) => {
+const getTechnicianServices = async (
+  technicianId: string
+): Promise<Service[]> => {
   try {
     const services = await prismaClient.technicianService.findMany({
       where: {
