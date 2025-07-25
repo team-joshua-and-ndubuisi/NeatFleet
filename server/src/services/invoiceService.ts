@@ -1,4 +1,5 @@
 import prismaClient from '../config/prisma';
+import { Invoice } from '../../generated/prisma';
 
 type CreateInvoiceInput = {
   bookingId: string;
@@ -7,7 +8,7 @@ type CreateInvoiceInput = {
   totalCost: number;
 };
 
-const createInvoice = async (data: CreateInvoiceInput) => {
+const createInvoice = async (data: CreateInvoiceInput): Promise<Invoice> => {
   try {
     // Check if an invoice already exists for the booking
     const existing = await prismaClient.invoice.findUnique({
@@ -37,7 +38,7 @@ const createInvoice = async (data: CreateInvoiceInput) => {
   }
 };
 
-const getInvoice = async (bookingId: string) => {
+const getInvoice = async (bookingId: string): Promise<Invoice | null> => {
   try {
     const invoice = await prismaClient.invoice.findUnique({
       where: {
