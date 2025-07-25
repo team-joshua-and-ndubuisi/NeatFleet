@@ -1,7 +1,8 @@
 import prismaClient from '../config/prisma';
 import { getUserIdByEmail } from './userService';
+import { Technician, TechnicianAvailability } from '../../generated/prisma';
 
-const createTechnician = async (userId: string) => {
+const createTechnician = async (userId: string): Promise<Technician> => {
   try {
     const technician = await prismaClient.technician.create({
       data: {
@@ -14,7 +15,7 @@ const createTechnician = async (userId: string) => {
   }
 };
 
-const isTechnician = async (email: string) => {
+const isTechnician = async (email: string): Promise<boolean> => {
   try {
     const userID = await getUserIdByEmail(email);
     if (!userID) {
@@ -34,18 +35,19 @@ const isTechnician = async (email: string) => {
   }
 };
 
-const getTechnicianRating = async (userId: string) => {
+//ISSUE with return type
+const getTechnicianRating = async (userId: string): Promise<number | null> => {
   try {
-    const technician = await prismaClient.technician.findUnique({
+    const technicianRating = await prismaClient.technician.findUnique({
       where: { user_id: userId },
       select: { current_rating: true },
     });
 
-    if (!technician) {
+    if (!technicianRating) {
       throw new Error(`Technician with user_id ${userId} not found`);
     }
 
-    return technician;
+    return technicianRating.current_rating?.toNumber() ?? null;
   } catch (error: any) {
     throw new Error(
       `Error fetching technician with id ${userId}  Message: ${error.message}`
@@ -53,7 +55,11 @@ const getTechnicianRating = async (userId: string) => {
   }
 };
 
-const updateRating = async (userId: string, newRating: number) => {
+//ISSUE with return type
+const updateRating = async (
+  userId: string,
+  newRating: number
+): Promise<number | null> => {
   try {
     const updatedTechnician = await prismaClient.technician.update({
       where: { user_id: userId },
@@ -61,7 +67,7 @@ const updateRating = async (userId: string, newRating: number) => {
       select: { current_rating: true },
     });
 
-    return updatedTechnician.current_rating;
+    return updatedTechnician.current_rating?.toNumber() ?? null;
   } catch (error: any) {
     throw new Error(
       `Error updating rating for technician with user_id ${userId}: ${error.message}`
@@ -79,7 +85,7 @@ const setTechnicianAvailability = async ({
   availableDate: string;
   startTime: string;
   endTime: string;
-}) => {
+}): Promise<TechnicianAvailability> => {
   try {
     const availability = await prismaClient.technicianAvailability.create({
       data: {
@@ -101,7 +107,9 @@ const setTechnicianAvailability = async ({
 // const getAllTechniciansInfo;
 
 //This returns the entire row, until we figure what we exactly need
-const getTechAvailabilities = async (techId: string) => {
+const getTechAvailabilities = async (
+  techId: string
+): Promise<TechnicianAvailability[]> => {
   try {
     const availabilities = await prismaClient.technicianAvailability.findMany({
       where: {
@@ -123,7 +131,7 @@ const getTechAvailabilities = async (techId: string) => {
   }
 };
 
-const getTechIdByEmail = async (email: string) => {
+const getTechIdByEmail = async (email: string): Promise<string> => {
   try {
     const techId = await prismaClient.technician.findFirst({
       where: {

@@ -38,9 +38,9 @@ async function main() {
   // userIsTechnician = await isTechnician('randemail@email.com');
   // console.log(userIsTechnician === false); // true
 
-  // //Test 3
-  // let techRating = await getTechnicianRating(userOneId!);
-  // console.log(techRating);
+  //Test 3
+  let techRating = await getTechnicianRating(userOneId!);
+  console.log(techRating);
 
   // //Test 4
   // const DUMMY_RATING = 4.3;
