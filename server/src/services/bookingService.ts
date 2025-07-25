@@ -1,5 +1,5 @@
 import prismaClient from '../config/prisma';
-import { ServiceStatus, PaymentStatus } from '../../generated/prisma';
+import { Booking, ServiceStatus, PaymentStatus } from '../../generated/prisma';
 
 type CreateBookingInput = {
   userId: string;
@@ -18,7 +18,7 @@ type CreateBookingInput = {
   ratingComment?: string;
 };
 
-const createBooking = async (data: CreateBookingInput) => {
+const createBooking = async (data: CreateBookingInput): Promise<Booking> => {
   try {
     const booking = await prismaClient.booking.create({
       data: {
@@ -44,7 +44,7 @@ const createBooking = async (data: CreateBookingInput) => {
   }
 };
 
-const getAllUserBookings = async (userId: string) => {
+const getAllUserBookings = async (userId: string): Promise<Booking[]> => {
   try {
     const bookings = await prismaClient.booking.findMany({
       where: {
@@ -60,7 +60,9 @@ const getAllUserBookings = async (userId: string) => {
   }
 };
 
-const getAllTechnicianBookings = async (technicianId: string) => {
+const getAllTechnicianBookings = async (
+  technicianId: string
+): Promise<Booking[]> => {
   try {
     const bookings = await prismaClient.booking.findMany({
       where: {
@@ -80,7 +82,7 @@ const rateBooking = async (
   bookingId: string,
   ratingScore: number,
   ratingComment?: string
-) => {
+): Promise<Booking> => {
   try {
     const existing = await prismaClient.booking.findUnique({
       where: { id: bookingId },
@@ -90,13 +92,15 @@ const rateBooking = async (
       throw new Error(`Booking ${bookingId} does not exist`);
     }
 
-    return await prismaClient.booking.update({
+    const updated = await prismaClient.booking.update({
       where: { id: bookingId },
       data: {
         rating_score: ratingScore,
         rating_comment: ratingComment,
       },
     });
+
+    return updated;
   } catch (error: any) {
     throw new Error(`Failed to rate booking: ${error.message}`);
   }
@@ -105,7 +109,7 @@ const rateBooking = async (
 const updateServiceStatus = async (
   bookingId: string,
   status: ServiceStatus
-) => {
+): Promise<Booking> => {
   try {
     const booking = await prismaClient.booking.update({
       where: {
@@ -127,7 +131,7 @@ const updateServiceStatus = async (
 const updatePaymentStatus = async (
   bookingId: string,
   status: PaymentStatus
-) => {
+): Promise<Booking> => {
   try {
     const booking = await prismaClient.booking.update({
       where: {
