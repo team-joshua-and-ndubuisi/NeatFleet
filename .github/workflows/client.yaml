@@ -3,6 +3,7 @@ name: CI/CD for Client
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 on:
   push:
@@ -20,6 +21,21 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      - name: Validate environment variables
+        run: |
+          if [ -z "${{ env.VERCEL_ORG_ID }}" ]; then
+            echo "VERCEL_ORG_ID is not set"
+            exit 1
+          fi
+          if [ -z "${{ env.VERCEL_PROJECT_ID }}" ]; then
+            echo "VERCEL_PROJECT_ID is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "VERCEL_TOKEN is not set"
+            exit 1
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -40,7 +56,7 @@ jobs:
         working-directory: ./client
         run: npm run build
 
-  deploy:
+  CD:
     needs: CI
     runs-on: ubuntu-latest
 
@@ -63,6 +79,9 @@ jobs:
 
       - name: Deploy to Vercel
         working-directory: ./client
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: npx vercel --prod --token $VERCEL_TOKEN
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ] && [ "${{ github.event_name }}" = "push" ]; then
+            npx vercel --prod --token $VERCEL_TOKEN
+          else
+            npx vercel --token $VERCEL_TOKEN
+          fi
