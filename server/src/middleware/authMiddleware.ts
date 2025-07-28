@@ -2,22 +2,18 @@ import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 
 const isAuth = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate(
-    'jwt',
-    { session: false },
-    (err: any, user: any, info: any) => {
-      if (err) {
-        return next(err);
-      }
-
-      if (!user) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-
-      req.user = user;
-      next();
+  passport.authenticate('jwt', { session: false }, (err: any, user: any) => {
+    if (err) {
+      return next(err);
     }
-  )(req, res, next);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    req.user = user;
+    next();
+  })(req, res, next);
 };
 
 const isAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -33,4 +29,4 @@ const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export { isAuth, isAdmin };
+export { isAdmin, isAuth };

@@ -1,8 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 import passport from 'passport';
-import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
-// import User from "../models/user";
+import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
+import path from 'path';
 
 import prisma from './prisma';
 const User = prisma.user;
