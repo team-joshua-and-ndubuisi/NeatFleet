@@ -15,8 +15,21 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum ServiceStatus {
+  scheduled
+  in_progress
+  completed
+  cancelled
+}
+
+//No unpaid, because only book when booking is paid
+enum PaymentStatus {
+  paid
+  refunded
+}
+
 model User {
-  id         String   @id @default(uuid()) @db.Uuid
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   first_name String   @db.VarChar(255)
   last_name  String   @db.VarChar(255)
   email      String   @unique @db.VarChar(255)
@@ -25,7 +38,12 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   is_active  Boolean  @default(true)
-  admin      Admin? // <-- Opposite relation field
+
+  // Opposite relation field, for type saftey
+  admin      Admin?
+  address    Address[]
+  technician Technician?
+  Booking    Booking[]
 
   @@map("users")
 }
@@ -36,4 +54,113 @@ model Admin {
   user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("admins") // This tells Prisma the actual table name is "admins"
+}
+
+//Change date and time into string type to prevent Prisma's issue of auto converting to zulu time
+model TechnicianAvailability {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  technician_id  String   @db.Uuid
+  available_date String // Store as 'YYYY-MM-DD'
+  start_time     String // Store as 'HH:MM:SS'
+  end_time       String // Store as 'HH:MM:SS'
+  created_at     DateTime @default(now()) @db.Timestamp
+
+  technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
+
+  @@map("technician_availabilities")
+}
+
+model Address {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id   String   @db.Uuid
+  street    String
+  city      String
+  state     String
+  zip       String
+  latitude  Float?   @db.DoublePrecision
+  longitude Float?   @db.DoublePrecision
+  isPrimary Boolean? @default(false)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, street, city, state, zip]) // Enforces no duplicate addresses per user
+  @@map("addresses")
+}
+
+model Technician {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String   @unique @db.Uuid
+  current_rating Decimal? @db.Decimal(2, 1)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  availabilities TechnicianAvailability[]
+  services       TechnicianService[]
+  Booking        Booking[]
+
+  @@map("technicians")
+}
+
+model Service {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String @db.VarChar(255)
+  description String @db.Text
+
+  technicianService TechnicianService[]
+  Booking           Booking[]
+
+  @@map("services")
+}
+
+model TechnicianService {
+  technician_id String @db.Uuid
+  service_id    String @db.Uuid
+
+  technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
+  service    Service    @relation(fields: [service_id], references: [id], onDelete: Cascade)
+
+  @@id([technician_id, service_id])
+  @@map("technicians_services")
+}
+
+// Set up so that one booking can have only ONE service, ONE technician for MVP purpose
+model Booking {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String        @db.Uuid
+  service_id     String        @db.Uuid
+  technician_id  String        @db.Uuid
+  service_date   String // Store as 'YYYY-MM-DD'
+  service_time   String? // Store as 'HH:MM:SS'
+  address_street String
+  address_city   String
+  address_state  String
+  address_zip    String
+  service_status ServiceStatus @default(scheduled)
+  service_notes  String?
+  payment_status PaymentStatus @default(paid)
+  created_at     DateTime      @default(now())
+  rating_score   Int?
+  rating_comment String?
+
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  service    Service    @relation(fields: [service_id], references: [id], onDelete: Cascade)
+  technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
+
+  invoice Invoice? // Optional because it might not be created yet
+
+  @@map("bookings")
+}
+
+// Can include pdf_url for cloud storage integration
+model Invoice {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  booking_id  String   @unique @db.Uuid
+  cost        Decimal  @db.Decimal(10, 2)
+  tax_percent Decimal  @db.Decimal(5, 2)
+  total_cost  Decimal  @db.Decimal(10, 2)
+  created_at  DateTime @default(now())
+
+  booking Booking @relation(fields: [booking_id], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
 }

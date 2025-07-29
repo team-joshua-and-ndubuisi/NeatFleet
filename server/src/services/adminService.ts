@@ -1,7 +1,8 @@
 import prismaClient from '../config/prisma';
 import { getUserIdByEmail } from './userService';
+import { Admin } from '../../generated/prisma';
 
-const createAdmin = async (userId: string) => {
+const createAdmin = async (userId: string): Promise<Admin> => {
   try {
     const admin = await prismaClient.admin.create({
       data: {
@@ -14,9 +15,9 @@ const createAdmin = async (userId: string) => {
   }
 };
 
-const setUserAsAdmin = async (email: string) => {
-  // 1st check if user exist, if not throw an error
-  // if user exist, use user id to create an admin row based on user id
+const setUserAsAdmin = async (email: string): Promise<Admin> => {
+  // 1st check if user exists, if not throw an error
+  // if user exists, use user id to create an admin row based on user id
   try {
     const userID = await getUserIdByEmail(email);
     if (!userID) {
@@ -24,7 +25,6 @@ const setUserAsAdmin = async (email: string) => {
     }
 
     const admin = await createAdmin(userID);
-
     return admin;
   } catch (error) {
     if (error instanceof Error) {
@@ -32,11 +32,11 @@ const setUserAsAdmin = async (email: string) => {
         `Error setting user as admin, user email ${email}: ${error.message}`
       );
     }
-    throw new Error(`Unknown error deactivating user with email ${email}`);
+    throw new Error(`Unknown error setting user as admin with email ${email}`);
   }
 };
 
-const isAdmin = async (email: string) => {
+const isAdmin = async (email: string): Promise<boolean> => {
   try {
     const userID = await getUserIdByEmail(email);
     if (!userID) {
