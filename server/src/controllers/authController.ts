@@ -1,13 +1,12 @@
-import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
-import issueJWT from '../lib/issueJWT';
-import { logger } from '../config/logger';
 import { NextFunction, Request, Response } from 'express';
-import prisma from '../config/prisma'; //connection to Prisma client
-import { User as UserType } from '../../generated/prisma'; // dealing with only user table
-
-import { ExtendedErrorT } from '../types/error';
+import asyncHandler from 'express-async-handler';
+import { User as UserType } from '../../generated/prisma';
+import { logger } from '../config/logger';
+import prisma from '../config/prisma';
+import issueJWT from '../lib/issueJWT';
 import { createUser } from '../services/userService';
+import { ExtendedErrorT } from '../types/error';
 const User = prisma.user;
 
 // @desc    Register new user
@@ -264,4 +263,4 @@ const deleteProfile = asyncHandler(
   }
 );
 
-export { registerUser, loginUser, userProfile, editProfile, deleteProfile };
+export { deleteProfile, editProfile, loginUser, registerUser, userProfile };

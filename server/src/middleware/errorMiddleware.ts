@@ -1,5 +1,5 @@
-const { logger } = require("../config/logger");
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
+import { ErrorRequestHandler } from 'express';
+import { logger } from '../config/logger';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || res.statusCode || 500;
@@ -8,9 +8,9 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   res.status(statusCode).json({
     success: false,
-    message: err.message || "An unexpected error occurred",
+    message: err.message || 'An unexpected error occurred',
     errors: err.details || null,
-    stack: process.env.NODE_ENV === "production" ? undefined : err.stack,
+    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
   });
 };
 
