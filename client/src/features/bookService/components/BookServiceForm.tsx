@@ -1,121 +1,167 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { ErrorComponent, LoadingIndicator } from '@/components';
-import { SelectableButton } from '@/components';
-import { motion, AnimatePresence } from 'motion/react';
-import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { useFetchServices } from '@/features/services';
-import { useFetchTechnicians } from '@/features/technicians';
-import { ServiceFormData, useServiceFormStore } from '@/features/bookService';
+// components/ServiceBookingForm.tsx
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-export default function BookServiceForm() {
-  const {
-    data: services,
-    isLoading: areServicesLoading,
-    error: servicesError,
-  } = useFetchServices();
+// Define valid time slots
+type TimeSlot = 'Morning' | 'Afternoon' | 'Evening';
 
-  const {
-    data: technicians,
-    isLoading: areTechniciansLoading,
-    error: techniciansError,
-  } = useFetchTechnicians();
+// Form data shape
+interface FormData {
+  service: string;
+  date: Date | null;
+  timeSlot: TimeSlot | '';
+  technician: string;
+}
 
-  const methods = useForm<ServiceFormData>({
-    defaultValues: useServiceFormStore.getState().data,
-    mode: 'onChange',
+// Helper types for strict handleChange
+type FormFieldKey = keyof FormData;
+type FormFieldValue<K extends FormFieldKey> = K extends 'service'
+  ? string
+  : K extends 'date'
+    ? Date | null
+    : K extends 'timeSlot'
+      ? TimeSlot | ''
+      : K extends 'technician'
+        ? string
+        : never;
+
+// Sample data
+const services = ['Plumbing', 'Electrical', 'HVAC'];
+const technicians = ['Alice', 'Bob', 'Charlie'];
+
+const ServiceBookingForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    service: '',
+    date: null,
+    timeSlot: '',
+    technician: '',
   });
 
-  const { step, next, back, setFormData } = useServiceFormStore();
-  const isLastStep = step === 1;
+  // Strictly typed handler
+  function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
+    setFormData(prev => ({
+      ...prev,
+      [key]: value,
+    }));
+  }
 
-  const onSubmit: SubmitHandler<ServiceFormData> = data => {
-    setFormData(data);
-    console.log('Submitted!', data);
-    //TODO: Add react-query logic here for posting data
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Submitting:', formData);
 
-  const handleNext = () => {
-    if (isLastStep) {
-      methods.handleSubmit(onSubmit)();
-    } else {
-      next();
+    try {
+      const response = await fetch('http://localhost:3000/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      console.log('Response:', result);
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
   };
 
-  if (areTechniciansLoading) return <LoadingIndicator />;
-  if (techniciansError) return <ErrorComponent />;
-
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className='w-full max-w-md mx-auto mt-10'>
-        <Card className='overflow-hidden min-h-[250px]'>
-          <CardContent className='p-6'>
-            <AnimatePresence mode='wait'>
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.3 }}
-              >
-                {step === 0 && (
-                  <>
-                    {areServicesLoading ? (
-                      <LoadingIndicator />
-                    ) : servicesError ? (
-                      <ErrorComponent />
-                    ) : (
-                      <div className='flex flex-wrap gap-2'>
-                        {services?.map(service => (
-                          <SelectableButton
-                            key={service.id}
-                            name='services'
-                            value={service.id}
-                            label={service.name}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
+    <form
+      onSubmit={handleSubmit}
+      className='max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-md space-y-6'
+    >
+      <h2 className='text-2xl font-bold text-gray-800'>Book a Service</h2>
 
-                {step === 1 && (
-                  <>
-                    {areTechniciansLoading ? (
-                      <LoadingIndicator />
-                    ) : techniciansError ? (
-                      <ErrorComponent />
-                    ) : (
-                      <div className='flex flex-wrap gap-2'>
-                        {technicians?.map(technician => (
-                          <SelectableButton
-                            key={technician.id}
-                            name='technician'
-                            value={technician.id}
-                            label={`${technician.first_name} ${technician.last_name}`}
-                            singleSelect
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </CardContent>
-        </Card>
-
-        <div className='flex justify-between mt-4'>
-          <Button type='button' variant='outline' onClick={back} disabled={step === 0}>
-            Back
-          </Button>
-
-          <Button type='button' onClick={handleNext}>
-            {isLastStep ? 'Submit' : 'Next'}
-          </Button>
+      {/* Service Selection */}
+      <div>
+        <label className='block text-gray-700 font-semibold mb-2'>Choose a service:</label>
+        <div className='space-y-2'>
+          {services.map(service => (
+            <label key={service} className='flex items-center space-x-2'>
+              <input
+                type='radio'
+                name='service'
+                value={service}
+                checked={formData.service === service}
+                onChange={() => handleChange('service', service)}
+                className='accent-blue-600'
+              />
+              <span>{service}</span>
+            </label>
+          ))}
         </div>
-      </form>
-    </FormProvider>
+      </div>
+
+      {/* Date Selection */}
+      <div>
+        <label className='block text-gray-700 font-semibold mb-2'>Select a date:</label>
+        <DatePicker
+          selected={formData.date}
+          onChange={date => handleChange('date', date)}
+          className='w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none'
+          placeholderText='Pick a date'
+          minDate={new Date()}
+          dateFormat='MMMM d, yyyy'
+        />
+      </div>
+
+      {/* Time Slot Selection */}
+      <div>
+        <label className='block text-gray-700 font-semibold mb-2'>Choose a time slot:</label>
+        <div className='space-y-2'>
+          {(['Morning', 'Afternoon', 'Evening'] as TimeSlot[]).map(slot => (
+            <label key={slot} className='flex items-center space-x-2'>
+              <input
+                type='radio'
+                name='timeSlot'
+                value={slot}
+                checked={formData.timeSlot === slot}
+                onChange={() => handleChange('timeSlot', slot)}
+                className='accent-blue-600'
+              />
+              <span>
+                {slot} (
+                {
+                  {
+                    Morning: '8am-12pm',
+                    Afternoon: '12pm-4pm',
+                    Evening: '4pm-8pm',
+                  }[slot]
+                }
+                )
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Technician Selection */}
+      <div>
+        <label className='block text-gray-700 font-semibold mb-2'>Choose a technician:</label>
+        <div className='space-y-2'>
+          {technicians.map(tech => (
+            <label key={tech} className='flex items-center space-x-2'>
+              <input
+                type='radio'
+                name='technician'
+                value={tech}
+                checked={formData.technician === tech}
+                onChange={() => handleChange('technician', tech)}
+                className='accent-blue-600'
+              />
+              <span>{tech}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <button
+        type='submit'
+        className='w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition'
+      >
+        Submit Booking
+      </button>
+    </form>
   );
-}
+};
+
+export default ServiceBookingForm;
