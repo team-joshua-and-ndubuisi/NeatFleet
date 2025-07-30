@@ -2,41 +2,42 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-// Define valid time slots
-type TimeSlot = 'Morning' | 'Afternoon' | 'Evening';
-
-// Form data shape
-interface FormData {
-  service: string;
-  date: Date | null;
-  timeSlot: TimeSlot | '';
-  technician: string;
-}
+import { TimeSlot, FormData } from '@/features/bookService';
+import { useFetchServices, Service } from '@/features/services';
+import { Technician, useFetchTechnicians } from '@/features/technicians';
+import { LoadingIndicator, ErrorComponent } from '@/components';
 
 // Helper types for strict handleChange
 type FormFieldKey = keyof FormData;
 type FormFieldValue<K extends FormFieldKey> = K extends 'service'
-  ? string
+  ? Service | null
   : K extends 'date'
     ? Date | null
     : K extends 'timeSlot'
       ? TimeSlot | ''
       : K extends 'technician'
-        ? string
+        ? Technician | null
         : never;
-
-// Sample data
-const services = ['Plumbing', 'Electrical', 'HVAC'];
-const technicians = ['Alice', 'Bob', 'Charlie'];
 
 const ServiceBookingForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
-    service: '',
+    service: null,
     date: null,
     timeSlot: '',
-    technician: '',
+    technician: null,
   });
+
+  const {
+    data: services,
+    isLoading: areServicesLoading,
+    error: servicesError,
+  } = useFetchServices();
+
+  const {
+    data: technicians,
+    isLoading: areTechniciasLoading,
+    error: techniciansError,
+  } = useFetchTechnicians();
 
   // Strictly typed handler
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
@@ -64,6 +65,11 @@ const ServiceBookingForm: React.FC = () => {
     }
   };
 
+  if (areServicesLoading) return <LoadingIndicator />;
+  if (servicesError) return <ErrorComponent />;
+  if (areTechniciasLoading) return <LoadingIndicator />;
+  if (techniciansError) return <ErrorComponent />;
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -75,18 +81,30 @@ const ServiceBookingForm: React.FC = () => {
       <div>
         <label className='block text-gray-700 font-semibold mb-2'>Choose a service:</label>
         <div className='space-y-2'>
-          {services.map(service => (
-            <label key={service} className='flex items-center space-x-2'>
+          {services?.map(service => (
+            <div key={service.id}>
               <input
                 type='radio'
+                id={`service-${service.id}`}
                 name='service'
-                value={service}
-                checked={formData.service === service}
+                value={service.id}
+                checked={formData.service?.id === service.id}
                 onChange={() => handleChange('service', service)}
-                className='accent-blue-600'
+                className='hidden'
               />
-              <span>{service}</span>
-            </label>
+              <label
+                htmlFor={`service-${service.id}`}
+                className={`block px-4 py-2 rounded-lg border text-center cursor-pointer transition
+                          ${
+                            formData.service?.id === service.id
+                              ? 'bg-blue-600 text-white border-blue-600'
+                              : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-100'
+                          }
+                            `}
+              >
+                {service.name}
+              </label>
+            </div>
           ))}
         </div>
       </div>
@@ -138,17 +156,19 @@ const ServiceBookingForm: React.FC = () => {
       <div>
         <label className='block text-gray-700 font-semibold mb-2'>Choose a technician:</label>
         <div className='space-y-2'>
-          {technicians.map(tech => (
-            <label key={tech} className='flex items-center space-x-2'>
+          {technicians?.map(tech => (
+            <label key={tech.id} className='flex items-center space-x-2'>
               <input
                 type='radio'
                 name='technician'
-                value={tech}
+                value={tech.id}
                 checked={formData.technician === tech}
                 onChange={() => handleChange('technician', tech)}
                 className='accent-blue-600'
               />
-              <span>{tech}</span>
+              <span>
+                {tech.first_name} {tech.last_name}
+              </span>
             </label>
           ))}
         </div>
