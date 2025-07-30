@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './auth';
 import usersRoutes from './users';
+import servicesRoutes from './services';
 // const postsRoutes = require("./posts");
 import { isAuth } from '../middleware/authMiddleware';
 
