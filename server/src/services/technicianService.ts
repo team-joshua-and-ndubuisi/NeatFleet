@@ -1,6 +1,10 @@
 import prismaClient from '../config/prisma';
 import { getUserIdByEmail } from './userService';
-import { Technician, TechnicianAvailability } from '../../generated/prisma';
+import {
+  Technician,
+  TechnicianAvailability,
+  TimeBlock,
+} from '../../generated/prisma';
 
 const createTechnician = async (userId: string): Promise<Technician> => {
   try {
@@ -78,21 +82,18 @@ const updateRating = async (
 const setTechnicianAvailability = async ({
   techId,
   availableDate,
-  startTime,
-  endTime,
+  timeBlock,
 }: {
   techId: string;
-  availableDate: string;
-  startTime: string;
-  endTime: string;
+  availableDate: string; // e.g. '2025-08-01'
+  timeBlock: TimeBlock;
 }): Promise<TechnicianAvailability> => {
   try {
     const availability = await prismaClient.technicianAvailability.create({
       data: {
         technician_id: techId,
         available_date: availableDate,
-        start_time: startTime,
-        end_time: endTime,
+        time_block: timeBlock,
       },
     });
 
