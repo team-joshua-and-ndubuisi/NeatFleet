@@ -19,6 +19,18 @@ type FormFieldValue<K extends FormFieldKey> = K extends 'service'
         ? Technician | null
         : never;
 
+interface SectionTitleProps {
+  title: string;
+}
+
+const SectionTitle: React.FC<SectionTitleProps> = ({ title }) => {
+  return <label className='block text-primary font-semibold text-2xl mb-2'>{title}</label>;
+};
+
+const HorizontalLine: React.FC = () => {
+  return <hr className='border-t-1 border-primary-100 pb-10 mt-12' />;
+};
+
 const ServiceBookingForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     service: null,
@@ -73,16 +85,16 @@ const ServiceBookingForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-md space-y-6'
+      className='max-w-xl mx-auto p-6 bg-primary-50 rounded-2xl shadow-md space-y-6'
     >
-      <h2 className='text-2xl font-bold text-gray-800'>Book a Service</h2>
+      <h2 className='text-4xl font-lato text-foreground text-center'>Book a Service</h2>
 
       {/* Service Selection */}
       <div>
-        <label className='block text-gray-700 font-semibold mb-2'>Choose a service:</label>
-        <div className='space-y-2'>
+        <SectionTitle title='Choose a service:' />
+        <div className='space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch'>
           {services?.map(service => (
-            <div key={service.id}>
+            <div key={service.id} className='h-full'>
               <input
                 type='radio'
                 id={`service-${service.id}`}
@@ -94,11 +106,11 @@ const ServiceBookingForm: React.FC = () => {
               />
               <label
                 htmlFor={`service-${service.id}`}
-                className={`block px-4 py-2 rounded-lg border text-center cursor-pointer transition
+                className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
                           ${
                             formData.service?.id === service.id
-                              ? 'bg-blue-600 text-white border-blue-600'
-                              : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-100'
+                              ? 'bg-primary-400 text-background border-primary-600'
+                              : 'bg-card text-foreground border-ring hover:border-primary-300 hover:text-primary-600'
                           }
                             `}
               >
@@ -110,76 +122,100 @@ const ServiceBookingForm: React.FC = () => {
       </div>
 
       {/* Date Selection */}
-      <div>
-        <label className='block text-gray-700 font-semibold mb-2'>Select a date:</label>
-        <DatePicker
-          selected={formData.date}
-          onChange={date => handleChange('date', date)}
-          className='w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none'
-          placeholderText='Pick a date'
-          minDate={new Date()}
-          dateFormat='MMMM d, yyyy'
-        />
-      </div>
+      {formData.service && (
+        <div>
+          <HorizontalLine />
+          <SectionTitle title='Choose a date:' />
+          <DatePicker
+            showIcon
+            selected={formData.date}
+            onChange={date => handleChange('date', date)}
+            className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
+            placeholderText='Pick a date'
+            minDate={new Date()}
+            dateFormat='MMMM d, yyyy'
+          />
+        </div>
+      )}
 
       {/* Time Slot Selection */}
-      <div>
-        <label className='block text-gray-700 font-semibold mb-2'>Choose a time slot:</label>
-        <div className='space-y-2'>
-          {(['Morning', 'Afternoon', 'Evening'] as TimeSlot[]).map(slot => (
-            <label key={slot} className='flex items-center space-x-2'>
-              <input
-                type='radio'
-                name='timeSlot'
-                value={slot}
-                checked={formData.timeSlot === slot}
-                onChange={() => handleChange('timeSlot', slot)}
-                className='accent-blue-600'
-              />
-              <span>
-                {slot} (
-                {
-                  {
-                    Morning: '8am-12pm',
-                    Afternoon: '12pm-4pm',
-                    Evening: '4pm-8pm',
-                  }[slot]
-                }
-                )
-              </span>
-            </label>
-          ))}
+      {formData.service && formData.date && (
+        <div>
+          <HorizontalLine />
+          <SectionTitle title='Choose a time slot:' />
+          <div className='space-y-2 flex flex-col'>
+            {(['Morning', 'Afternoon', 'Evening'] as TimeSlot[]).map(slot => (
+              <div key={slot} className='h-full'>
+                <input
+                  type='radio'
+                  id={slot}
+                  name='timeslot'
+                  value={slot}
+                  checked={formData?.timeSlot === slot}
+                  onChange={() => handleChange('timeSlot', slot)}
+                  className='hidden'
+                />
+                <label
+                  htmlFor={slot}
+                  className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+                          ${
+                            formData?.timeSlot === slot
+                              ? 'bg-primary-400 text-background border-primary-600'
+                              : 'bg-card text-foreground border-ring hover:border-primary-300 hover:text-primary-600'
+                          }
+                            `}
+                >
+                  {slot}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Technician Selection */}
-      <div>
-        <label className='block text-gray-700 font-semibold mb-2'>Choose a technician:</label>
-        <div className='space-y-2'>
-          {technicians?.map(tech => (
-            <label key={tech.id} className='flex items-center space-x-2'>
-              <input
-                type='radio'
-                name='technician'
-                value={tech.id}
-                checked={formData.technician === tech}
-                onChange={() => handleChange('technician', tech)}
-                className='accent-blue-600'
-              />
-              <span>
-                {tech.first_name} {tech.last_name}
-              </span>
-            </label>
-          ))}
+      {formData.service && formData.date && formData.timeSlot && (
+        <div>
+          <HorizontalLine />
+          <SectionTitle title='Choose a technician:' />
+          <div className='space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch'>
+            {technicians?.map(tech => (
+              <div key={tech.id} className='h-full'>
+                <input
+                  type='radio'
+                  id={`tech-${tech.id}`}
+                  name='technician'
+                  value={tech.id}
+                  checked={formData.technician?.id === tech.id}
+                  onChange={() => handleChange('technician', tech)}
+                  className='hidden'
+                />
+                <label
+                  htmlFor={`tech-${tech.id}`}
+                  className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+                          ${
+                            formData.technician?.id === tech.id
+                              ? 'bg-primary-400 text-background border-primary-600'
+                              : 'bg-card text-foreground border-ring hover:border-primary-300 hover:text-primary-600'
+                          }
+                            `}
+                >
+                  {tech.first_name} {tech.last_name}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <button
-        type='submit'
-        className='w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition'
-      >
-        Submit Booking
-      </button>
+      {formData.service && formData.date && formData.timeSlot && formData.technician && (
+        <button
+          type='submit'
+          className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8 mb-8'
+        >
+          Submit Booking
+        </button>
+      )}
     </form>
   );
 };
