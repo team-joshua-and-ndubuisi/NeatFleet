@@ -11,3 +11,7 @@ export const updateAddress = async (userId: string, address: AddressT): Promise<
   const response = await axiosInstance.put(`${url}:${userId}/address`, address);
   return response.data;
 };
+export const fetchAddresses = async (userId: string): Promise<AddressT[]> => {
+  const response = await axiosInstance.get(`${url}:${userId}/addresses`);
+  return response.data;
+};
