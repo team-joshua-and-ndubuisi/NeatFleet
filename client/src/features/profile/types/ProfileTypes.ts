@@ -23,3 +23,10 @@ export interface UserProfileT {
   technician: TechnicianT;
   bookings: BookingT[];
 }
+
+export interface AddressT {
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}
