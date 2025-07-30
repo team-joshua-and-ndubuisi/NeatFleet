@@ -1,12 +1,17 @@
 import prismaClient from '../config/prisma';
-import { Booking, ServiceStatus, PaymentStatus } from '../../generated/prisma';
+import {
+  Booking,
+  ServiceStatus,
+  PaymentStatus,
+  TimeBlock,
+} from '../../generated/prisma';
 
 type CreateBookingInput = {
   userId: string;
   serviceId: string;
   technicianId: string;
   serviceDate: string;
-  serviceTime?: string;
+  timeBlock: TimeBlock;
   addressStreet: string;
   addressCity: string;
   addressState: string;
@@ -26,7 +31,7 @@ const createBooking = async (data: CreateBookingInput): Promise<Booking> => {
         service_id: data.serviceId,
         technician_id: data.technicianId,
         service_date: data.serviceDate,
-        service_time: data.serviceTime,
+        time_block: data.timeBlock,
         address_street: data.addressStreet,
         address_city: data.addressCity,
         address_state: data.addressState,
