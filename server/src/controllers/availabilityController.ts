@@ -28,10 +28,22 @@ const getServiceTimeBlockAvailability = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { service_id } = req.params;
     const { date } = req.query;
+
+    if (typeof date !== 'string') {
+      res
+        .status(400)
+        .json({ error: 'Invalid or missing date query parameter' });
+      return;
+    }
+
     const serviceId = service_id;
 
-    logger.info(`Fetching availability time block for service ${serviceId}`);
-    const timeBlocks = await getAvailableTimeBlocks(serviceId);
+    logger.info(
+      `Fetching availability time blocks for service ${serviceId} on date ${date}`
+    );
+
+    const timeBlocks = await getAvailableTimeBlocks(serviceId, date);
+
     res.status(200).json({ time_blocks: timeBlocks });
   }
 );
