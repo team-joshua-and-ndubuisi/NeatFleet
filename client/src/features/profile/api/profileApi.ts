@@ -12,6 +12,6 @@ export const updateProfile = async (
   userId: string,
   profileData: UserProfileT
 ): Promise<UserProfileT> => {
-  const response = await axiosInstance.put(`${url}:${userId}`, profileData);
+  const response = await axiosInstance.put(`${url}/${userId}`, profileData);
   return response.data;
 };
