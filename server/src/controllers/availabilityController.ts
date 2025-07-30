@@ -7,7 +7,7 @@ import { logger } from '../config/logger';
 // @desc    Get upcoming availability dates for a specific service
 // @route   GET api/availabilities/service/:serviceId
 // @access  Public
-const getServiceAvailability = asyncHandler(
+const getServiceDateAvailability = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { service_id } = req.params;
     const serviceId = service_id;
@@ -18,4 +18,4 @@ const getServiceAvailability = asyncHandler(
   }
 );
 
-export { getServiceAvailability };
+export { getServiceDateAvailability };
