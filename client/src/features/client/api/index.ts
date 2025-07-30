@@ -1,1 +1,0 @@
-export { fetchProfile } from './profileApi';
