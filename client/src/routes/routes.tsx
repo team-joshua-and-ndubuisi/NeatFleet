@@ -1,10 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout } from '@/layouts';
 import LoadingPage from '@/pages/LoadingPage';
 
@@ -20,11 +15,9 @@ const CartPaymentPage = lazy(() => import('@/pages/CartPaymentPage'));
 const StatusPage = lazy(() => import('@/pages/StatusPage'));
 const RatingPage = lazy(() => import('@/pages/RatingPage'));
 const ManageServicesPage = lazy(() => import('@/pages/ManageServicesPage'));
-const ManageTechniciansPage = lazy(
-  () => import('@/pages/ManageTechniciansPage')
-);
+const ManageTechniciansPage = lazy(() => import('@/pages/ManageTechniciansPage'));
 const ManageSchedulePage = lazy(() => import('@/pages/ManageSchedulePage'));
-const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 const AppRoutes: React.FC = () => {
@@ -52,18 +45,9 @@ const AppRoutes: React.FC = () => {
               <Route path='status' element={<StatusPage />} />
               <Route path='rating' element={<RatingPage />} />
               <Route path='manage-services' element={<ManageServicesPage />} />
-              <Route
-                path='manage-technicians'
-                element={<ManageTechniciansPage />}
-              />
-              <Route
-              path="/profile"
-              element={<ProfilePage />}
-               />
-              <Route
-                path='manage-availability'
-                element={<ManageSchedulePage />}
-              />
+              <Route path='manage-technicians' element={<ManageTechniciansPage />} />
+              <Route path='/profile' element={<ProfilePage />} />
+              <Route path='manage-availability' element={<ManageSchedulePage />} />
             </Route>
             <Route path='*' element={<NotFoundPage />} />
           </Route>
