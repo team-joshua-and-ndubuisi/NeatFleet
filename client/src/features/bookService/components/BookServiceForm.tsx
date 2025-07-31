@@ -10,8 +10,13 @@ import {
   State,
   Apartment,
   Zipcode,
+  CardName,
+  CardNumber,
+  CVC,
+  Expiry,
+  Zip,
+  useFetchAvailableDates,
 } from '@/features/bookService';
-import { CardName, CardNumber, CVC, Expiry, Zip } from '@/features/bookService';
 import { useFetchServices, Service } from '@/features/services';
 import { Technician, useFetchTechnicians } from '@/features/technicians';
 import { LoadingIndicator, ErrorComponent } from '@/components';
@@ -138,6 +143,12 @@ const ServiceBookingForm: React.FC = () => {
   } = useFetchServices();
 
   const {
+    data: availableDates,
+    isLoading: areDatesLoading,
+    error: datesError,
+  } = useFetchAvailableDates(formData.service?.id);
+
+  const {
     data: technicians,
     isLoading: areTechniciasLoading,
     error: techniciansError,
@@ -214,12 +225,19 @@ const ServiceBookingForm: React.FC = () => {
       </div>
 
       {/* Date Selection */}
-      {formData.service && (
+      {areDatesLoading && <LoadingIndicator message='Loading Available Dates...' />}
+      {datesError && (
+        <ErrorComponent message='Something went wrong while fetching available dates.' />
+      )}
+      {availableDates && (
         <div>
           <HorizontalLine />
           <SectionTitle title='Choose a date:' />
           <DatePicker
             showIcon
+            includeDates={
+              availableDates[0].dates ? availableDates[0].dates.map(date => new Date(date)) : []
+            }
             selected={formData.date}
             onChange={date => handleChange('date', date)}
             className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
