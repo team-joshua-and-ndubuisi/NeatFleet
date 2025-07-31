@@ -1,8 +1,15 @@
-import { PrismaClient } from '../../generated/prisma';
+import { PrismaClient, Prisma } from '../../generated/prisma';
 
-const prisma = new PrismaClient({
-  log: [{ emit: 'event', level: 'query' }],
-});
+//Allows hotrealod with singleton setup
+const globalForPrisma = global as unknown as {
+  prisma: PrismaClient<Prisma.PrismaClientOptions, 'query'>;
+};
+
+const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: [{ emit: 'event', level: 'query' }],
+  });
 
 prisma.$on('query', e => {
   // Filter out common non-essential queries
@@ -13,5 +20,7 @@ prisma.$on('query', e => {
     console.log('Params:', e.params);
   }
 });
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export default prisma;
