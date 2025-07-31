@@ -28,6 +28,12 @@ enum PaymentStatus {
   refunded
 }
 
+enum TimeBlock {
+  morning
+  afternoon
+  evening
+}
+
 model User {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   first_name String   @db.VarChar(255)
@@ -58,15 +64,15 @@ model Admin {
 
 //Change date and time into string type to prevent Prisma's issue of auto converting to zulu time
 model TechnicianAvailability {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  technician_id  String   @db.Uuid
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  technician_id  String    @db.Uuid
   available_date String // Store as 'YYYY-MM-DD'
-  start_time     String // Store as 'HH:MM:SS'
-  end_time       String // Store as 'HH:MM:SS'
-  created_at     DateTime @default(now()) @db.Timestamp
+  time_block     TimeBlock
+  created_at     DateTime  @default(now()) @db.Timestamp
 
   technician Technician @relation(fields: [technician_id], references: [id], onDelete: Cascade)
 
+  @@unique([technician_id, available_date, time_block])
   @@map("technician_availabilities")
 }
 
@@ -130,7 +136,7 @@ model Booking {
   service_id     String        @db.Uuid
   technician_id  String        @db.Uuid
   service_date   String // Store as 'YYYY-MM-DD'
-  service_time   String? // Store as 'HH:MM:SS'
+  time_block     TimeBlock
   address_street String
   address_city   String
   address_state  String
@@ -148,6 +154,7 @@ model Booking {
 
   invoice Invoice? // Optional because it might not be created yet
 
+  @@unique([technician_id, service_date, time_block]) // enfroce 1 cust per time block for MVp
   @@map("bookings")
 }
 
