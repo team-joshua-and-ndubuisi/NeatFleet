@@ -1,6 +1,7 @@
 type UserT = {
-  userType: string;
+  userType: 'admin' | 'tech' | 'client';
   userId: string;
+  name: string;
 };
 type TechnicianT = {
   techId: string;
