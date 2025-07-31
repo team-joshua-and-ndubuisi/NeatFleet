@@ -5,7 +5,7 @@ interface ProfileStore {
 }
 
 // good one
-export const useAuthStore = createLocalPersistStore<ProfileStore>(
+export const useProfileStore = createLocalPersistStore<ProfileStore>(
   set => ({
     profile: {} as UserProfileT,
     setProfile: (profile: UserProfileT) => set(() => ({ profile })),
