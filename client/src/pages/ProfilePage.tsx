@@ -5,6 +5,9 @@ import BookingCard from '@/components/profile/BookingCard';
 import BookingSnippet from '@/components/profile/BookingSnippet';
 import ProfileMain from '@/components/profile/ProfileMain';
 import ProfileContainer from '@/components/profile/ProfileContainer';
+import { useFetchProfile } from '@/features/profile';
+import { useAuthStore } from '@/features/auth/stores';
+import { LoadingIndicator } from '@/components';
 // import { Star } from 'lucide-react';
 
 //for when the api is set up
@@ -62,8 +65,25 @@ const userData = {
 
 const ProfilePage: React.FC = () => {
   // const [userData, setUserData]=useState(null)
-  const scheduledBookings = scheduledBookingsMockData;
-  const pastBookings = pastBookingsMockData;
+  const bookings = userData.bookings;
+
+  const userId = useAuthStore(state => state.user?.id);
+
+  //only fetch profile if userProfileData is not set
+  const { data: userProfileData, isLoading, isError } = useFetchProfile(userId);
+
+  // console.log('data', userProfileData);
+  // console.log('isLoading', isLoading);
+  // console.log('isError', isError);
+  // console.log('isFetching', isFetching);
+
+  if (isLoading) {
+    return <LoadingIndicator message='Loading profile...' />;
+  }
+
+  if (isError || !userProfileData) {
+    return <div className='text-red-500 text-center'>Error loading profile data.</div>;
+  }
 
   // useEffect(() =>{
   //Fetch for user model + bookings
@@ -103,14 +123,14 @@ const ProfilePage: React.FC = () => {
       <ProfileContainer>
         <h1 className='text-5xl text-center py-5'>Profile </h1>
         <ProfileMain
-          userType={userData.type}
-          userName={userData.name}
-          bookingsCompleted={userData.bc}
-          years={userData.years}
+          userType={userProfileData.user.userType}
+          userName={userProfileData.user.name}
           rating={userData.rating}
-          bookings={userData.bookings.length}
+          years={userData.years}
           location={userData.location}
           image={userData.image}
+          bookingsCompleted={userData.bc}
+          bookings={userData.bookings.length}
         />
         <BookingSnippet title='Scheduled Bookings'>
           {scheduledBookings.map((booking, index) => {
@@ -148,17 +168,3 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
-
-// <div>
-//   <Accordion type='single' collapsible>
-//     <AccordionItem className='py-5' value='item-1'>
-//       <AccordionTrigger className='bg-stone-300 border-3 border border-black'>
-//         <h3 className='px-3 text-3xl'>Past Bookings</h3>
-//       </AccordionTrigger>
-//       <AccordionContent className='flex flex-col justify-center gap-3'>
-//         {/* Child is map of booking car */}
-//         {children}
-//       </AccordionContent>
-//     </AccordionItem>
-//   </Accordion>
-// </div>;
