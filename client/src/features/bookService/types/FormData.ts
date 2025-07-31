@@ -20,3 +20,6 @@ export interface FormData {
   cvc: CVC | null;
   zip: Zip | null;
 }
+
+export type FormFieldKey = keyof FormData;
+export type FormFieldValue<K extends FormFieldKey> = FormData[K];

@@ -5,54 +5,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {
   TimeSlot,
   FormData,
-  Address,
-  City,
+  FormFieldKey,
+  FormFieldValue,
   State,
-  Apartment,
-  Zipcode,
-  CardName,
-  CardNumber,
-  CVC,
-  Expiry,
-  Zip,
   useFetchAvailableDates,
 } from '@/features/bookService';
-import { useFetchServices, Service } from '@/features/services';
-import { Technician, useFetchTechnicians } from '@/features/technicians';
+import { useFetchServices } from '@/features/services';
+import { useFetchTechnicians } from '@/features/technicians';
 import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
-
-// Helper types for strict handleChange
-type FormFieldKey = keyof FormData;
-type FormFieldValue<K extends FormFieldKey> = K extends 'service'
-  ? Service | null
-  : K extends 'date'
-    ? Date | null
-    : K extends 'timeSlot'
-      ? TimeSlot | ''
-      : K extends 'technician'
-        ? Technician | null
-        : K extends 'address'
-          ? Address | null
-          : K extends 'apartment'
-            ? Apartment | null
-            : K extends 'city'
-              ? City | null
-              : K extends 'state'
-                ? State | null
-                : K extends 'zipcode'
-                  ? Zipcode | null
-                  : K extends 'cardName'
-                    ? CardName | null
-                    : K extends 'cardNumber'
-                      ? CardNumber | null
-                      : K extends 'cvc'
-                        ? CVC | null
-                        : K extends 'expiry'
-                          ? Expiry | null
-                          : K extends 'zip'
-                            ? Zip | null
-                            : never;
 
 interface SectionTitleProps {
   title: string;
@@ -102,7 +63,6 @@ const ServiceBookingForm: React.FC = () => {
     error: techniciansError,
   } = useFetchTechnicians();
 
-  // Strictly typed handler
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
     setFormData(prev => ({
       ...prev,
