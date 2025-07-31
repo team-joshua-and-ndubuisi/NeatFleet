@@ -1,14 +1,8 @@
 import { Router } from 'express';
-import {
-  getServiceDateAvailability,
-  getServiceTimeBlockAvailability,
-} from '../controllers/availabilityController';
+import { getServiceAvailability } from '../controllers/availabilityController';
 
 const router = Router();
 
-router.get('/service/:service_id', getServiceDateAvailability);
-
-// '/service/:service_id/timeblocks?date=YYYY-MM-DD'
-router.get('/service/:service_id/timeblocks', getServiceTimeBlockAvailability);
+router.get('/service/:service_id', getServiceAvailability);
 
 export default router;

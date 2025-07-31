@@ -29,7 +29,7 @@ async function getUpcomingAvailableDatesByServiceId(
   }
 }
 
-async function getAvailableTimeBlocks(serviceId: string, date: string) {
+async function getOpenTimeBlocks(serviceId: string, date: string) {
   const result: { time_block: string }[] = await prismaClient.$queryRaw<
     { time_block: TimeBlock }[]
   >`
@@ -60,4 +60,4 @@ async function getAvailableTimeBlocks(serviceId: string, date: string) {
   return availabilityMap;
 }
 
-export { getUpcomingAvailableDatesByServiceId, getAvailableTimeBlocks };
+export { getUpcomingAvailableDatesByServiceId, getOpenTimeBlocks };
