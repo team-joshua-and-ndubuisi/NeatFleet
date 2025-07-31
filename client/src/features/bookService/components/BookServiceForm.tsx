@@ -2,7 +2,16 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { TimeSlot, FormData } from '@/features/bookService';
+import {
+  TimeSlot,
+  FormData,
+  Address,
+  City,
+  State,
+  Apartment,
+  Zipcode,
+} from '@/features/bookService';
+import { CardName, CardNumber, CVC, Expiry, Zip } from '@/features/bookService';
 import { useFetchServices, Service } from '@/features/services';
 import { Technician, useFetchTechnicians } from '@/features/technicians';
 import { LoadingIndicator, ErrorComponent } from '@/components';
@@ -17,11 +26,84 @@ type FormFieldValue<K extends FormFieldKey> = K extends 'service'
       ? TimeSlot | ''
       : K extends 'technician'
         ? Technician | null
-        : never;
+        : K extends 'address'
+          ? Address | null
+          : K extends 'apartment'
+            ? Apartment | null
+            : K extends 'city'
+              ? City | null
+              : K extends 'state'
+                ? State | null
+                : K extends 'zipcode'
+                  ? Zipcode | null
+                  : K extends 'cardName'
+                    ? CardName | null
+                    : K extends 'cardNumber'
+                      ? CardNumber | null
+                      : K extends 'cvc'
+                        ? CVC | null
+                        : K extends 'expiry'
+                          ? Expiry | null
+                          : K extends 'zip'
+                            ? Zip | null
+                            : never;
 
 interface SectionTitleProps {
   title: string;
 }
+
+const states = [
+  'AL',
+  'AK',
+  'AZ',
+  'AR',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'FL',
+  'GA',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'ME',
+  'MD',
+  'MA',
+  'MI',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NV',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'NC',
+  'ND',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'VA',
+  'WA',
+  'WV',
+  'WI',
+  'WY',
+];
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ title }) => {
   return <label className='block text-primary font-semibold text-2xl mb-2'>{title}</label>;
@@ -37,6 +119,16 @@ const ServiceBookingForm: React.FC = () => {
     date: null,
     timeSlot: '',
     technician: null,
+    address: null,
+    apartment: null,
+    city: null,
+    state: null,
+    zipcode: null,
+    cardName: null,
+    cardNumber: null,
+    cvc: null,
+    expiry: null,
+    zip: null,
   });
 
   const {
@@ -144,7 +236,13 @@ const ServiceBookingForm: React.FC = () => {
           <HorizontalLine />
           <SectionTitle title='Choose a time slot:' />
           <div className='space-y-2 flex flex-col'>
-            {(['Morning', 'Afternoon', 'Evening'] as TimeSlot[]).map(slot => (
+            {(
+              [
+                'Morning (8am - 12pm)',
+                'Afternoon (12pm - 4pm)',
+                'Evening (4pm - 8pm)',
+              ] as TimeSlot[]
+            ).map(slot => (
               <div key={slot} className='h-full'>
                 <input
                   type='radio'
@@ -208,14 +306,165 @@ const ServiceBookingForm: React.FC = () => {
         </div>
       )}
 
+      {/* Address section */}
       {formData.service && formData.date && formData.timeSlot && formData.technician && (
-        <button
-          type='submit'
-          className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8 mb-8'
-        >
-          Submit Booking
-        </button>
+        <div>
+          <HorizontalLine />
+          <SectionTitle title='Enter your address:' />
+          <div className='space-y-2 flex flex-col'>
+            <div>
+              <label htmlFor='address'>Address</label>
+              <input
+                type='text'
+                name='address'
+                id='address'
+                value={formData.address || ''}
+                onChange={e => handleChange('address', e.target.value)}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+            <div>
+              <label htmlFor='apartment'>Apartment</label>
+              <input
+                type='text'
+                name='apartment'
+                id='apartment'
+                value={formData.apartment || ''}
+                onChange={e => handleChange('apartment', e.target.value)}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+            <div>
+              <label htmlFor='city'>City</label>
+              <input
+                type='text'
+                name='city'
+                id='city'
+                value={formData.city || ''}
+                onChange={e => handleChange('city', e.target.value)}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+            <div>
+              <label htmlFor='state'>State</label>
+              <select
+                name='state'
+                id='state'
+                value={formData.state || ''}
+                onChange={e => handleChange('state', e.target.value as State)}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              >
+                {states.map(state => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor='zipcode'>Zipcode</label>
+              <input
+                type='text'
+                name='zipcode'
+                id='zipcode'
+                value={formData.zipcode?.toString() || ''}
+                onChange={e =>
+                  handleChange('zipcode', e.target.value ? Number(e.target.value) : null)
+                }
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+          </div>
+        </div>
       )}
+
+      {/* Payment section */}
+
+      {formData.address && formData.city && formData.state && formData.zipcode && (
+        <div>
+          <HorizontalLine />
+          <SectionTitle title='Choose your payment:' />
+          <div className='space-y-2 flex flex-col'>
+            <div>
+              <label htmlFor='cardName'>Name on Card</label>
+              <input
+                type='text'
+                id='cardName'
+                name='cardName'
+                value={formData.cardName || ''}
+                onChange={e => handleChange('cardName', e.target.value)}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+
+            <div>
+              <label htmlFor='cardNumber'>Card Number</label>
+              <input
+                type='text'
+                id='cardNumber'
+                name='cardNumber'
+                value={formData.cardNumber || ''}
+                onChange={e => handleChange('cardNumber', e.target.value)}
+                placeholder='1234 5678 9012 3456'
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <label htmlFor='expiry'>Expiration</label>
+                <input
+                  type='text'
+                  id='expiry'
+                  name='expiry'
+                  value={formData.expiry || ''}
+                  onChange={e => handleChange('expiry', e.target.value)}
+                  placeholder='MM/YY'
+                  className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+                />
+              </div>
+
+              <div>
+                <label htmlFor='cvc'>CVC</label>
+                <input
+                  type='text'
+                  id='cvc'
+                  name='cvc'
+                  value={formData.cvc || ''}
+                  onChange={e => handleChange('cvc', e.target.value)}
+                  placeholder='123'
+                  className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor='zip'>Billing ZIP Code</label>
+              <input
+                type='text'
+                id='zip'
+                name='zip'
+                value={formData.zip || ''}
+                onChange={e => handleChange('zip', e.target.value)}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {formData.cardName &&
+        formData.cardNumber &&
+        formData.cvc &&
+        formData.expiry &&
+        formData.zip && (
+          <button
+            type='submit'
+            className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8'
+          >
+            Reserve
+          </button>
+        )}
     </form>
   );
 };
