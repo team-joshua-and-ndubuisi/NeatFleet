@@ -1,17 +1,16 @@
 import { Router } from 'express';
-import authRoutes from './auth';
-import usersRoutes from './users';
-import servicesRoutes from './services';
-import availabilityRoutes from './availabilities';
-// const postsRoutes = require("./posts");
 import { isAuth } from '../middleware/authMiddleware';
+import authRoutes from './auth';
+import availabilityRoutes from './availabilities';
+import bookingsRoutes from './bookings';
+import servicesRoutes from './services';
+import usersRoutes from './users';
 
 const router = Router();
 
 router.use('/auth', authRoutes);
-// router.use("/users", isAuth, usersRoutes);
-router.use('/users', usersRoutes);
-// router.use("/posts", isAuth, postsRoutes);
+router.use('/users', isAuth, usersRoutes);
+router.use('/bookings', isAuth, bookingsRoutes);
 router.use('/services', servicesRoutes);
 router.use('/availabilities', availabilityRoutes);
 

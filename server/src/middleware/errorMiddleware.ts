@@ -2,7 +2,7 @@ import { ErrorRequestHandler } from 'express';
 import { logger } from '../config/logger';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  const statusCode = err.statusCode || res.statusCode || 500;
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
 
   logger.error(err.stack || err);
 

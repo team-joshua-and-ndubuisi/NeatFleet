@@ -1,165 +1,132 @@
+import { Booking, PaymentStatus, ServiceStatus } from '../../generated/prisma';
 import prismaClient from '../config/prisma';
-import {
-  Booking,
-  ServiceStatus,
-  PaymentStatus,
-  TimeBlock,
-} from '../../generated/prisma';
 
 type CreateBookingInput = {
-  userId: string;
-  serviceId: string;
-  technicianId: string;
-  serviceDate: string;
-  timeBlock: TimeBlock;
-  addressStreet: string;
-  addressCity: string;
-  addressState: string;
-  addressZip: string;
-  serviceStatus: ServiceStatus;
-  serviceNotes?: string;
-  paymentStatus: PaymentStatus;
-  ratingScore?: number;
-  ratingComment?: string;
+  user_id: string;
+  service_id: string;
+  technician_id: string;
+  service_date: string;
+  service_time?: string;
+  address_street: string;
+  address_city: string;
+  address_state: string;
+  address_zip: string;
+  service_status: ServiceStatus;
+  service_notes?: string;
+  payment_status: PaymentStatus;
+  rating_score?: number;
+  rating_comment?: string;
 };
 
-const createBooking = async (data: CreateBookingInput): Promise<Booking> => {
-  try {
-    const booking = await prismaClient.booking.create({
-      data: {
-        user_id: data.userId,
-        service_id: data.serviceId,
-        technician_id: data.technicianId,
-        service_date: data.serviceDate,
-        time_block: data.timeBlock,
-        address_street: data.addressStreet,
-        address_city: data.addressCity,
-        address_state: data.addressState,
-        address_zip: data.addressZip,
-        service_status: data.serviceStatus,
-        service_notes: data.serviceNotes,
-        payment_status: data.paymentStatus,
-        rating_score: data.ratingScore,
-        rating_comment: data.ratingComment,
-      },
-    });
-    return booking;
-  } catch (error: any) {
-    throw new Error(`Error creating booking: ${error.message}`);
+type UpdateBookingInput = Partial<CreateBookingInput>;
+
+const createBooking = async (
+  newBooking: CreateBookingInput
+): Promise<Booking> => {
+  const { user_id, technician_id } = newBooking;
+
+  const user = await prismaClient.user.findUnique({ where: { id: user_id } });
+  if (!user) {
+    throw new Error(`User not found.`);
   }
-};
 
-const getAllUserBookings = async (userId: string): Promise<Booking[]> => {
-  try {
-    const bookings = await prismaClient.booking.findMany({
-      where: {
-        user_id: userId,
-      },
-    });
-
-    return bookings;
-  } catch (error: any) {
-    throw new Error(
-      `Error fetching bookings for user ${userId}: ${error.message}`
-    );
+  const technician = await prismaClient.technician.findUnique({
+    where: { id: technician_id },
+  });
+  if (!technician) {
+    throw new Error(`Technician not found.`);
   }
+
+  const booking = await prismaClient.booking.create({ data: newBooking });
+  return booking;
 };
 
-const getAllTechnicianBookings = async (
-  technicianId: string
+const getUserBookings = async (
+  userId: string,
+  serviceStatus?: ServiceStatus,
+  serviceDate?: string
 ): Promise<Booking[]> => {
-  try {
-    const bookings = await prismaClient.booking.findMany({
-      where: {
-        technician_id: technicianId,
-      },
-    });
-
-    return bookings;
-  } catch (error: any) {
-    throw new Error(
-      `Error fetching bookings for technician ${technicianId}: ${error.message}`
-    );
+  const user = await prismaClient.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new Error(`User not found.`);
   }
+
+  const bookings = await prismaClient.booking.findMany({
+    where: {
+      user_id: userId,
+      service_status: serviceStatus,
+      service_date: serviceDate,
+    },
+  });
+  return bookings;
 };
 
-const rateBooking = async (
-  bookingId: string,
-  ratingScore: number,
-  ratingComment?: string
-): Promise<Booking> => {
-  try {
-    const existing = await prismaClient.booking.findUnique({
-      where: { id: bookingId },
-    });
+const getTechnicianBookings = async (
+  technicianId: string,
+  serviceStatus?: ServiceStatus,
+  serviceDate?: string
+): Promise<Booking[]> => {
+  const technician = await prismaClient.technician.findUnique({
+    where: { id: technicianId },
+  });
 
-    if (!existing) {
-      throw new Error(`Booking ${bookingId} does not exist`);
-    }
-
-    const updated = await prismaClient.booking.update({
-      where: { id: bookingId },
-      data: {
-        rating_score: ratingScore,
-        rating_comment: ratingComment,
-      },
-    });
-
-    return updated;
-  } catch (error: any) {
-    throw new Error(`Failed to rate booking: ${error.message}`);
+  if (!technician) {
+    throw new Error(`Technician not found.`);
   }
+
+  const bookings = await prismaClient.booking.findMany({
+    where: {
+      technician_id: technicianId,
+      service_status: serviceStatus,
+      service_date: serviceDate,
+    },
+  });
+
+  return bookings;
 };
 
-const updateServiceStatus = async (
+const editBooking = async (
   bookingId: string,
-  status: ServiceStatus
+  updatedBooking: UpdateBookingInput
 ): Promise<Booking> => {
-  try {
-    const booking = await prismaClient.booking.update({
-      where: {
-        id: bookingId,
-      },
-      data: {
-        service_status: status,
-      },
-    });
+  const existing = await prismaClient.booking.findUnique({
+    where: { id: bookingId },
+  });
 
-    return booking;
-  } catch (error: any) {
-    throw new Error(
-      `Error updating service status for booking ${bookingId}: ${error.message}`
-    );
+  if (!existing) {
+    throw new Error(`Booking not found.`);
   }
+
+  const booking = await prismaClient.booking.update({
+    where: {
+      id: bookingId,
+    },
+    data: updatedBooking,
+  });
+  return booking;
 };
 
-const updatePaymentStatus = async (
-  bookingId: string,
-  status: PaymentStatus
-): Promise<Booking> => {
-  try {
-    const booking = await prismaClient.booking.update({
-      where: {
-        id: bookingId,
-      },
-      data: {
-        payment_status: status,
-      },
-    });
+const deleteBookingById = async (bookingId: string): Promise<Booking> => {
+  const existing = await prismaClient.booking.findUnique({
+    where: { id: bookingId },
+  });
 
-    return booking;
-  } catch (error: any) {
-    throw new Error(
-      `Error updating payment status for booking ${bookingId}: ${error.message}`
-    );
+  if (!existing) {
+    throw new Error(`Booking not found.`);
   }
+
+  const booking = await prismaClient.booking.delete({
+    where: {
+      id: bookingId,
+    },
+  });
+  return booking;
 };
 
 export {
   createBooking,
-  getAllUserBookings,
-  getAllTechnicianBookings,
-  rateBooking,
-  updateServiceStatus,
-  updatePaymentStatus,
+  deleteBookingById,
+  editBooking,
+  getTechnicianBookings,
+  getUserBookings,
 };
