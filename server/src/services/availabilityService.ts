@@ -60,4 +60,50 @@ async function getOpenTimeBlocks(serviceId: string, date: string) {
   return availabilityMap;
 }
 
-export { getUpcomingAvailableDatesByServiceId, getOpenTimeBlocks };
+async function getTechniciansByServiceDateAndTimeBlock(
+  serviceId: string,
+  date: string,
+  timeBlock: TimeBlock
+) {
+  try {
+    const technicians = await prismaClient.technician.findMany({
+      where: {
+        services: {
+          some: {
+            service_id: serviceId,
+          },
+        },
+        availabilities: {
+          some: {
+            available_date: date,
+            time_block: timeBlock,
+          },
+        },
+      },
+      select: {
+        id: true,
+        user: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
+        },
+        current_rating: true,
+      },
+    });
+
+    return technicians;
+  } catch (error: any) {
+    console.error(
+      `Error retrieving technicians for service ${serviceId} on ${date} during ${timeBlock}:`,
+      error
+    );
+    throw new Error('Failed to fetch available technicians.');
+  }
+}
+
+export {
+  getUpcomingAvailableDatesByServiceId,
+  getOpenTimeBlocks,
+  getTechniciansByServiceDateAndTimeBlock,
+};

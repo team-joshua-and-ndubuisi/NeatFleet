@@ -106,8 +106,9 @@ const getAvailableTechnicians = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { service_id } = req.params;
     const { date, time_block } = req.query;
+    const TIME_BLOCK_OPTIONS = ['morning', 'afternoon', 'evening'];
 
-    if (typeof date !== 'string' || typeof time_block !== 'string') {
+    if (typeof date !== 'string' || TIME_BLOCK_OPTIONS.includes(time_block)) {
       res.status(400).json({
         error: 'Missing or invalid `date` or `time_block` query parameter',
       });
