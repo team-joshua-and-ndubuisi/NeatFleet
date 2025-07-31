@@ -20,6 +20,7 @@ import {
 import { useFetchServices, Service } from '@/features/services';
 import { Technician, useFetchTechnicians } from '@/features/technicians';
 import { LoadingIndicator, ErrorComponent } from '@/components';
+import { stateAbbreviations } from '@/data';
 
 // Helper types for strict handleChange
 type FormFieldKey = keyof FormData;
@@ -56,59 +57,6 @@ type FormFieldValue<K extends FormFieldKey> = K extends 'service'
 interface SectionTitleProps {
   title: string;
 }
-
-const states = [
-  'AL',
-  'AK',
-  'AZ',
-  'AR',
-  'CA',
-  'CO',
-  'CT',
-  'DE',
-  'FL',
-  'GA',
-  'HI',
-  'ID',
-  'IL',
-  'IN',
-  'IA',
-  'KS',
-  'KY',
-  'LA',
-  'ME',
-  'MD',
-  'MA',
-  'MI',
-  'MN',
-  'MS',
-  'MO',
-  'MT',
-  'NE',
-  'NV',
-  'NH',
-  'NJ',
-  'NM',
-  'NY',
-  'NC',
-  'ND',
-  'OH',
-  'OK',
-  'OR',
-  'PA',
-  'RI',
-  'SC',
-  'SD',
-  'TN',
-  'TX',
-  'UT',
-  'VT',
-  'VA',
-  'WA',
-  'WV',
-  'WI',
-  'WY',
-];
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ title }) => {
   return <label className='block text-primary font-semibold text-2xl mb-2'>{title}</label>;
@@ -372,7 +320,7 @@ const ServiceBookingForm: React.FC = () => {
                 onChange={e => handleChange('state', e.target.value as State)}
                 className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
               >
-                {states.map(state => (
+                {stateAbbreviations.map(state => (
                   <option key={state} value={state}>
                     {state}
                   </option>
