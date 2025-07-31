@@ -8,6 +8,11 @@ import {
 import { logger } from '../config/logger';
 
 /**
+ * The following allows one step by step to progressively
+ * builds up info. So that it can accomadate step by step booking flow.
+ */
+
+/**
  * @desc    Get availability information for a specific service.
  *          Behavior depends on query parameters:
  *          - No query: returns available dates
