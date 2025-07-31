@@ -1,14 +1,20 @@
 import { UserProfileT } from '@/features/profile/';
 import { createLocalPersistStore } from '@/lib/utils';
+import { create } from 'zustand';
 interface ProfileStore {
-  profile: UserProfileT;
+  profile: UserProfileT | null;
+  setProfile: (profile: UserProfileT) => void;
 }
 
 // good one
-export const useProfileStore = createLocalPersistStore<ProfileStore>(
-  set => ({
-    profile: {} as UserProfileT,
-    setProfile: (profile: UserProfileT) => set(() => ({ profile })),
-  }),
-  'profileStore'
-);
+export const useProfileStore = create<ProfileStore>(set => ({
+  profile: null,
+  setProfile: (profile: UserProfileT) => set(() => ({ profile })),
+}));
+// export const useProfileStore = createLocalPersistStore<ProfileStore>(
+//   set => ({
+//     profile: null,
+//     setProfile: (profile: UserProfileT) => set(() => ({ profile })),
+//   }),
+//   'profileStore'
+// );
