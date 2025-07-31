@@ -1,6 +1,8 @@
 export type { ServiceFormData } from './ServiceFormDataType';
 export type { ServiceFormState } from './ServiceFormState';
 export type { FormData } from './FormData';
+export type { FormFieldKey } from './FormData';
+export type { FormFieldValue } from './FormData';
 export type { TimeSlot } from './TimeSlot';
 export type { Address } from './Address';
 export type { Apartment } from './Address';
