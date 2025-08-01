@@ -6,7 +6,7 @@ import { navItems } from '@/data';
 const MainLayout: React.FC = () => {
   return (
     <div className='min-h-screen bg-gray-50'>
-      <NavBar heading='Web App Template' navItems={navItems} />
+      <NavBar heading='Neat Fleet' navItems={navItems} />
       <Outlet />
     </div>
   );
