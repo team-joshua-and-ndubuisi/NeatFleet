@@ -81,7 +81,6 @@ async function main() {
   });
 
   // Create Technician Availability
-<<<<<<< HEAD
   await prisma.technicianAvailability.createMany({
     data: [
       {
@@ -100,16 +99,6 @@ async function main() {
         time_block: 'morning',
       },
     ],
-=======
-  await prisma.technicianAvailability.create({
-    data: {
-      id: '50000000-0000-0000-0000-000000000001',
-      technician_id: technician1.id,
-      available_date: '2025-09-10',
-      start_time: '09:00:00',
-      end_time: '17:00:00',
-    },
->>>>>>> 828f6b635626e678bf65c1210f2e70e3934eb2ed
   });
 
   // Create Services
@@ -152,20 +141,11 @@ async function main() {
       service_id: service1.id,
       technician_id: technician1.id,
       service_date: '2025-09-10',
-<<<<<<< HEAD
       time_block: 'afternoon',
-=======
-      service_time: '14:00:00',
->>>>>>> 828f6b635626e678bf65c1210f2e70e3934eb2ed
       address_street: '456 Oak Ave',
       address_city: 'Someville',
       address_state: 'TX',
       address_zip: '67890',
-<<<<<<< HEAD
-=======
-      service_status: 'scheduled',
-      payment_status: 'paid',
->>>>>>> 828f6b635626e678bf65c1210f2e70e3934eb2ed
     },
   });
 
@@ -176,20 +156,11 @@ async function main() {
       service_id: service2.id,
       technician_id: technician1.id,
       service_date: '2025-09-12',
-<<<<<<< HEAD
       time_block: 'morning',
-=======
-      service_time: '09:30:00',
->>>>>>> 828f6b635626e678bf65c1210f2e70e3934eb2ed
       address_street: '123 Main St',
       address_city: 'Anytown',
       address_state: 'CA',
       address_zip: '12345',
-<<<<<<< HEAD
-=======
-      service_status: 'scheduled',
-      payment_status: 'paid',
->>>>>>> 828f6b635626e678bf65c1210f2e70e3934eb2ed
     },
   });
 
@@ -218,11 +189,7 @@ async function main() {
 }
 
 main()
-<<<<<<< HEAD
   .catch(e => {
-=======
-  .catch((e) => {
->>>>>>> 828f6b635626e678bf65c1210f2e70e3934eb2ed
     console.error(e);
     process.exit(1);
   })
