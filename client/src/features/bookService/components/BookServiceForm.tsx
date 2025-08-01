@@ -69,8 +69,6 @@ const ServiceBookingForm: React.FC = () => {
     }
   };
 
-  if (areServicesLoading) return <LoadingIndicator />;
-  if (servicesError) return <ErrorComponent />;
   if (areTechniciansLoading) return <LoadingIndicator />;
   if (techniciansError) return <ErrorComponent />;
 
@@ -85,6 +83,12 @@ const ServiceBookingForm: React.FC = () => {
       <div>
         <SectionTitle title='Choose a service:' />
         <div className='space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch'>
+          {areServicesLoading && <LoadingIndicator message='Loading Services...' />}
+
+          {servicesError && (
+            <ErrorComponent message='Something went wrong while fetching services.' />
+          )}
+
           {services?.map(service => (
             <div key={service.id} className='h-full'>
               <input
@@ -114,14 +118,16 @@ const ServiceBookingForm: React.FC = () => {
       </div>
 
       {/* Date Selection */}
-      {areDatesLoading && <LoadingIndicator message='Loading Available Dates...' />}
-      {datesError && (
-        <ErrorComponent message='Something went wrong while fetching available dates.' />
-      )}
-      {availableDates && availableDates.length > 0 && (
-        <div>
-          <HorizontalLine />
-          <SectionTitle title='Choose a date:' />
+      <div>
+        <HorizontalLine />
+        <SectionTitle title='Choose a date:' />
+        {areDatesLoading && <LoadingIndicator message='Loading Available Dates...' />}
+
+        {datesError && (
+          <ErrorComponent message='Something went wrong while fetching available dates.' />
+        )}
+
+        {availableDates && availableDates.length > 0 && (
           <DatePicker
             showIcon
             includeDates={
@@ -134,8 +140,8 @@ const ServiceBookingForm: React.FC = () => {
             minDate={new Date()}
             dateFormat='MMMM d, yyyy'
           />
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Time Slot Selection */}
       {formData.service && formData.date && (
