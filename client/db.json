@@ -1337,6 +1337,68 @@
           "current_rating": 3.8
         }
       ]
+    },
+    {
+      "serviceId": "f77b9a0d-f3ee-4f1b-8a79-fb86a54763f2",
+      "date": "2025-08-06T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "f77b9a0d-f3ee-4f1b-8a79-fb86a54763f2",
+      "date": "2025-08-06T00:00:00.000Z",
+      "time": "evening",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
     }
   ]
 }
