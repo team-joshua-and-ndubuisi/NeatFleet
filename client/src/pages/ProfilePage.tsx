@@ -50,7 +50,7 @@ const pastBookingsMockData = [
 ];
 
 const userData = {
-  type: 'tech',
+  type: '',
   name: 'JohnDoe123',
   bc: 42,
   years: 5,
