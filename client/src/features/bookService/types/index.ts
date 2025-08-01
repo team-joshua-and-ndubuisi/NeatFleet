@@ -14,4 +14,4 @@ export type { CardNumber } from './Payment';
 export type { CVC } from './Payment';
 export type { Expiry } from './Payment';
 export type { Zip } from './Payment';
-export type { Availability } from './Availability';
+export type { AvailableDate, AvailableTime, AvailableTechnician } from './Availability';
