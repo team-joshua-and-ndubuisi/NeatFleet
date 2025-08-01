@@ -1,14 +1,13 @@
-// components/ServiceBookingForm.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   TimeSlot,
-  FormData,
   FormFieldKey,
   FormFieldValue,
   State,
   useFetchAvailableDates,
+  useServiceFormStore,
 } from '@/features/bookService';
 import { useFetchServices } from '@/features/services';
 import { useFetchTechnicians } from '@/features/technicians';
@@ -28,22 +27,7 @@ const HorizontalLine: React.FC = () => {
 };
 
 const ServiceBookingForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    service: null,
-    date: null,
-    timeSlot: '',
-    technician: null,
-    address: null,
-    apartment: null,
-    city: null,
-    state: null,
-    zipcode: null,
-    cardName: null,
-    cardNumber: null,
-    cvc: null,
-    expiry: null,
-    zip: null,
-  });
+  const { formData, setFormData } = useServiceFormStore();
 
   const {
     data: services,
@@ -59,15 +43,12 @@ const ServiceBookingForm: React.FC = () => {
 
   const {
     data: technicians,
-    isLoading: areTechniciasLoading,
+    isLoading: areTechniciansLoading,
     error: techniciansError,
   } = useFetchTechnicians();
 
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
-    setFormData(prev => ({
-      ...prev,
-      [key]: value,
-    }));
+    setFormData({ [key]: value });
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,7 +71,7 @@ const ServiceBookingForm: React.FC = () => {
 
   if (areServicesLoading) return <LoadingIndicator />;
   if (servicesError) return <ErrorComponent />;
-  if (areTechniciasLoading) return <LoadingIndicator />;
+  if (areTechniciansLoading) return <LoadingIndicator />;
   if (techniciansError) return <ErrorComponent />;
 
   return (
@@ -137,7 +118,7 @@ const ServiceBookingForm: React.FC = () => {
       {datesError && (
         <ErrorComponent message='Something went wrong while fetching available dates.' />
       )}
-      {availableDates && (
+      {availableDates && availableDates.length > 0 && (
         <div>
           <HorizontalLine />
           <SectionTitle title='Choose a date:' />

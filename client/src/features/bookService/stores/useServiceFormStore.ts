@@ -1,14 +1,31 @@
 import { create } from 'zustand';
-import { ServiceFormData, ServiceFormState } from '@/features/bookService';
+import { FormData, ServiceFormState } from '@/features/bookService';
+
+const initialFormState = {
+  service: null,
+  date: null,
+  timeSlot: null,
+  technician: null,
+  address: null,
+  apartment: null,
+  city: null,
+  state: null,
+  zipcode: null,
+  cardName: null,
+  cardNumber: null,
+  cvc: null,
+  expiry: null,
+  zip: null,
+};
 
 export const useServiceFormStore = create<ServiceFormState>(set => ({
-  step: 0,
-  data: {
-    services: [],
-    technician: null,
-  },
-  next: () => set(state => ({ step: state.step + 1 })),
-  back: () => set(state => ({ step: Math.max(0, state.step - 1) })),
-  reset: () => set({ step: 0, data: { services: [], technician: null } }),
-  setFormData: (data: ServiceFormData) => set({ data }),
+  formData: initialFormState,
+  reset: () => set({ formData: initialFormState }),
+  setFormData: (update: Partial<FormData>) =>
+    set(state => ({
+      formData: {
+        ...state.formData,
+        ...update,
+      },
+    })),
 }));
