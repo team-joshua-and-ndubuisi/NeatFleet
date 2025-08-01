@@ -7,9 +7,9 @@ export const useFetchProfile = (userId: string) => {
     queryFn: () => fetchProfile(userId),
     staleTime: 1000 * 60 * 60 * 1, // 1 hour
     retry: 1,
-    placeholderData: {
+    initialData: {
       user: { userId: '12345ID', userType: 'client', name: 'Bob' },
-      technician: { techId: '', techName: '', techRating: 0 },
+      technician: { techId: '', techName: '', techRating: 4.5 },
       bookings: [],
     },
   });
