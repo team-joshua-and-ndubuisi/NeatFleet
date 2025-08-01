@@ -375,5 +375,968 @@
       "date": "2025-08-24T00:00:00.000Z",
       "times": ["morning", "evening"]
     }
+  ],
+  "availableTechnicians": [
+    {
+      "serviceId": "3f8d8a2e-5e13-4d8a-8b35-90c0d40c1b01",
+      "date": "2025-08-01T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "3f8d8a2e-5e13-4d8a-8b35-90c0d40c1b01",
+      "date": "2025-08-01T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "3f8d8a2e-5e13-4d8a-8b35-90c0d40c1b01",
+      "date": "2025-08-02T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "a974c9d5-b2f2-4f43-b537-473af02e04c5",
+          "user_id": "b02a13ab-5749-4f9c-81d5-35440c8a5dbf",
+          "first_name": "Sophia",
+          "last_name": "Chen",
+          "email": "sophia.chen@example.com",
+          "phone": "+1-202-555-0128",
+          "password": "$2b$10$examplehash5",
+          "created_at": "2025-07-05T09:21:45Z",
+          "is_active": true,
+          "current_rating": 4.5
+        },
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        }
+      ]
+    },
+    {
+      "serviceId": "3f8d8a2e-5e13-4d8a-8b35-90c0d40c1b01",
+      "date": "2025-08-02T00:00:00.000Z",
+      "time": "evening",
+      "technicians": [
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        },
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        }
+      ]
+    },
+    {
+      "serviceId": "f77b9a0d-f3ee-4f1b-8a79-fb86a54763f2",
+      "date": "2025-08-04T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        },
+        {
+          "id": "a974c9d5-b2f2-4f43-b537-473af02e04c5",
+          "user_id": "b02a13ab-5749-4f9c-81d5-35440c8a5dbf",
+          "first_name": "Sophia",
+          "last_name": "Chen",
+          "email": "sophia.chen@example.com",
+          "phone": "+1-202-555-0128",
+          "password": "$2b$10$examplehash5",
+          "created_at": "2025-07-05T09:21:45Z",
+          "is_active": true,
+          "current_rating": 4.5
+        }
+      ]
+    },
+    {
+      "serviceId": "f77b9a0d-f3ee-4f1b-8a79-fb86a54763f2",
+      "date": "2025-08-04T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "f77b9a0d-f3ee-4f1b-8a79-fb86a54763f2",
+      "date": "2025-08-04T00:00:00.000Z",
+      "time": "evening",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "a9b9e19c-7ae2-46f9-9bd7-02894736f78e",
+      "date": "2025-08-07T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "a9b9e19c-7ae2-46f9-9bd7-02894736f78e",
+      "date": "2025-08-07T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "a9b9e19c-7ae2-46f9-9bd7-02894736f78e",
+      "date": "2025-08-08T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "a9b9e19c-7ae2-46f9-9bd7-02894736f78e",
+      "date": "2025-08-08T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "a9b9e19c-7ae2-46f9-9bd7-02894736f78e",
+      "date": "2025-08-09T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "a9b9e19c-7ae2-46f9-9bd7-02894736f78e",
+      "date": "2025-08-09T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "aa1492e4-91e0-4d59-87a1-5b2cf30f98ea",
+      "date": "2025-08-10T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "aa1492e4-91e0-4d59-87a1-5b2cf30f98ea",
+      "date": "2025-08-10T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "aa1492e4-91e0-4d59-87a1-5b2cf30f98ea",
+      "date": "2025-08-11T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "aa1492e4-91e0-4d59-87a1-5b2cf30f98ea",
+      "date": "2025-08-11T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "aa1492e4-91e0-4d59-87a1-5b2cf30f98ea",
+      "date": "2025-08-12T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "aa1492e4-91e0-4d59-87a1-5b2cf30f98ea",
+      "date": "2025-08-12T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "529b9b95-4419-4c6f-91b1-5a7e3b72f027",
+      "date": "2025-08-13T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "529b9b95-4419-4c6f-91b1-5a7e3b72f027",
+      "date": "2025-08-13T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "82c5b4ec-b930-48c1-9f67-743acbd5ae35",
+      "date": "2025-08-16T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "82c5b4ec-b930-48c1-9f67-743acbd5ae35",
+      "date": "2025-08-16T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "c1fe6ac3-30b2-4f79-8c1f-4b11a561f21b",
+      "date": "2025-08-19T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "c1fe6ac3-30b2-4f79-8c1f-4b11a561f21b",
+      "date": "2025-08-19T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "bc2a24dc-83f1-4d29-b32a-f879e3949de4",
+      "date": "2025-08-22T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "bc2a24dc-83f1-4d29-b32a-f879e3949de4",
+      "date": "2025-08-22T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "bc2a24dc-83f1-4d29-b32a-f879e3949de4",
+      "date": "2025-08-23T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "bc2a24dc-83f1-4d29-b32a-f879e3949de4",
+      "date": "2025-08-23T00:00:00.000Z",
+      "time": "afternoon",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    },
+    {
+      "serviceId": "bc2a24dc-83f1-4d29-b32a-f879e3949de4",
+      "date": "2025-08-24T00:00:00.000Z",
+      "time": "morning",
+      "technicians": [
+        {
+          "id": "b3f23e7c-8f10-4b52-a0d1-5bba07eb9f41",
+          "user_id": "7d5f7ad0-2a1c-4e6a-baa6-167a3b8e5422",
+          "first_name": "Maria",
+          "last_name": "Lopez",
+          "email": "maria.lopez@example.com",
+          "phone": "+1-202-555-0134",
+          "password": "$2b$10$examplehash1",
+          "created_at": "2025-07-01T10:15:30Z",
+          "is_active": true,
+          "current_rating": 4.7
+        },
+        {
+          "id": "e1a36a68-d97f-49fc-b1ea-cc3fdb71b826",
+          "user_id": "3c1e93aa-c7f0-4f8d-973f-8c4c4b22f3ee",
+          "first_name": "James",
+          "last_name": "Nguyen",
+          "email": "james.nguyen@example.com",
+          "phone": "+1-202-555-0173",
+          "password": "$2b$10$examplehash2",
+          "created_at": "2025-07-02T14:27:15Z",
+          "is_active": true,
+          "current_rating": 4.3
+        }
+      ]
+    },
+    {
+      "serviceId": "bc2a24dc-83f1-4d29-b32a-f879e3949de4",
+      "date": "2025-08-24T00:00:00.000Z",
+      "time": "evening",
+      "technicians": [
+        {
+          "id": "3f839d35-4f33-42a2-8b4a-e56a0b3c8af8",
+          "user_id": "f69a157f-76a1-44e1-a7b2-1cfb8aa1d0e0",
+          "first_name": "Alicia",
+          "last_name": "Martinez",
+          "email": "alicia.martinez@example.com",
+          "phone": "+1-202-555-0101",
+          "password": "$2b$10$examplehash3",
+          "created_at": "2025-07-03T08:40:12Z",
+          "is_active": true,
+          "current_rating": 4.9
+        },
+        {
+          "id": "5a2047cb-5d11-4f4f-9f1b-5477853fc8bc",
+          "user_id": "2ec38f00-3d75-4642-9510-39135112cd1a",
+          "first_name": "Derek",
+          "last_name": "White",
+          "email": "derek.white@example.com",
+          "phone": "+1-202-555-0199",
+          "password": "$2b$10$examplehash4",
+          "created_at": "2025-07-04T11:55:00Z",
+          "is_active": true,
+          "current_rating": 3.8
+        }
+      ]
+    }
   ]
 }
