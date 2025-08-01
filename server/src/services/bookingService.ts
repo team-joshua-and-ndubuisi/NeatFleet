@@ -1,4 +1,4 @@
-import { Booking, TimeBlock } from '../../generated/prisma';
+import { Booking, ServiceStatus, TimeBlock } from '../../generated/prisma';
 import prismaClient from '../config/prisma';
 
 type CreateBookingInput = {
@@ -53,7 +53,7 @@ const createBooking = async (
 
 const getUserBookings = async (
   userId: string,
-  serviceStatus?: any,
+  serviceStatus?: ServiceStatus,
   serviceDate?: string
 ): Promise<Booking[]> => {
   const user = await prismaClient.user.findUnique({ where: { id: userId } });
@@ -73,7 +73,7 @@ const getUserBookings = async (
 
 const getTechnicianBookings = async (
   technicianId: string,
-  serviceStatus?: any,
+  serviceStatus?: ServiceStatus,
   serviceDate?: string
 ): Promise<Booking[]> => {
   const technician = await prismaClient.technician.findUnique({
