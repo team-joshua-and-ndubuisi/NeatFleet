@@ -19,6 +19,7 @@ const userData = {
   rating: 4.7,
   bookings: [
     {
+      id: '1sdafasd',
       name: 'Alice Johnson',
       status: 'completed',
       date: 1672531200000,
@@ -26,6 +27,7 @@ const userData = {
       rating: 5,
     },
     {
+      id: '2qweqwe',
       name: 'Robert Smith',
       status: 'completed',
       date: 1675209600000,
@@ -33,6 +35,7 @@ const userData = {
       rating: 4,
     },
     {
+      id: '3zxcvbnm',
       name: 'Maria Garcia',
       status: 'cancelled',
       date: 1677888000000,
@@ -40,6 +43,7 @@ const userData = {
       rating: 0,
     },
     {
+      id: '4qwertyu',
       name: 'James Wilson',
       status: 'upcoming',
       date: 1680566400000,
@@ -107,6 +111,7 @@ const ProfilePage: React.FC = () => {
           {bookings.map((booking, index) => {
             return (
               <BookingCard
+                id={booking.id}
                 key={index}
                 name={booking.name}
                 status={booking.status}
