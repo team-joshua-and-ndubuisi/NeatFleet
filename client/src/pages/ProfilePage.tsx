@@ -11,17 +11,6 @@ import ProfileContainer from '@/components/profile/ProfileContainer';
 // const endpoint='/profile'
 // const URL = 'http://localhost5432'+endpoint
 
-const userData = {
-  type: '',
-  name: 'JohnDoe123',
-  bc: 42,
-  years: 5,
-  rating: 4.7,
-  bookings: [],
-  location: 'New York, NY',
-  image: 'https://example.com/profile-pictures/johndoe.jpg',
-};
-
 const scheduledBookingsMockData = [
   {
     id: '4qwertyu',
@@ -59,6 +48,17 @@ const pastBookingsMockData = [
     rating: 0,
   },
 ];
+
+const userData = {
+  type: '',
+  name: 'JohnDoe123',
+  bc: 42,
+  years: 5,
+  rating: 4.7,
+  bookings: pastBookingsMockData,
+  location: 'New York, NY',
+  image: 'https://example.com/profile-pictures/johndoe.jpg',
+};
 
 const ProfilePage: React.FC = () => {
   // const [userData, setUserData]=useState(null)
