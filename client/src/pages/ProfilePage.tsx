@@ -70,12 +70,7 @@ const ProfilePage: React.FC = () => {
   function convertDate(date: number) {
     const newdate = new Date(date);
 
-    // Extract components
-    const day = newdate.getDate();
-    const month = newdate.getMonth() + 1;
-    const year = newdate.getFullYear();
-
-    return `${day}/${month}/${year}`;
+    return newdate.toLocaleDateString();
   }
   // function getStars(rating:any){
   //   const stars= Array(5).fill(0)

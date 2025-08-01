@@ -13,8 +13,8 @@ interface BookingProps {
 
 const BookingCard: React.FC<BookingProps> = ({ name, status, date, details, rating, id }) => {
   return (
-    <div className='parent-container'>
-      <div className='flex py-10'>
+    <div className='parent-container shadow-2xs'>
+      <div className='flex'>
         <div className='border border-black py-3 w-1/5 text-wrap text-center lg:text-xl md:text-xl text-sm  border-round-5x rounded-tl-lg rounded-bl-lg'>
           <span> Name: {name}</span>
         </div>
