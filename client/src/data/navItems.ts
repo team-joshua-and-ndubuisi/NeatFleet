@@ -4,6 +4,6 @@ export const navItems = [
   { text: 'Contact', path: '/contact' },
   { text: 'Login', path: '/login' },
   { text: 'Signup', path: '/signup' },
-  { text: 'Services', path: '/service-catalog' },
+  { text: 'Book Now', path: '/service-catalog' },
   { text: 'Profile', path: '/profile' },
 ];

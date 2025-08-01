@@ -1,1 +1,1 @@
-export type { Technician } from './TechnicianType';
+export type { Technician } from './Technician';
