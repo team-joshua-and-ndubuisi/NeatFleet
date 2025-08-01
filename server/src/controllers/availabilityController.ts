@@ -7,6 +7,7 @@ import {
   getOpenTimeBlocks,
 } from '../services/availabilityService';
 import { logger } from '../config/logger';
+import { TimeBlock } from '../../generated/prisma';
 
 /**
  * The following allows one step by step to progressively
@@ -40,7 +41,7 @@ const getServiceAvailability = asyncHandler(
 
     if (date && time_block) {
       //STEP 3: Return available technicians for that service, date, and time block
-      getAvailableTechnicians(req, res, next);
+      await getAvailableTechnicians(req, res, next);
       return;
     }
 
@@ -106,9 +107,18 @@ const getAvailableTechnicians = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { service_id } = req.params;
     const { date, time_block } = req.query;
-    const TIME_BLOCK_OPTIONS = ['morning', 'afternoon', 'evening'];
 
-    if (typeof date !== 'string' || TIME_BLOCK_OPTIONS.includes(time_block)) {
+    // Define the valid time blocks as string literals, and mark as 'const' for type inference
+    const TIME_BLOCK_OPTIONS = ['morning', 'afternoon', 'evening'] as const;
+
+    // Define a union type: 'morning' | 'afternoon' | 'evening'
+    type TimeBlockLiteral = (typeof TIME_BLOCK_OPTIONS)[number]; // 'morning' | 'afternoon' | 'evening'
+
+    if (
+      typeof date !== 'string' ||
+      typeof time_block !== 'string' ||
+      !TIME_BLOCK_OPTIONS.includes(time_block as TimeBlockLiteral)
+    ) {
       res.status(400).json({
         error: 'Missing or invalid `date` or `time_block` query parameter',
       });
@@ -122,11 +132,10 @@ const getAvailableTechnicians = asyncHandler(
     const technicians = await getTechniciansByServiceDateAndTimeBlock(
       service_id,
       date,
-      time_block
+      time_block as TimeBlock
     );
 
     res.status(200).json({ technicians });
-    return;
   }
 );
 
