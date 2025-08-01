@@ -6,8 +6,9 @@ import {
   FormFieldKey,
   FormFieldValue,
   State,
-  useFetchAvailableDates,
   useServiceFormStore,
+  useFetchAvailableDates,
+  useFetchAvailableTimes,
 } from '@/features/bookService';
 import { useFetchServices } from '@/features/services';
 import { useFetchTechnicians } from '@/features/technicians';
@@ -26,6 +27,16 @@ const HorizontalLine: React.FC = () => {
   return <hr className='border-t-1 border-primary-100 pb-10 mt-12' />;
 };
 
+const formatTimeSlot = (timeSlot: TimeSlot): string => {
+  const dict = {
+    morning: 'Morning (8am - 12pm)',
+    afternoon: 'Afternoon (12pm - 4pm)',
+    evening: 'Evening (4pm - 8pm)',
+  };
+
+  return dict[timeSlot];
+};
+
 const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
 
@@ -40,6 +51,12 @@ const ServiceBookingForm: React.FC = () => {
     isLoading: areDatesLoading,
     error: datesError,
   } = useFetchAvailableDates(formData.service?.id);
+
+  const {
+    data: availableTimes,
+    isLoading: areTimesLoading,
+    error: timesError,
+  } = useFetchAvailableTimes(formData.service?.id, formData.date);
 
   const {
     data: technicians,
@@ -150,39 +167,39 @@ const ServiceBookingForm: React.FC = () => {
         <div>
           <HorizontalLine />
           <SectionTitle title='Choose a time slot:' />
-          <div className='space-y-2 flex flex-col'>
-            {(
-              [
-                'Morning (8am - 12pm)',
-                'Afternoon (12pm - 4pm)',
-                'Evening (4pm - 8pm)',
-              ] as TimeSlot[]
-            ).map(slot => (
-              <div key={slot} className='h-full'>
-                <input
-                  type='radio'
-                  id={slot}
-                  name='timeslot'
-                  value={slot}
-                  checked={formData?.timeSlot === slot}
-                  onChange={() => handleChange('timeSlot', slot)}
-                  className='hidden'
-                />
-                <label
-                  htmlFor={slot}
-                  className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+          {areTimesLoading && <LoadingIndicator message='Loading times...' />}
+
+          {timesError && <ErrorComponent message='Something went wrong while fetching times.' />}
+
+          {availableTimes && (
+            <div className='space-y-2 flex flex-col'>
+              {availableTimes[0].times.map(availableTime => (
+                <div key={availableTime} className='h-full'>
+                  <input
+                    type='radio'
+                    id={availableTime}
+                    name='timeslot'
+                    value={availableTime}
+                    checked={formData?.timeSlot === availableTime}
+                    onChange={() => handleChange('timeSlot', availableTime as TimeSlot)}
+                    className='hidden'
+                  />
+                  <label
+                    htmlFor={availableTime}
+                    className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
                           ${
-                            formData?.timeSlot === slot
+                            formData?.timeSlot === availableTime
                               ? 'bg-primary-400 text-background border-primary-600'
                               : 'bg-card text-foreground border-ring hover:border-primary-300 hover:text-primary-600'
                           }
                             `}
-                >
-                  {slot}
-                </label>
-              </div>
-            ))}
-          </div>
+                  >
+                    {formatTimeSlot(availableTime as TimeSlot)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
