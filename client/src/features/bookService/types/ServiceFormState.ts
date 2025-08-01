@@ -1,10 +1,7 @@
-import { ServiceFormData } from '@/features/bookService';
+import { FormData } from '@/features/bookService';
 
 export interface ServiceFormState {
-  step: number;
-  data: ServiceFormData;
-  next: () => void;
-  back: () => void;
+  formData: FormData;
   reset: () => void;
-  setFormData: (data: ServiceFormData) => void;
+  setFormData: (formData: Partial<FormData>) => void;
 }
