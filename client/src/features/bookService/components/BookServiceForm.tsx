@@ -9,9 +9,9 @@ import {
   useServiceFormStore,
   useFetchAvailableDates,
   useFetchAvailableTimes,
+  useFetchAvailableTechnicians,
 } from '@/features/bookService';
 import { useFetchServices } from '@/features/services';
-import { useFetchTechnicians } from '@/features/technicians';
 import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
 
@@ -62,7 +62,7 @@ const ServiceBookingForm: React.FC = () => {
     data: technicians,
     isLoading: areTechniciansLoading,
     error: techniciansError,
-  } = useFetchTechnicians();
+  } = useFetchAvailableTechnicians(formData.service?.id, formData.date, formData.timeSlot);
 
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
     setFormData({ [key]: value });
@@ -85,9 +85,6 @@ const ServiceBookingForm: React.FC = () => {
       console.error('Error submitting form:', error);
     }
   };
-
-  if (areTechniciansLoading) return <LoadingIndicator />;
-  if (techniciansError) return <ErrorComponent />;
 
   return (
     <form
@@ -209,31 +206,39 @@ const ServiceBookingForm: React.FC = () => {
           <HorizontalLine />
           <SectionTitle title='Choose a technician:' />
           <div className='space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch'>
-            {technicians?.map(tech => (
-              <div key={tech.id} className='h-full'>
-                <input
-                  type='radio'
-                  id={`tech-${tech.id}`}
-                  name='technician'
-                  value={tech.id}
-                  checked={formData.technician?.id === tech.id}
-                  onChange={() => handleChange('technician', tech)}
-                  className='hidden'
-                />
-                <label
-                  htmlFor={`tech-${tech.id}`}
-                  className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+            {areTechniciansLoading && <LoadingIndicator message='Loading technicians...' />}
+
+            {techniciansError && (
+              <ErrorComponent message='Something went wrong while fetching technicians.' />
+            )}
+
+            {technicians &&
+              technicians.length > 0 &&
+              technicians[0]?.technicians.map(tech => (
+                <div key={tech.id} className='h-full'>
+                  <input
+                    type='radio'
+                    id={`tech-${tech.id}`}
+                    name='technician'
+                    value={tech.id}
+                    checked={formData.technician?.id === tech.id}
+                    onChange={() => handleChange('technician', tech)}
+                    className='hidden'
+                  />
+                  <label
+                    htmlFor={`tech-${tech.id}`}
+                    className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
                           ${
                             formData.technician?.id === tech.id
                               ? 'bg-primary-400 text-background border-primary-600'
                               : 'bg-card text-foreground border-ring hover:border-primary-300 hover:text-primary-600'
                           }
                             `}
-                >
-                  {tech.first_name} {tech.last_name}
-                </label>
-              </div>
-            ))}
+                  >
+                    {tech.first_name} {tech.last_name}
+                  </label>
+                </div>
+              ))}
           </div>
         </div>
       )}
