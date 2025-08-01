@@ -1,5 +1,4 @@
-
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -82,14 +81,24 @@ async function main() {
   });
 
   // Create Technician Availability
-  await prisma.technicianAvailability.create({
-    data: {
-      id: '50000000-0000-0000-0000-000000000001',
-      technician_id: technician1.id,
-      available_date: '2025-09-10',
-      start_time: '09:00:00',
-      end_time: '17:00:00',
-    },
+  await prisma.technicianAvailability.createMany({
+    data: [
+      {
+        technician_id: technician1.id,
+        available_date: '2025-09-10',
+        time_block: 'morning',
+      },
+      {
+        technician_id: technician1.id,
+        available_date: '2025-09-10',
+        time_block: 'afternoon',
+      },
+      {
+        technician_id: technician1.id,
+        available_date: '2025-09-12',
+        time_block: 'morning',
+      },
+    ],
   });
 
   // Create Services
@@ -132,13 +141,11 @@ async function main() {
       service_id: service1.id,
       technician_id: technician1.id,
       service_date: '2025-09-10',
-      service_time: '14:00:00',
+      time_block: 'afternoon',
       address_street: '456 Oak Ave',
       address_city: 'Someville',
       address_state: 'TX',
       address_zip: '67890',
-      service_status: 'scheduled',
-      payment_status: 'paid',
     },
   });
 
@@ -149,13 +156,11 @@ async function main() {
       service_id: service2.id,
       technician_id: technician1.id,
       service_date: '2025-09-12',
-      service_time: '09:30:00',
+      time_block: 'morning',
       address_street: '123 Main St',
       address_city: 'Anytown',
       address_state: 'CA',
       address_zip: '12345',
-      service_status: 'scheduled',
-      payment_status: 'paid',
     },
   });
 
@@ -184,7 +189,7 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error(e);
     process.exit(1);
   })

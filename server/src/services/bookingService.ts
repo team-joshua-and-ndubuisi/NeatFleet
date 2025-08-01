@@ -1,4 +1,4 @@
-import { Booking, PaymentStatus, ServiceStatus } from '../../generated/prisma';
+import { Booking, TimeBlock } from '../../generated/prisma';
 import prismaClient from '../config/prisma';
 
 type CreateBookingInput = {
@@ -6,16 +6,12 @@ type CreateBookingInput = {
   service_id: string;
   technician_id: string;
   service_date: string;
-  service_time?: string;
+  time_block: TimeBlock;
   address_street: string;
   address_city: string;
   address_state: string;
   address_zip: string;
-  service_status: ServiceStatus;
   service_notes?: string;
-  payment_status: PaymentStatus;
-  rating_score?: number;
-  rating_comment?: string;
 };
 
 type UpdateBookingInput = Partial<CreateBookingInput>;
@@ -37,13 +33,27 @@ const createBooking = async (
     throw new Error(`Technician not found.`);
   }
 
+  const existingBooking = await prismaClient.booking.findFirst({
+    where: {
+      technician_id: technician_id,
+      service_date: newBooking.service_date,
+      time_block: newBooking.time_block,
+    },
+  });
+
+  if (existingBooking) {
+    throw new Error(
+      `Technician is already booked for ${newBooking.time_block} on ${newBooking.service_date}. Please choose a different time slot or technician.`
+    );
+  }
+
   const booking = await prismaClient.booking.create({ data: newBooking });
   return booking;
 };
 
 const getUserBookings = async (
   userId: string,
-  serviceStatus?: ServiceStatus,
+  serviceStatus?: any,
   serviceDate?: string
 ): Promise<Booking[]> => {
   const user = await prismaClient.user.findUnique({ where: { id: userId } });
@@ -63,7 +73,7 @@ const getUserBookings = async (
 
 const getTechnicianBookings = async (
   technicianId: string,
-  serviceStatus?: ServiceStatus,
+  serviceStatus?: any,
   serviceDate?: string
 ): Promise<Booking[]> => {
   const technician = await prismaClient.technician.findUnique({

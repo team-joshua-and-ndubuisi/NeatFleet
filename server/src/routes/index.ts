@@ -10,7 +10,7 @@ const router = Router();
 
 router.use('/auth', authRoutes);
 router.use('/users', isAuth, usersRoutes);
-router.use('/bookings', isAuth, bookingsRoutes);
+router.use('/bookings', bookingsRoutes);
 router.use('/services', servicesRoutes);
 router.use('/availabilities', availabilityRoutes);
 
