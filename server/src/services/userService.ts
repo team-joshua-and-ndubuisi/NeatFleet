@@ -1,6 +1,7 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
+import { User } from '../../generated/prisma';
 
-const getUserIdByEmail = async (email: string) => {
+const getUserIdByEmail = async (email: string): Promise<string | null> => {
   try {
     const user = await prismaClient.user.findUnique({
       where: { email },
@@ -15,7 +16,7 @@ const getUserIdByEmail = async (email: string) => {
   }
 };
 
-const deactivateUserByEmail = async (email: string) => {
+const deactivateUserByEmail = async (email: string): Promise<User> => {
   try {
     const user = await prismaClient.user.findUnique({ where: { email } });
     if (!user) {
@@ -38,27 +39,29 @@ const deactivateUserByEmail = async (email: string) => {
   }
 };
 
+type CreateUserInput = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  password: string;
+};
+
 const createUser = async ({
   first_name,
   last_name,
   email,
   phone,
   password,
-}: {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  password: string;
-}) => {
+}: CreateUserInput): Promise<User> => {
   try {
     const user = await prismaClient.user.create({
       data: {
-        first_name: first_name,
-        last_name: last_name,
+        first_name,
+        last_name,
         email,
         phone,
-        password: password,
+        password,
       },
     });
     return user;
