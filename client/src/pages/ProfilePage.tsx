@@ -125,7 +125,7 @@ const ProfilePage: React.FC = () => {
         <ProfileMain
           userType={userProfileData.user.userType}
           userName={userProfileData.user.name}
-          rating={userData.rating}
+          rating={userProfileData.technician.techRating}
           years={userData.years}
           location={userData.location}
           image={userData.image}
