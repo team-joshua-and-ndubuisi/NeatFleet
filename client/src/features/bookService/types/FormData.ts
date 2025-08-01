@@ -7,7 +7,7 @@ import { CardName, CardNumber, CVC, Expiry, Zip } from '@/features/bookService';
 export interface FormData {
   service: Service | null;
   date: Date | null;
-  timeSlot: TimeSlot | '';
+  timeSlot: TimeSlot | null;
   technician: Technician | null;
   address: Address | null;
   apartment: Apartment | null;
