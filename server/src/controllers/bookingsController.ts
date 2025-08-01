@@ -56,6 +56,7 @@ type BookingQueries = {
   technicianId?: string;
   serviceStatus?: ServiceStatus;
   serviceDate?: string;
+  limit?: string;
 };
 
 const getBookings = asyncHandler(
@@ -63,7 +64,8 @@ const getBookings = asyncHandler(
     req: Request<unknown, unknown, unknown, BookingQueries>,
     res: Response
   ): Promise<void> => {
-    const { userId, technicianId, serviceStatus, serviceDate } = req.query;
+    const { userId, technicianId, serviceStatus, serviceDate, limit } =
+      req.query;
 
     if (userId && technicianId) {
       res.status(400).json({
@@ -87,7 +89,8 @@ const getBookings = asyncHandler(
       const result = await getTechnicianBookings(
         technicianId,
         serviceStatus,
-        serviceDate
+        serviceDate,
+        limit
       );
       res.status(200).json(result);
       return;

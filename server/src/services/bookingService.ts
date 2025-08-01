@@ -74,7 +74,8 @@ const getUserBookings = async (
 const getTechnicianBookings = async (
   technicianId: string,
   serviceStatus?: ServiceStatus,
-  serviceDate?: string
+  serviceDate?: string,
+  limit?: string
 ): Promise<Booking[]> => {
   const technician = await prismaClient.technician.findUnique({
     where: { id: technicianId },
@@ -84,12 +85,15 @@ const getTechnicianBookings = async (
     throw new Error(`Technician not found.`);
   }
 
+  const take = Number(limit);
+
   const bookings = await prismaClient.booking.findMany({
     where: {
       technician_id: technicianId,
       service_status: serviceStatus,
       service_date: serviceDate,
     },
+    take: limit ? take : undefined,
   });
 
   return bookings;
