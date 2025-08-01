@@ -17,7 +17,7 @@ export default function SignupPage() {
       initAuth(data);
       navigate('/profile'); // Redirect to profile after signup
     }
-  }, [data, initAuth, navigate]);
+  }, [data, initAuth]);
 
   const handleSignup = async (userCredentials: SignupBodyT) => {
     await signupMutate(userCredentials);
