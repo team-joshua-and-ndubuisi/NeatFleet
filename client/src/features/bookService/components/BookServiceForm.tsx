@@ -118,33 +118,35 @@ const ServiceBookingForm: React.FC = () => {
       </div>
 
       {/* Date Selection */}
-      <div>
-        <HorizontalLine />
-        <SectionTitle title='Choose a date:' />
-        {areDatesLoading && <LoadingIndicator message='Loading Available Dates...' />}
+      {formData.service && (
+        <div>
+          <HorizontalLine />
+          <SectionTitle title='Choose a date:' />
+          {areDatesLoading && <LoadingIndicator message='Loading Available Dates...' />}
 
-        {datesError && (
-          <ErrorComponent message='Something went wrong while fetching available dates.' />
-        )}
+          {datesError && (
+            <ErrorComponent message='Something went wrong while fetching available dates.' />
+          )}
 
-        {availableDates && availableDates.length > 0 && (
-          <DatePicker
-            showIcon
-            includeDates={
-              availableDates[0].dates ? availableDates[0].dates.map(date => new Date(date)) : []
-            }
-            selected={formData.date}
-            onChange={date => handleChange('date', date)}
-            className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
-            placeholderText='Pick a date'
-            minDate={new Date()}
-            dateFormat='MMMM d, yyyy'
-          />
-        )}
-      </div>
+          {availableDates && availableDates.length > 0 && (
+            <DatePicker
+              showIcon
+              includeDates={
+                availableDates[0].dates ? availableDates[0].dates.map(date => new Date(date)) : []
+              }
+              selected={formData.date}
+              onChange={date => handleChange('date', date)}
+              className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
+              placeholderText='Pick a date'
+              minDate={new Date()}
+              dateFormat='MMMM d, yyyy'
+            />
+          )}
+        </div>
+      )}
 
       {/* Time Slot Selection */}
-      {formData.service && formData.date && (
+      {formData.date && (
         <div>
           <HorizontalLine />
           <SectionTitle title='Choose a time slot:' />
@@ -185,7 +187,7 @@ const ServiceBookingForm: React.FC = () => {
       )}
 
       {/* Technician Selection */}
-      {formData.service && formData.date && formData.timeSlot && (
+      {formData.timeSlot && (
         <div>
           <HorizontalLine />
           <SectionTitle title='Choose a technician:' />
@@ -220,7 +222,7 @@ const ServiceBookingForm: React.FC = () => {
       )}
 
       {/* Address section */}
-      {formData.service && formData.date && formData.timeSlot && formData.technician && (
+      {formData.technician && (
         <div>
           <HorizontalLine />
           <SectionTitle title='Enter your address:' />
