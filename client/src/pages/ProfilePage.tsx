@@ -17,47 +17,53 @@ const userData = {
   bc: 42,
   years: 5,
   rating: 4.7,
-  bookings: [
-    {
-      id: '1sdafasd',
-      name: 'Alice Johnson',
-      status: 'completed',
-      date: 1672531200000,
-      details: 'Deep Cleaning',
-      rating: 5,
-    },
-    {
-      id: '2qweqwe',
-      name: 'Robert Smith',
-      status: 'completed',
-      date: 1675209600000,
-      details: 'Standard Cleaning',
-      rating: 4,
-    },
-    {
-      id: '3zxcvbnm',
-      name: 'Maria Garcia',
-      status: 'cancelled',
-      date: 1677888000000,
-      details: 'Plumbing Repairs',
-      rating: 0,
-    },
-    {
-      id: '4qwertyu',
-      name: 'James Wilson',
-      status: 'upcoming',
-      date: 1680566400000,
-      details: 'Handyman Services',
-      rating: 0,
-    },
-  ],
+  bookings: [],
   location: 'New York, NY',
   image: 'https://example.com/profile-pictures/johndoe.jpg',
 };
 
+const scheduledBookingsMockData = [
+  {
+    id: '4qwertyu',
+    name: 'James Wilson',
+    status: 'upcoming',
+    date: 1680566400000,
+    details: 'Handyman Services',
+    rating: 0,
+  },
+];
+
+const pastBookingsMockData = [
+  {
+    id: '1sdafasd',
+    name: 'Alice Johnson',
+    status: 'completed',
+    date: 1672531200000,
+    details: 'Deep Cleaning',
+    rating: 5,
+  },
+  {
+    id: '2qweqwe',
+    name: 'Robert Smith',
+    status: 'completed',
+    date: 1675209600000,
+    details: 'Standard Cleaning',
+    rating: 4,
+  },
+  {
+    id: '3zxcvbnm',
+    name: 'Maria Garcia',
+    status: 'cancelled',
+    date: 1677888000000,
+    details: 'Plumbing Repairs',
+    rating: 0,
+  },
+];
+
 const ProfilePage: React.FC = () => {
   // const [userData, setUserData]=useState(null)
-  const bookings = userData.bookings;
+  const scheduledBookings = scheduledBookingsMockData;
+  const pastBookings = pastBookingsMockData;
 
   // useEffect(() =>{
   //Fetch for user model + bookings
@@ -106,8 +112,23 @@ const ProfilePage: React.FC = () => {
           location={userData.location}
           image={userData.image}
         />
-        <BookingSnippet>
-          {bookings.map((booking, index) => {
+        <BookingSnippet title='Scheduled Bookings'>
+          {scheduledBookings.map((booking, index) => {
+            return (
+              <BookingCard
+                id={booking.id}
+                key={index}
+                name={booking.name}
+                status={booking.status}
+                date={convertDate(booking.date)}
+                details={booking.details}
+                rating={booking.rating}
+              />
+            );
+          })}
+        </BookingSnippet>
+        <BookingSnippet title='Past Bookings'>
+          {pastBookings.map((booking, index) => {
             return (
               <BookingCard
                 id={booking.id}
@@ -127,3 +148,17 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
+
+// <div>
+//   <Accordion type='single' collapsible>
+//     <AccordionItem className='py-5' value='item-1'>
+//       <AccordionTrigger className='bg-stone-300 border-3 border border-black'>
+//         <h3 className='px-3 text-3xl'>Past Bookings</h3>
+//       </AccordionTrigger>
+//       <AccordionContent className='flex flex-col justify-center gap-3'>
+//         {/* Child is map of booking car */}
+//         {children}
+//       </AccordionContent>
+//     </AccordionItem>
+//   </Accordion>
+// </div>;
