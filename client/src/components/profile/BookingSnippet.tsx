@@ -12,7 +12,7 @@ const BookingSnippets = ({ children, title }: { children: React.ReactNode; title
         <div>
           <Accordion type='single' collapsible>
             <AccordionItem className='py-5' value='item-1'>
-              <AccordionTrigger className='bg-stone-300 border-3 border border-black '>
+              <AccordionTrigger className='bg-stone-300 border border-slate-500 rounded-lg shadow-md'>
                 <h3 className='px-3 text-3xl'>{title}</h3>
               </AccordionTrigger>
               <AccordionContent className='flex flex-col justify-center gap-3'>
