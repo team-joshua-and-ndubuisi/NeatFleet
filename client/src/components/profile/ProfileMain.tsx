@@ -11,6 +11,7 @@ interface UserMenuProp {
   bookings: [] | number; //client only
   location: string;
   image?: string;
+  phoneNumber?: string;
 }
 
 const ProfileMain: React.FC<UserMenuProp> = ({
@@ -21,6 +22,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   image,
   bookings,
   rating,
+  phoneNumber,
 }) => {
   return (
     <div className='bg-primary-50 '>
@@ -34,6 +36,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
           />
           <span className=' text-3xl font-semibold py-5'>{userName}</span>
           <span className='text-3xl text-center py-5'>{location} Memphis, Alabama</span>
+          <span className='text-3xl text-center py-5'>Phone Number: #{phoneNumber}</span>
         </div>
         <div className='flex mx-30'>
           <div className=' flex flex-col items-center justify-around '>

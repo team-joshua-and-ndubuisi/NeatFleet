@@ -52,7 +52,7 @@ const pastBookingsMockData = [
   },
 ];
 
-const userData = {
+const MOCK_USER_DATA = {
   type: 'tech',
   name: 'JohnDoe123',
   bc: 42,
@@ -65,17 +65,13 @@ const userData = {
 
 const ProfilePage: React.FC = () => {
   // const [userData, setUserData]=useState(null)
-  const bookings = userData.bookings;
+  // const bookings = userData.bookings;
 
-  const userId = useAuthStore(state => state.user?.id);
+  // const userId = useAuthStore(state => state.user?.id);
+  const userToken = useAuthStore(state => state.token);
 
   //only fetch profile if userProfileData is not set
-  const { data: userProfileData, isLoading, isError } = useFetchProfile(userId);
-
-  // console.log('data', userProfileData);
-  // console.log('isLoading', isLoading);
-  // console.log('isError', isError);
-  // console.log('isFetching', isFetching);
+  const { data: userProfileData, isLoading, isError } = useFetchProfile(userToken);
 
   if (isLoading) {
     return <LoadingIndicator message='Loading profile...' />;
@@ -124,16 +120,17 @@ const ProfilePage: React.FC = () => {
         <h1 className='text-5xl text-center py-5'>Profile </h1>
         <ProfileMain
           userType={userProfileData.user.userType}
-          userName={userProfileData.user.name}
-          rating={userProfileData.technician.techRating}
-          years={userData.years}
-          location={userData.location}
-          image={userData.image}
-          bookingsCompleted={userData.bc}
-          bookings={userData.bookings.length}
+          userName={userProfileData.user.first_name + ' ' + userProfileData.user.last_name}
+          rating={MOCK_USER_DATA.rating}
+          years={MOCK_USER_DATA.years}
+          location={MOCK_USER_DATA.location}
+          image={MOCK_USER_DATA.image}
+          bookingsCompleted={MOCK_USER_DATA.bc}
+          bookings={MOCK_USER_DATA.bookings.length}
+          phoneNumber={userProfileData.user.phone}
         />
         <BookingSnippet title='Scheduled Bookings'>
-          {scheduledBookings.map((booking, index) => {
+          {scheduledBookingsMockData.map((booking, index) => {
             return (
               <BookingCard
                 id={booking.id}
@@ -148,7 +145,7 @@ const ProfilePage: React.FC = () => {
           })}
         </BookingSnippet>
         <BookingSnippet title='Past Bookings'>
-          {pastBookings.map((booking, index) => {
+          {pastBookingsMockData.map((booking, index) => {
             return (
               <BookingCard
                 id={booking.id}

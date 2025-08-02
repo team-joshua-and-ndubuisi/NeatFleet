@@ -1,7 +1,10 @@
 type UserT = {
   userType: 'admin' | 'tech' | 'client';
-  userId: string;
-  name: string;
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
 };
 type TechnicianT = {
   techId: string;
@@ -21,8 +24,6 @@ type BookingT = {
 
 export interface UserProfileT {
   user: UserT;
-  technician: TechnicianT;
-  bookings: BookingT[];
 }
 
 export interface AddressT {
