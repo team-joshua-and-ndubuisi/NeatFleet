@@ -12,6 +12,7 @@ interface UserMenuProp {
   location: string;
   image?: string;
   phoneNumber?: string;
+  userId: string; //used for fetching profile data
 }
 
 const ProfileMain: React.FC<UserMenuProp> = ({
@@ -23,6 +24,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   bookings,
   rating,
   phoneNumber,
+  userId,
 }) => {
   return (
     <div className='bg-primary-50 '>
@@ -35,6 +37,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
             alt='Profile Picture'
           />
           <span className=' text-3xl font-semibold py-5'>{userName}</span>
+          <span>ID: {userId} </span>
           <span className='text-3xl text-center py-5'>{location} Memphis, Alabama</span>
           <span className='text-3xl text-center py-5'>Phone Number: #{phoneNumber}</span>
         </div>
