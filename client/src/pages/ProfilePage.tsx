@@ -129,6 +129,7 @@ const ProfilePage: React.FC = () => {
           bookings={MOCK_USER_DATA.bookings.length}
           phoneNumber={userProfileData.user.phone}
           userId={userProfileData.user.id}
+          email={userProfileData.user.email}
         />
         <BookingSnippet title='Scheduled Bookings'>
           {scheduledBookingsMockData.map((booking, index) => {
