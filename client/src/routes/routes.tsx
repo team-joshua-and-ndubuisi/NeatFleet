@@ -6,8 +6,6 @@ import HomePage from '@/pages/HomePage';
 
 const SignupPage = lazy(() => import('@/pages/SignupPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
-const AboutPage = lazy(() => import('@/pages/AboutPage'));
-const ContactPage = lazy(() => import('@/pages/ContactPage'));
 const ServiceCatalogPage = lazy(() => import('@/pages/ServiceCatalogPage'));
 const TechSelectionPage = lazy(() => import('@/pages/TechSelectionPage'));
 const ScheduleServicePage = lazy(() => import('@/pages/ScheduleServicePage'));
@@ -28,8 +26,6 @@ const AppRoutes: React.FC = () => {
         <Routes>
           <Route path='/' element={<MainLayout />}>
             <Route index element={<HomePage />} />
-            <Route path='/about' element={<AboutPage />} />
-            <Route path='/contact' element={<ContactPage />} />
             <Route path='/home' element={<Navigate to='/' />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
