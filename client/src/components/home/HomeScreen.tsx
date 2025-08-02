@@ -3,13 +3,15 @@ import homeInfoCards from '@/data/homeInfoCards';
 import socialLinks from '@/data/socialLinks';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import AboutSection from './AboutSection'
+import Services from './Services'
 
 const HomeScreen = () => {
   return (
     <div className='flex flex-col min-h-screen min-w-[270px]'>
       {/* Make Appointment Section */}
       <div
-        className='flex-[6] flex items-center justify-center bg-cover bg-center bg-no-repeat bg-blue-100'
+        className=' h-96 flex items-center justify-center bg-cover bg-center bg-no-repeat bg-blue-100'
         style={{ backgroundImage: "url('/images/cozy-living-room-modern-apartment.jpg')" }}
       >
         <NavLink to={'/service-catalog'}>
@@ -17,6 +19,13 @@ const HomeScreen = () => {
             Make an Appointment
           </Button>
         </NavLink>
+      </div>
+      <div>
+          <AboutSection/>
+
+      </div>
+      <div>
+        <Services/>
       </div>
       {/* Company Information Section */}
       <div className='flex-[.25] flex flex-col justify-center bg-neutral-100 px-4 py-8'>
@@ -26,6 +35,7 @@ const HomeScreen = () => {
           ))}
         </div>
       </div>
+
       {/* Social Media Footer */}
       <div className='flex-[.25] flex items-center justify-center bg-black text-white'>
         <div className='flex gap-6'>
