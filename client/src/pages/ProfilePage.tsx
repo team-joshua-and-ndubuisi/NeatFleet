@@ -1,6 +1,4 @@
 import React from 'react';
-// import {useState, useEffect} from 'react';
-// import axios from "axios";
 import BookingCard from '@/components/profile/BookingCard';
 import BookingSnippet from '@/components/profile/BookingSnippet';
 import ProfileMain from '@/components/profile/ProfileMain';
@@ -8,11 +6,6 @@ import ProfileContainer from '@/components/profile/ProfileContainer';
 import { useFetchProfile } from '@/features/profile';
 import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
-// import { Star } from 'lucide-react';
-
-//for when the api is set up
-// const endpoint='/profile'
-// const URL = 'http://localhost5432'+endpoint
 
 const scheduledBookingsMockData = [
   {
@@ -64,13 +57,8 @@ const MOCK_USER_DATA = {
 };
 
 const ProfilePage: React.FC = () => {
-  // const [userData, setUserData]=useState(null)
-  // const bookings = userData.bookings;
-
-  // const userId = useAuthStore(state => state.user?.id);
   const userToken = useAuthStore(state => state.token);
 
-  //only fetch profile if userProfileData is not set
   const { data: userProfileData, isLoading, isError } = useFetchProfile(userToken);
 
   if (isLoading) {
@@ -80,14 +68,6 @@ const ProfilePage: React.FC = () => {
   if (isError || !userProfileData) {
     return <div className='text-red-500 text-center'>Error loading profile data.</div>;
   }
-
-  // useEffect(() =>{
-  //Fetch for user model + bookings
-  //      axios.get(URL).then((response) => {
-  //        setUserData(response.data);
-  //      })
-  //      let bookings:[] = userData.bookings
-  // }, [])
 
   function convertDate(date: number) {
     const newdate = new Date(date);
