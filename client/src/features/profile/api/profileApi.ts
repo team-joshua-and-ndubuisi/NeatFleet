@@ -7,6 +7,5 @@ export const fetchProfile = async (userToken: string): Promise<UserProfileT> => 
   const response = await axiosInstance.get(`${url}`, {
     headers: { Authorization: `Bearer ${userToken}` },
   });
-  console.log('response', response);
   return response.data;
 };
