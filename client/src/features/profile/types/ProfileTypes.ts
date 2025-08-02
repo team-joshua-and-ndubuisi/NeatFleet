@@ -1,27 +1,29 @@
 type UserT = {
-  userType: string;
-  userId: string;
+  userType: 'admin' | 'tech' | 'client';
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
 };
-type TechnicianT = {
-  techId: string;
-  techName: string;
-  techRating: number;
-};
+// type TechnicianT = {
+//   techId: string;
+//   techName: string;
+//   techRating: number;
+// };
 
-type BookingT = {
-  bookingId: string;
-  serviceId: string;
-  serviceName: string;
-  date: string;
-  time: string;
-  address: string;
-  status: string;
-};
+// type BookingT = {
+//   bookingId: string;
+//   serviceId: string;
+//   serviceName: string;
+//   date: string;
+//   time: string;
+//   address: string;
+//   status: string;
+// };
 
 export interface UserProfileT {
   user: UserT;
-  technician: TechnicianT;
-  bookings: BookingT[];
 }
 
 export interface AddressT {
