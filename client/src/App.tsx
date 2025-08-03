@@ -6,10 +6,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 
 const queryClient = new QueryClient();
-const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
 function App() {
-  const fetchClientSecret = async () => {
+  const fetchClientSecret = async (): Promise<string> => {
     // TODO: Replace with axiosInstance once the backend is integrated.
     // const response = await axiosInstance.post('/bookings/create-checkout-session');
 
