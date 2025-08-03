@@ -1,1 +1,1 @@
-export type { Service } from './ServiceType';
+export type { Service } from './Service';
