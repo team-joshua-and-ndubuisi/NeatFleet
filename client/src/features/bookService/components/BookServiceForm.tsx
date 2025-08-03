@@ -145,9 +145,7 @@ const ServiceBookingForm: React.FC = () => {
           {availableDates && availableDates.length > 0 && (
             <DatePicker
               showIcon
-              includeDates={
-                availableDates[0].dates ? availableDates[0].dates.map(date => new Date(date)) : []
-              }
+              includeDates={availableDates?.map(date => new Date(date)) || []}
               selected={formData.date}
               onChange={date => handleChange('date', date)}
               className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
