@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 
 const queryClient = new QueryClient();
-const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_SECRET as string);
+const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
 function App() {
   const fetchClientSecret = async () => {
