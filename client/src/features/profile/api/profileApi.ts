@@ -1,9 +1,11 @@
 import { axiosInstance } from '@/api';
 import { UserProfileT } from '@/features/profile/types/';
 
-const url = '/profile';
+const url = '/auth/profile';
 
-export const fetchProfile = async (userId: string): Promise<UserProfileT> => {
-  const response = await axiosInstance.get(`${url}:${userId}`);
+export const fetchProfile = async (userToken: string): Promise<UserProfileT> => {
+  const response = await axiosInstance.get(`${url}`, {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
   return response.data;
 };
