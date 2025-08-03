@@ -41,7 +41,7 @@ const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
 
   const {
-    data: services,
+    data: servicesData,
     isLoading: areServicesLoading,
     error: servicesError,
   } = useFetchServices();
@@ -103,7 +103,7 @@ const ServiceBookingForm: React.FC = () => {
             <ErrorComponent message='Something went wrong while fetching services.' />
           )}
 
-          {services?.map(service => (
+          {servicesData?.services?.map(service => (
             <div key={service.id} className='h-full'>
               <input
                 type='radio'
