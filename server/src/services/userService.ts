@@ -85,8 +85,14 @@ const getUserWithRole = async (userId: string) => {
     throw error;
   }
 
-  logger.info(`User found`, { id: user.id, email: user.email });
-  return user;
+  const userInfo = {
+    id: user.id,
+    email: user.email,
+    isTechnician: user.technician,
+  };
+
+  logger.info(`User found`, userInfo);
+  return userInfo;
 };
 
 export { getUserIdByEmail, createUser, deactivateUserByEmail, getUserWithRole };
