@@ -125,25 +125,17 @@ const loginUser = asyncHandler(
 // @access  Private
 const userProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    if (!req.user) {
-      res.status(401).json({ message: 'User not authenticated' });
-      return;
-    }
-
     const userId = (req.user as UserType).id;
 
-    logger.info(`Attempting to find user with id ${userId}`);
     const user = await getUserWithRole(userId);
 
-    if (!user) {
-      logger.warn(`No user found with id ${userId}`);
-      const error: ExtendedErrorT = new Error('No user found');
-      error.statusCode = 404;
-      next(error);
-      return;
+    if (user.isTechnician) {
+      const profile = await getTechnicianProfile(userId);
+      res.status(200).json(profile);
+    } else {
+      const profile = await getCustomerProfile(userId);
+      res.status(200).json(profile);
     }
-
-    res.status(200).json({ user });
   }
 );
 
