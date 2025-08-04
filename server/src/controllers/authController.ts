@@ -5,7 +5,11 @@ import { User as UserType } from '../../generated/prisma';
 import { logger } from '../config/logger';
 import prisma from '../config/prisma';
 import issueJWT from '../lib/issueJWT';
-import { createUser, getUserWithRole } from '../services/userService';
+import {
+  createUser,
+  getUserProfile,
+  getUserWithRole,
+} from '../services/userService';
 import { ExtendedErrorT } from '../types/error';
 const User = prisma.user;
 
@@ -130,10 +134,10 @@ const userProfile = asyncHandler(
     const user = await getUserWithRole(userId);
 
     if (user.isTechnician) {
-      const profile = await getTechnicianProfile(userId);
-      res.status(200).json(profile);
+      // const profile = await getTechnicianProfile(userId);
+      // res.status(200).json(profile);
     } else {
-      const profile = await getCustomerProfile(userId);
+      const profile = await getUserProfile(userId);
       res.status(200).json(profile);
     }
   }
