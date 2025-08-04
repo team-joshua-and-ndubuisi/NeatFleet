@@ -5,13 +5,7 @@ import { cn } from '@/lib/utils';
 
 interface BackButtonProps {
   className?: string;
-  variant?:
-    | 'default'
-    | 'destructive'
-    | 'outline'
-    | 'secondary'
-    | 'ghost'
-    | 'link';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   size?: 'default' | 'sm' | 'lg' | 'icon';
   children?: React.ReactNode;
   onClick?: () => void;
@@ -35,12 +29,7 @@ const BackButton: React.FC<BackButtonProps> = ({
   };
 
   return (
-    <Button
-      onClick={handleClick}
-      variant={variant}
-      size={size}
-      className={cn('mb-4', className)}
-    >
+    <Button onClick={handleClick} variant={variant} size={size} className={cn('mb-4', className)}>
       {children}
     </Button>
   );

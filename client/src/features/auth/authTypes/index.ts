@@ -1,6 +1,1 @@
-export type {
-  LoginBodyT,
-  SignupBodyT,
-  UserProfileT,
-  AuthResponseT,
-} from "./authTypes";
+export type { LoginBodyT, SignupBodyT, UserProfileT, AuthResponseT } from './authTypes';

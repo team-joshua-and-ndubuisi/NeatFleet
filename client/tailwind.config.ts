@@ -4,22 +4,22 @@ const config: Config = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-    keyframes: {
+      keyframes: {
         appear: {
-          "0%": {
-            opacity: "0",
+          '0%': {
+            opacity: '0',
           },
-          "100%": {
-            opacity: "1",
+          '100%': {
+            opacity: '1',
           },
         },
-       },
-       animation: {
-          appear: "appear 1s ease-in-out",
-       }
+      },
+      animation: {
+        appear: 'appear 1s ease-in-out',
+      },
+    },
+    plugins: [],
   },
-  plugins: [],
-},
-}
+};
 
 export default config;

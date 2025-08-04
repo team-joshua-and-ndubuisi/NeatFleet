@@ -7,10 +7,9 @@ interface CounterStore extends CounterState {
   incrementByAmount: (amount: number) => void;
 }
 
-export const useCounterStore = create<CounterStore>((set) => ({
+export const useCounterStore = create<CounterStore>(set => ({
   value: 0,
-  increment: () => set((state) => ({ value: state.value + 1 })),
-  decrement: () => set((state) => ({ value: state.value - 1 })),
-  incrementByAmount: (amount: number) =>
-    set((state) => ({ value: state.value + amount })),
+  increment: () => set(state => ({ value: state.value + 1 })),
+  decrement: () => set(state => ({ value: state.value - 1 })),
+  incrementByAmount: (amount: number) => set(state => ({ value: state.value + amount })),
 }));

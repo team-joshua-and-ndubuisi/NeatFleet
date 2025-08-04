@@ -15,10 +15,7 @@ const NotFoundPage: React.FC = () => {
       <h2 className='text-xl text-muted-foreground mb-8'>
         Oops! The page you're looking for doesn't exist.
       </h2>
-      <Button
-        onClick={handleBackBtnClick}
-        className='bg-blue-400 hover:bg-blue-500 mt-4'
-      >
+      <Button onClick={handleBackBtnClick} className='bg-blue-400 hover:bg-blue-500 mt-4'>
         Go Back to Home
       </Button>
     </div>

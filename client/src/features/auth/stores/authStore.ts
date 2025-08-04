@@ -1,5 +1,5 @@
-import { AuthResponseT, UserProfileT } from "@/features/auth/";
-import { createLocalPersistStore } from "@/lib/utils";
+import { AuthResponseT, UserProfileT } from '@/features/auth/';
+import { createLocalPersistStore } from '@/lib/utils';
 interface AuthStore extends AuthResponseT {
   token: string;
   user: {
@@ -15,14 +15,14 @@ interface AuthStore extends AuthResponseT {
 
 // good one
 export const useAuthStore = createLocalPersistStore<AuthStore>(
-  (set) => ({
-    token: "",
+  set => ({
+    token: '',
     user: {
-      firstName: "",
-      lastName: "",
+      firstName: '',
+      lastName: '',
       isAdmin: false,
-      id: "",
-      email: "",
+      id: '',
+      email: '',
     },
     setUserToken: (token: string) => set(() => ({ token })),
     setUser: (user: UserProfileT) => set(() => ({ user })),
@@ -40,5 +40,5 @@ export const useAuthStore = createLocalPersistStore<AuthStore>(
       }));
     },
   }),
-  "authStore"
+  'authStore'
 );

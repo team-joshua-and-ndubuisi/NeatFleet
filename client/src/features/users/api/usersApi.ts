@@ -14,10 +14,7 @@ export const createUser = async (newUser: Omit<UserType, 'id'>) => {
 };
 
 export const updateUser = async (updatedUser: UserType) => {
-  const response = await axiosInstance.put(
-    `${url}/${updatedUser.id}`,
-    updatedUser
-  );
+  const response = await axiosInstance.put(`${url}/${updatedUser.id}`, updatedUser);
   return response.data;
 };
 

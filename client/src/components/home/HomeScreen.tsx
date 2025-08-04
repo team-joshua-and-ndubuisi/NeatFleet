@@ -2,10 +2,9 @@ import BusinessInfoCard from './BusinessInfoCard';
 import homeInfoCards from '@/data/homeInfoCards';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import AboutSection from './AboutSection'
-import Services from './Services'
-import  Footer  from '@/components/Footer';
-
+import AboutSection from './AboutSection';
+import Services from './Services';
+import Footer from '@/components/Footer';
 
 const HomeScreen = () => {
   return (
@@ -15,7 +14,9 @@ const HomeScreen = () => {
         className='md:h-200 h-96 flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat bg-blue-100 '
         style={{ backgroundImage: "url('/images/cozy-living-room-modern-apartment.jpg')" }}
       >
-        <h1 className="text-5xl bg-[#F9FAFB] py-7 px-5 mb-10 text-[#3B82F6] opacity-80">NeatFleet Home and Cleaning Solutions </h1>
+        <h1 className='text-5xl bg-[#F9FAFB] py-7 px-5 mb-10 text-[#3B82F6] opacity-80'>
+          NeatFleet Home and Cleaning Solutions{' '}
+        </h1>
         <NavLink to={'/service-catalog'}>
           <Button className='text-lg border-[#F9FAFB] sm:text-xl max-w-[1200px] cursor-pointer'>
             Make an Appointment
@@ -23,11 +24,10 @@ const HomeScreen = () => {
         </NavLink>
       </div>
       <div className='bg-cover bg-center bg-no-repeat md:bg-[url(images/background-design.svg)]'>
-          <AboutSection/>
-
+        <AboutSection />
       </div>
       <div>
-        <Services/>
+        <Services />
       </div>
       {/* Company Information Section */}
       <div className='flex-[.25] flex flex-col justify-center bg-neutral-100 px-4 py-8'>
@@ -39,7 +39,7 @@ const HomeScreen = () => {
       </div>
 
       {/* Social Media Footer */}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
