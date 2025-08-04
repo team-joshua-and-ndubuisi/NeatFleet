@@ -1,5 +1,6 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
 import { User } from '../../generated/prisma';
+import { ExtendedErrorT } from '../types/error';
 
 const getUserIdByEmail = async (email: string): Promise<string | null> => {
   try {
@@ -70,4 +71,19 @@ const createUser = async ({
   }
 };
 
-export { getUserIdByEmail, createUser, deactivateUserByEmail };
+const getUserWithRole = async (userId: string) => {
+  const user = await prismaClient.user.findUnique({
+    where: { id: userId },
+    include: { technician: true },
+  });
+
+  if (!user) {
+    const error = new Error('User not found') as ExtendedErrorT;
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return user;
+};
+
+export { getUserIdByEmail, createUser, deactivateUserByEmail, getUserWithRole };
