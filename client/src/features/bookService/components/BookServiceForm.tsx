@@ -168,7 +168,7 @@ const ServiceBookingForm: React.FC = () => {
 
           {availableTimes && (
             <div className='space-y-2 flex flex-col'>
-              {availableTimes[0].times.map(availableTime => (
+              {availableTimes.map(availableTime => (
                 <div key={availableTime} className='h-full'>
                   <input
                     type='radio'
