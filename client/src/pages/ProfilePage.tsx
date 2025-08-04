@@ -1,15 +1,11 @@
 import React from 'react';
-// import {useState, useEffect} from 'react';
-// import axios from "axios";
 import BookingCard from '@/components/profile/BookingCard';
 import BookingSnippet from '@/components/profile/BookingSnippet';
 import ProfileMain from '@/components/profile/ProfileMain';
 import ProfileContainer from '@/components/profile/ProfileContainer';
-// import { Star } from 'lucide-react';
-
-//for when the api is set up
-// const endpoint='/profile'
-// const URL = 'http://localhost5432'+endpoint
+import { useFetchProfile } from '@/features/profile';
+import { useAuthStore } from '@/features/auth/stores';
+import { LoadingIndicator } from '@/components';
 
 const scheduledBookingsMockData = [
   {
@@ -49,7 +45,7 @@ const pastBookingsMockData = [
   },
 ];
 
-const userData = {
+const MOCK_USER_DATA = {
   type: 'tech',
   name: 'JohnDoe123',
   bc: 42,
@@ -61,17 +57,17 @@ const userData = {
 };
 
 const ProfilePage: React.FC = () => {
-  // const [userData, setUserData]=useState(null)
-  const scheduledBookings = scheduledBookingsMockData;
-  const pastBookings = pastBookingsMockData;
+  const userToken = useAuthStore(state => state.token);
 
-  // useEffect(() =>{
-  //Fetch for user model + bookings
-  //      axios.get(URL).then((response) => {
-  //        setUserData(response.data);
-  //      })
-  //      let bookings:[] = userData.bookings
-  // }, [])
+  const { data: userProfileData, isLoading, isError } = useFetchProfile(userToken);
+
+  if (isLoading) {
+    return <LoadingIndicator message='Loading profile...' />;
+  }
+
+  if (isError || !userProfileData) {
+    return <div className='text-red-500 text-center'>Error loading profile data.</div>;
+  }
 
   function convertDate(date: number) {
     const newdate = new Date(date);
@@ -103,17 +99,20 @@ const ProfilePage: React.FC = () => {
       <ProfileContainer>
         <h1 className='text-5xl text-center py-5'>Profile </h1>
         <ProfileMain
-          userType={userData.type}
-          userName={userData.name}
-          bookingsCompleted={userData.bc}
-          years={userData.years}
-          rating={userData.rating}
-          bookings={userData.bookings.length}
-          location={userData.location}
-          image={userData.image}
+          userType={userProfileData.user.userType}
+          userName={userProfileData.user.first_name + ' ' + userProfileData.user.last_name}
+          rating={MOCK_USER_DATA.rating}
+          years={MOCK_USER_DATA.years}
+          location={MOCK_USER_DATA.location}
+          image={MOCK_USER_DATA.image}
+          bookingsCompleted={MOCK_USER_DATA.bc}
+          bookings={MOCK_USER_DATA.bookings.length}
+          phoneNumber={userProfileData.user.phone}
+          userId={userProfileData.user.id}
+          email={userProfileData.user.email}
         />
         <BookingSnippet title='Scheduled Bookings'>
-          {scheduledBookings.map((booking, index) => {
+          {scheduledBookingsMockData.map((booking, index) => {
             return (
               <BookingCard
                 id={booking.id}
@@ -128,7 +127,7 @@ const ProfilePage: React.FC = () => {
           })}
         </BookingSnippet>
         <BookingSnippet title='Past Bookings'>
-          {pastBookings.map((booking, index) => {
+          {pastBookingsMockData.map((booking, index) => {
             return (
               <BookingCard
                 id={booking.id}
@@ -148,17 +147,3 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
-
-// <div>
-//   <Accordion type='single' collapsible>
-//     <AccordionItem className='py-5' value='item-1'>
-//       <AccordionTrigger className='bg-stone-300 border-3 border border-black'>
-//         <h3 className='px-3 text-3xl'>Past Bookings</h3>
-//       </AccordionTrigger>
-//       <AccordionContent className='flex flex-col justify-center gap-3'>
-//         {/* Child is map of booking car */}
-//         {children}
-//       </AccordionContent>
-//     </AccordionItem>
-//   </Accordion>
-// </div>;

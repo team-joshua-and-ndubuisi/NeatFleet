@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
+import Stripe from 'stripe';
 import { ServiceStatus } from '../../generated/prisma';
 import { validateId } from '../lib/validation';
 import {
@@ -9,6 +10,40 @@ import {
   getTechnicianBookings,
   getUserBookings,
 } from '../services/bookingService';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET as string, {
+  apiVersion: '2025-03-31.basil' as any,
+});
+
+// @desc    Create Checkout Session
+// @route   POST /api/bookings/create-checkout-session
+// @access  Private
+const checkoutStripe = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Service',
+            },
+            unit_amount: 2000,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      ui_mode: 'custom',
+      // The URL of your payment completion page
+      return_url: `${process.env.CLIENT_BASE_URL}/service-catalog/booking/success`,
+    });
+
+    res
+      .status(200)
+      .json({ checkoutSessionClientSecret: session.client_secret });
+  }
+);
 
 // @desc    Create a new booking
 // @route   POST /api/bookings
@@ -102,4 +137,10 @@ const getBookings = asyncHandler(
   }
 );
 
-export { addBooking, deleteBooking, getBookings, updateBooking };
+export {
+  addBooking,
+  checkoutStripe,
+  deleteBooking,
+  getBookings,
+  updateBooking,
+};

@@ -145,9 +145,7 @@ const ServiceBookingForm: React.FC = () => {
           {availableDates && availableDates.length > 0 && (
             <DatePicker
               showIcon
-              includeDates={
-                availableDates[0].dates ? availableDates[0].dates.map(date => new Date(date)) : []
-              }
+              includeDates={availableDates?.map(date => new Date(date)) || []}
               selected={formData.date}
               onChange={date => handleChange('date', date)}
               className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
@@ -170,7 +168,7 @@ const ServiceBookingForm: React.FC = () => {
 
           {availableTimes && (
             <div className='space-y-2 flex flex-col'>
-              {availableTimes[0].times.map(availableTime => (
+              {availableTimes.map(availableTime => (
                 <div key={availableTime} className='h-full'>
                   <input
                     type='radio'
@@ -212,33 +210,31 @@ const ServiceBookingForm: React.FC = () => {
               <ErrorComponent message='Something went wrong while fetching technicians.' />
             )}
 
-            {technicians &&
-              technicians.length > 0 &&
-              technicians[0]?.technicians.map(tech => (
-                <div key={tech.id} className='h-full'>
-                  <input
-                    type='radio'
-                    id={`tech-${tech.id}`}
-                    name='technician'
-                    value={tech.id}
-                    checked={formData.technician?.id === tech.id}
-                    onChange={() => handleChange('technician', tech)}
-                    className='hidden'
-                  />
-                  <label
-                    htmlFor={`tech-${tech.id}`}
-                    className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+            {technicians?.map(tech => (
+              <div key={tech.id} className='h-full'>
+                <input
+                  type='radio'
+                  id={`tech-${tech.id}`}
+                  name='technician'
+                  value={tech.id}
+                  checked={formData.technician?.id === tech.id}
+                  onChange={() => handleChange('technician', tech)}
+                  className='hidden'
+                />
+                <label
+                  htmlFor={`tech-${tech.id}`}
+                  className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
                           ${
                             formData.technician?.id === tech.id
                               ? 'bg-primary-400 text-background border-primary-600'
                               : 'bg-card text-foreground border-ring hover:border-primary-300 hover:text-primary-600'
                           }
                             `}
-                  >
-                    {tech.first_name} {tech.last_name}
-                  </label>
-                </div>
-              ))}
+                >
+                  {tech.user.first_name} {tech.user.last_name}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       )}

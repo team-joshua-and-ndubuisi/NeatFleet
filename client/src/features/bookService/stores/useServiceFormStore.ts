@@ -18,14 +18,30 @@ const initialFormState = {
   zip: null,
 };
 
+const fieldOrder = ['service', 'date', 'timeSlot', 'technician'];
+
 export const useServiceFormStore = create<ServiceFormState>(set => ({
   formData: initialFormState,
   reset: () => set({ formData: initialFormState }),
   setFormData: (update: Partial<FormData>) =>
-    set(state => ({
-      formData: {
-        ...state.formData,
-        ...update,
-      },
-    })),
+    set(state => {
+      const updatedField = Object.keys(update)[0] as keyof FormData;
+      const updatedFieldIndex = fieldOrder.indexOf(updatedField);
+
+      const nullifiedFields =
+        updatedFieldIndex !== -1
+          ? fieldOrder.slice(updatedFieldIndex + 1).reduce<Partial<FormData>>((acc, field) => {
+              acc[field as keyof FormData] = null;
+              return acc;
+            }, {})
+          : {};
+
+      return {
+        formData: {
+          ...state.formData,
+          ...update,
+          ...nullifiedFields,
+        },
+      };
+    }),
 }));
