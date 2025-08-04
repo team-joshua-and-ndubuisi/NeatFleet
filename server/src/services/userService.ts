@@ -95,4 +95,59 @@ const getUserWithRole = async (userId: string) => {
   return userInfo;
 };
 
-export { getUserIdByEmail, createUser, deactivateUserByEmail, getUserWithRole };
+const getUserProfile = async (userId: string) => {
+  const user = await prismaClient.user.findUnique({
+    where: { id: userId },
+    include: {
+      Booking: {
+        include: {
+          technician: {
+            include: {
+              user: true, // get technician name
+            },
+          },
+        },
+        orderBy: { service_date: 'desc' },
+      },
+    },
+  });
+
+  if (!user) {
+    const error = new Error('User not found') as ExtendedErrorT;
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+
+  const upcoming = user.Booking.filter(b => b.service_date >= today);
+  const past = user.Booking.filter(b => b.service_date < today);
+
+  const mapBooking = (b: (typeof user.Booking)[number]) => ({
+    booking_id: b.id,
+    technician_name: `${b.technician.user.first_name} ${b.technician.user.last_name}`,
+    status: b.service_status,
+    date: b.service_date,
+    details: b.service_notes,
+    rating_score: b.rating_score,
+    rating_comment: b.rating_comment,
+  });
+
+  return {
+    role: 'customer',
+    first_name: user.first_name,
+    last_name: user.last_name,
+    bookings: {
+      upcoming: upcoming.map(mapBooking),
+      past: past.map(mapBooking),
+    },
+  };
+};
+
+export {
+  getUserIdByEmail,
+  createUser,
+  deactivateUserByEmail,
+  getUserWithRole,
+  getUserProfile,
+};
