@@ -85,6 +85,7 @@ const getUserWithRole = async (userId: string) => {
     throw error;
   }
 
+  logger.info(`User found`, { id: user.id, email: user.email });
   return user;
 };
 

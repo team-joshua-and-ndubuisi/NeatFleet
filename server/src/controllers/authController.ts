@@ -5,7 +5,7 @@ import { User as UserType } from '../../generated/prisma';
 import { logger } from '../config/logger';
 import prisma from '../config/prisma';
 import issueJWT from '../lib/issueJWT';
-import { createUser } from '../services/userService';
+import { createUser, getUserWithRole } from '../services/userService';
 import { ExtendedErrorT } from '../types/error';
 const User = prisma.user;
 
@@ -133,16 +133,7 @@ const userProfile = asyncHandler(
     const userId = (req.user as UserType).id;
 
     logger.info(`Attempting to find user with id ${userId}`);
-    const user = await User.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        phone: true,
-      },
-    });
+    const user = await getUserWithRole(userId);
 
     if (!user) {
       logger.warn(`No user found with id ${userId}`);
@@ -152,7 +143,6 @@ const userProfile = asyncHandler(
       return;
     }
 
-    logger.info(`User found`, user);
     res.status(200).json({ user });
   }
 );
