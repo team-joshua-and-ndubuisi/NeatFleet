@@ -1,22 +1,33 @@
 import BusinessInfoCard from './BusinessInfoCard';
 import homeInfoCards from '@/data/homeInfoCards';
-import socialLinks from '@/data/socialLinks';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import AboutSection from './AboutSection';
+import Services from './Services';
+import Footer from '@/components/Footer';
 
 const HomeScreen = () => {
   return (
-    <div className='flex flex-col min-h-screen min-w-[270px]'>
+    <div className='flex flex-col min-h-screen min-w-[270px] '>
       {/* Make Appointment Section */}
       <div
-        className='flex-[6] flex items-center justify-center bg-cover bg-center bg-no-repeat bg-blue-100'
+        className='md:h-200 h-96 flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat bg-blue-100 '
         style={{ backgroundImage: "url('/images/cozy-living-room-modern-apartment.jpg')" }}
       >
+        <h1 className='text-5xl bg-[#F9FAFB] py-7 px-5 mb-10 text-[#3B82F6] opacity-80'>
+          NeatFleet Home and Cleaning Solutions{' '}
+        </h1>
         <NavLink to={'/service-catalog'}>
-          <Button className='text-lg sm:text-xl max-w-[1200px] cursor-pointer'>
+          <Button className='text-lg border-[#F9FAFB] sm:text-xl max-w-[1200px] cursor-pointer'>
             Make an Appointment
           </Button>
         </NavLink>
+      </div>
+      <div className='bg-cover bg-center bg-no-repeat md:bg-[url(images/background-design.svg)]'>
+        <AboutSection />
+      </div>
+      <div>
+        <Services />
       </div>
       {/* Company Information Section */}
       <div className='flex-[.25] flex flex-col justify-center bg-neutral-100 px-4 py-8'>
@@ -26,24 +37,9 @@ const HomeScreen = () => {
           ))}
         </div>
       </div>
+
       {/* Social Media Footer */}
-      <div className='flex-[.25] flex items-center justify-center bg-black text-white'>
-        <div className='flex gap-6'>
-          {socialLinks.map(({ name, href, icon: Icon }) => (
-            <a
-              key={name}
-              href={href}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='flex flex-col items-center hover:text-blue-400 transition-colors'
-              aria-label={name}
-            >
-              <Icon className='w-6 h-6' />
-              <span className='text-xs mt-1 hidden sm:block'>{name}</span>
-            </a>
-          ))}
-        </div>
-      </div>
+      <Footer />
     </div>
   );
 };

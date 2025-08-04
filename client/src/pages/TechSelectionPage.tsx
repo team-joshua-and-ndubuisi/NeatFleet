@@ -49,12 +49,8 @@ const TechSelectionPage: React.FC = () => {
     <div className='mt-16 px-8'>
       <h4 className='text-3xl mb-4'>Tech Selection Page</h4>
       <div className='grid grid-cols-3 grid-rows-2 gap-4 max-w-4xl'>
-        {technicianData.map((technician) => (
-          <TechnicianLink
-            key={technician.id}
-            name={technician.name}
-            url={technician.id}
-          />
+        {technicianData.map(technician => (
+          <TechnicianLink key={technician.id} name={technician.name} url={technician.id} />
         ))}
       </div>
     </div>
