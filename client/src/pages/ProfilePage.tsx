@@ -6,6 +6,7 @@ import ProfileContainer from '@/components/profile/ProfileContainer';
 import { useFetchProfile } from '@/features/profile';
 import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
+import { useFetchBookings } from '@/features/bookService';
 
 const scheduledBookingsMockData = [
   {
@@ -58,8 +59,10 @@ const MOCK_USER_DATA = {
 
 const ProfilePage: React.FC = () => {
   const userToken = useAuthStore(state => state.token);
+  const userId = useAuthStore(state => state.user.id);
 
   const { data: userProfileData, isLoading, isError } = useFetchProfile(userToken);
+  const { data: bookingsData } = useFetchBookings(userId, userToken);
 
   if (isLoading) {
     return <LoadingIndicator message='Loading profile...' />;
@@ -94,6 +97,9 @@ const ProfilePage: React.FC = () => {
 
   //   })
   // }
+
+  console.log('bookingsData', bookingsData);
+
   return (
     <div>
       <ProfileContainer>
