@@ -1,7 +1,7 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
 import { Address } from '../../generated/prisma';
 
-const getUserAddresses = async (userId: string): Promise<Address[]> => {
+const getAddressesForUser = async (userId: string): Promise<Address[]> => {
   try {
     const addresses = await prismaClient.address.findMany({
       where: { user_id: userId },
@@ -53,4 +53,4 @@ const createAddress = async ({
   }
 };
 
-export { createAddress, getUserAddresses };
+export { createAddress, getAddressesForUser };
