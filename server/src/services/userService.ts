@@ -1,6 +1,6 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
 import { User } from '../../generated/prisma';
-import { ExtendedErrorT } from '../types/error';
+import { AppError, ExtendedErrorT } from '../types/error';
 import { logger } from '../config/logger';
 
 const getUserIdByEmail = async (email: string): Promise<string | null> => {
@@ -79,11 +79,7 @@ const getUserWithRole = async (userId: string) => {
     include: { technician: true },
   });
 
-  if (!user) {
-    const error = new Error('User not found') as ExtendedErrorT;
-    error.statusCode = 404;
-    throw error;
-  }
+  if (!user) throw new AppError('User not found', 404);
 
   const userInfo = {
     id: user.id,
@@ -112,11 +108,7 @@ const getUserProfile = async (userId: string) => {
     },
   });
 
-  if (!user) {
-    const error = new Error('User not found') as ExtendedErrorT;
-    error.statusCode = 404;
-    throw error;
-  }
+  if (!user) throw new AppError('User not found', 404);
 
   const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
 
