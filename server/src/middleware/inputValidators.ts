@@ -41,6 +41,21 @@ const userIdValidator = param('userId')
   .isMongoId()
   .withMessage('Invalid user ID');
 
+const addressValidator = [
+  body('street').isString().notEmpty().withMessage('Street is required'),
+
+  body('city').isString().notEmpty().withMessage('City is required'),
+
+  body('state')
+    .isString()
+    .isLength({ min: 2, max: 2 })
+    .withMessage('State must be a 2-letter code (e.g., CA, NY)')
+    .isUppercase()
+    .withMessage('State code must be uppercase'),
+
+  body('zip').isPostalCode('US').withMessage('Invalid U.S. ZIP code'),
+];
+
 const checkValidations = async (
   req: Request,
   res: Response,
@@ -76,4 +91,5 @@ export {
   postIdValidator,
   titleValidator,
   userIdValidator,
+  addressValidator,
 };
