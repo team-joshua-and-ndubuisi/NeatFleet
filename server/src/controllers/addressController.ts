@@ -4,7 +4,7 @@ import { logger } from '../config/logger';
 import prisma from '../config/prisma';
 import { AppError } from '../types/error';
 import { User as UserType } from '../../generated/prisma';
-import { createAddress } from '../services/addressService';
+import { createAddress, getAddressesForUser } from '../services/addressService';
 
 // Create Address
 const addAddress = asyncHandler(
@@ -28,5 +28,18 @@ const addAddress = asyncHandler(
     res.status(201).json(address);
   }
 );
+
+const getUserAddresses = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log('hihi');
+    const userId = (req.user as UserType).id;
+
+    if (!userId) throw new AppError('Unauthorized', 401);
+
+    const addresses = await getAddressesForUser(userId);
+
+    res.status(200).json(addresses);
+  }
+);
 // getUserAddresses, updateAddress, deleteAddress
-export { addAddress };
+export { addAddress, getUserAddresses };
