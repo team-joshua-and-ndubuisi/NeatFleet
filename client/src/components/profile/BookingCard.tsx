@@ -42,7 +42,7 @@ const BookingCard: React.FC<BookingProps> = ({ name, status, date, details, rati
           <span>{details}</span>
         </div>
         <div className='border  py-3 text-wrap w-1/5 lg:text-xl md:text-xl text-sm border-round-5x rounded-br-lg rounded-tr-lg text-center'>
-          <span>Rating: {rating}</span>
+          <span>Rating: {rating || 'not rated yet'}</span>
         </div>
       </div>
     </div>
