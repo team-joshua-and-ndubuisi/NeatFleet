@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
@@ -14,6 +14,7 @@ import {
 import { useFetchServices } from '@/features/services';
 import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
+import * as Yup from 'yup';
 
 interface SectionTitleProps {
   title: string;
@@ -37,8 +38,25 @@ const formatTimeSlot = (timeSlot: TimeSlot): string => {
   return dict[timeSlot];
 };
 
+const addressValidationSchema = Yup.object().shape({
+  address: Yup.string().required('Address is required'),
+  city: Yup.string().required('City is required'),
+  state: Yup.string().required('State is required'),
+  zipcode: Yup.string()
+    .matches(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code format')
+    .required('Zipcode is required'),
+});
+
+interface ValidationErrors {
+  address?: string;
+  city?: string;
+  state?: string;
+  zipcode?: string;
+}
+
 const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
+  const [errors, setErrors] = React.useState<ValidationErrors>({});
 
   const {
     data: services,
@@ -64,15 +82,53 @@ const ServiceBookingForm: React.FC = () => {
     error: techniciansError,
   } = useFetchAvailableTechnicians(formData.service?.id, formData.date, formData.timeSlot);
 
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [formData]);
+
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
     setFormData({ [key]: value });
+
+    if (key in errors && errors[key as keyof ValidationErrors]) {
+      addressValidationSchema
+        .validateAt(key as keyof ValidationErrors, { [key]: value })
+        .then(() => {
+          setErrors(prevErrors => ({ ...prevErrors, [key as keyof ValidationErrors]: undefined }));
+        })
+        .catch(err => {
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            [key as keyof ValidationErrors]: err.message,
+          }));
+        });
+    }
+  }
+
+  function handleBlur<K extends keyof ValidationErrors>(key: K) {
+    const value = formData[key];
+    if (['address', 'city', 'state', 'zipcode'].includes(key)) {
+      addressValidationSchema
+        .validateAt(key, { [key]: value })
+        .then(() => {
+          setErrors(prevErrors => ({ ...prevErrors, [key]: undefined }));
+        })
+        .catch(err => {
+          setErrors(prevErrors => ({ ...prevErrors, [key]: err.message }));
+        });
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitting:', formData);
 
     try {
+      await addressValidationSchema.validate(formData, { abortEarly: false });
+      console.log('Submitting:', formData);
+
       const response = await fetch('http://localhost:3000/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -82,7 +138,15 @@ const ServiceBookingForm: React.FC = () => {
       const result = await response.json();
       console.log('Response:', result);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      if (error instanceof Yup.ValidationError) {
+        const formattedErrors = error.inner.reduce((acc: ValidationErrors, err) => {
+          acc[err.path as keyof ValidationErrors] = err.message;
+          return acc;
+        }, {});
+        setErrors(formattedErrors);
+      } else {
+        console.error('Unexpected error:', error);
+      }
     }
   };
 
@@ -253,8 +317,14 @@ const ServiceBookingForm: React.FC = () => {
                 id='address'
                 value={formData.address || ''}
                 onChange={e => handleChange('address', e.target.value)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+                onBlur={() => handleBlur('address')}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none transition-all duration-300 ease-in-out'
               />
+              <p
+                className={`text-red-500 overflow-hidden transition-all duration-300 ease-in-out ${errors.address ? 'max-h-6 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                {errors.address || null}
+              </p>
             </div>
             <div>
               <label htmlFor='apartment'>Apartment</label>
@@ -275,8 +345,14 @@ const ServiceBookingForm: React.FC = () => {
                 id='city'
                 value={formData.city || ''}
                 onChange={e => handleChange('city', e.target.value)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+                onBlur={() => handleBlur('city')}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none transition-all duration-300 ease-in-out'
               />
+              <p
+                className={`text-red-500 overflow-hidden transition-all duration-300 ease-in-out ${errors.city ? 'max-h-6 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                {errors.city || null}
+              </p>
             </div>
             <div>
               <label htmlFor='state'>State</label>
@@ -285,14 +361,20 @@ const ServiceBookingForm: React.FC = () => {
                 id='state'
                 value={formData.state || ''}
                 onChange={e => handleChange('state', e.target.value as State)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none transition-all duration-300 ease-in-out'
               >
-                {stateAbbreviations.map(state => (
+                {['', ...stateAbbreviations].map(state => (
+                  // Include an empty string as the first option to allow for a blank initial value
                   <option key={state} value={state}>
                     {state}
                   </option>
                 ))}
               </select>
+              <p
+                className={`text-red-500 overflow-hidden transition-all duration-300 ease-in-out ${errors.state ? 'max-h-6 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                {errors.state || null}
+              </p>
             </div>
             <div>
               <label htmlFor='zipcode'>Zipcode</label>
@@ -301,18 +383,21 @@ const ServiceBookingForm: React.FC = () => {
                 name='zipcode'
                 id='zipcode'
                 value={formData.zipcode?.toString() || ''}
-                onChange={e =>
-                  handleChange('zipcode', e.target.value ? Number(e.target.value) : null)
-                }
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
+                onChange={e => handleChange('zipcode', e.target.value ? e.target.value : null)}
+                onBlur={() => handleBlur('zipcode')}
+                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none transition-all duration-300 ease-in-out'
               />
+              <p
+                className={`text-red-500 overflow-hidden transition-all duration-300 ease-in-out ${errors.zipcode ? 'max-h-6 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                {errors.zipcode || null}
+              </p>
             </div>
           </div>
         </div>
       )}
 
       {/* Payment section */}
-
       {formData.address && formData.city && formData.state && formData.zipcode && (
         <div>
           <HorizontalLine />
@@ -398,6 +483,9 @@ const ServiceBookingForm: React.FC = () => {
             Reserve
           </button>
         )}
+
+      {/* Empty div for auto-scroll */}
+      <div ref={scrollRef}></div>
     </form>
   );
 };
