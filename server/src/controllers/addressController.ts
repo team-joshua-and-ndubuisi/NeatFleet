@@ -31,7 +31,6 @@ const addAddress = asyncHandler(
 
 const getUserAddresses = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('hihi');
     const userId = (req.user as UserType).id;
 
     if (!userId) throw new AppError('Unauthorized', 401);
