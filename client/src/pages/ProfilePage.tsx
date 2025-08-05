@@ -8,43 +8,6 @@ import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
 import { BookingT, useFetchBookings } from '@/features/bookService';
 
-// const scheduledBookings = [
-//   {
-//     id: '4qwertyu',
-//     name: 'James Wilson',
-//     status: 'upcoming',
-//     date: 1680566400000,
-//     details: 'Handyman Services',
-//     rating: 0,
-//   },
-// ];
-
-// const pastBookings = [
-//   {
-//     id: '1sdafasd',
-//     name: 'Alice Johnson',
-//     status: 'completed',
-//     date: 1672531200000,
-//     details: 'Deep Cleaning',
-//     rating: 5,
-//   },
-//   {
-//     id: '2qweqwe',
-//     name: 'Robert Smith',
-//     status: 'completed',
-//     date: 1675209600000,
-//     details: 'Standard Cleaning',
-//     rating: 4,
-//   },
-//   {
-//     id: '3zxcvbnm',
-//     name: 'Maria Garcia',
-//     status: 'cancelled',
-//     date: 1677888000000,
-//     details: 'Plumbing Repairs',
-//     rating: 0,
-//   },
-// ];
 
 const MOCK_USER_DATA = {
   type: 'tech',
