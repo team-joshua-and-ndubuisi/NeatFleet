@@ -1,5 +1,6 @@
 import prismaClient from '../config/prisma'; // Ensure your db connection is set up correctly
 import { Address } from '../../generated/prisma';
+import { AppError } from '../types/error';
 
 const getAddressesForUser = async (userId: string): Promise<Address[]> => {
   try {
@@ -53,4 +54,52 @@ const createAddress = async ({
   }
 };
 
-export { createAddress, getAddressesForUser };
+type UpdateAddressInput = {
+  addressId: string;
+  userId: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  latitude: number | null;
+  longitude: number | null;
+  isPrimary?: boolean;
+};
+
+const updateUserAddress = async ({
+  addressId,
+  userId,
+  street,
+  city,
+  state,
+  zip,
+  latitude,
+  longitude,
+  isPrimary,
+}: UpdateAddressInput) => {
+  // Verify address ownership
+  const address = await prismaClient.address.findUnique({
+    where: { id: addressId },
+  });
+
+  if (!address || address.user_id !== userId) {
+    throw new AppError('Address not found or unauthorized', 404);
+  }
+
+  const returnAddress = await prismaClient.address.update({
+    where: { id: addressId },
+    data: {
+      street,
+      city,
+      state,
+      zip,
+      latitude,
+      longitude,
+      ...(isPrimary !== undefined && { isPrimary }),
+    },
+  });
+
+  return returnAddress;
+};
+
+export { createAddress, getAddressesForUser, updateUserAddress };
