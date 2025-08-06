@@ -30,5 +30,9 @@ export interface AddressT {
   street: string;
   city: string;
   state: string;
-  zipCode: string;
+  zip: string;
+  id: string;
+  isPrimary: boolean;
+  latitude?: number;
+  longitude?: number;
 }

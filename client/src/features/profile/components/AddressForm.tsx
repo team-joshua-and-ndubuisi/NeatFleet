@@ -10,19 +10,20 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CircleX } from 'lucide-react';
+import { AddressT } from '../types';
 
-interface AddressRequestI {
-  addressId: string;
-  city: string;
-  state: string;
-  country: string;
-  street: string;
-  zip: string;
-}
+// interface AddressRequestI {
+//   addressId: string;
+//   city: string;
+//   state: string;
+//   country: string;
+//   street: string;
+//   zip: string;
+// }
 
 interface AddressFormProps {
-  addressData?: AddressRequestI;
-  apiCall: (addressDetails: AddressRequestI) => Promise<void>;
+  addressData?: AddressT;
+  apiCall: (addressDetails: AddressT) => Promise<void>;
   onClose?: () => void; // Optional callback to close the form
 }
 
@@ -33,31 +34,32 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
       onSubmit={async e => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
-        console.log('form', form.addressId.value);
-        const addressId = form.addressId.value;
-        const street = form.street.value;
-        const city = form.city.value;
-        const state = form.state.value;
-        const zip = form.zip.value;
-        const country = form.country.value;
+        const id = form?.addressId?.value;
+        const street = form?.street?.value;
+        const city = form?.city?.value;
+        const state = form?.state?.value;
+        const zip = form?.zip?.value;
+        const latitude = form?.latitude?.value || 0;
+        const longitude = form?.longitude?.value || 0;
 
         console.log('Submitting address:', {
-          addressId,
+          id,
           street,
           city,
           state,
           zip,
-          country,
+          latitude,
+          longitude,
         });
 
         if (apiCall) {
           await apiCall({
-            addressId,
+            id,
             street,
             city,
             state,
             zip,
-            country,
+            isPrimary: true,
           });
         }
       }}
@@ -72,12 +74,7 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
           }}
         />
         {/* hidden field to store address ID */}
-        <Input
-          id='addressId'
-          type='text'
-          defaultValue={addressData?.addressId || ''}
-          hidden={true}
-        />
+        <Input id='addressId' type='text' defaultValue={addressData?.id || ''} hidden={true} />
         <CardHeader>
           <CardTitle>Address</CardTitle>
           <CardDescription>Enter your address details below</CardDescription>
@@ -124,7 +121,7 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
                 required
               />
             </div>
-            <div className='grid gap-2'>
+            {/* <div className='grid gap-2'>
               <Label htmlFor='country'>Country</Label>
               <Input
                 id='country'
@@ -133,12 +130,12 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
                 placeholder='USA'
                 required
               />
-            </div>
+            </div> */}
           </div>
         </CardContent>
         <CardFooter className='flex-col gap-2'>
           <Button type='submit' className='w-full cursor-pointer'>
-            Submit
+            {addressData ? 'Update Address' : 'Add New Address'}
           </Button>
         </CardFooter>
       </Card>

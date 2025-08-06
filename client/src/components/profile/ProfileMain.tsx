@@ -1,7 +1,10 @@
+import { AddressT, useAddAddress, useFetchAddresses, useUpdateAddress } from '@/features/profile';
 import AddressForm from '@/features/profile/components/AddressForm';
 import { Edit3 } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LoadingIndicator from '../LoadingIndicator';
+import { useAuthStore } from '@/features/auth/stores';
 
 //Menu at top of profile loaded based on the type of user
 interface UserMenuProp {
@@ -31,14 +34,6 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   userName,
   years,
   location,
-  address = {
-    addressId: '1234',
-    street: '123 grove street',
-    city: 'Dallas',
-    state: 'TX',
-    zip: '75201',
-    country: 'USA',
-  },
   image,
   bookings,
   rating,
@@ -47,10 +42,26 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   email,
 }) => {
   const [showAddressForm, setShowAddressForm] = React.useState(false);
+  const userToken = useAuthStore(state => state.token);
+
+  const { data: addressesData, isLoading: isLoadingAddresses } = useFetchAddresses(userToken);
+
+  const { mutateAsync: updateAddress } = useUpdateAddress(userToken);
+  const { mutateAsync: addAddress } = useAddAddress(userToken);
+
+  let primaryAddress: AddressT | undefined;
+
+  let addressFormApiCall = updateAddress;
+
+  //no addresses found change api call to addAddress
+  if (!addressesData || addressesData.length === 0) {
+    primaryAddress = undefined;
+    addressFormApiCall = addAddress;
+  }
 
   return (
     <div className='bg-primary-50 '>
-      <div className='flex w-full h-1/2 border-3 border border-black py-10 flex-col  lg:flex-row lg:justify-center  md:flex-row md:justify-center rounded'>
+      <div className='flex w-full h-1/2 border-3 border-black py-10 flex-col  lg:flex-row lg:justify-center  md:flex-row md:justify-center rounded'>
         <div className='flex flex-col items-center '>
           <img
             width='100%'
@@ -63,9 +74,20 @@ const ProfileMain: React.FC<UserMenuProp> = ({
           <span className='text-3xl text-center py-5 flex'>{location}</span>
           <section className='bg-slate-100 p-5 rounded-lg shadow-lg relative'>
             <h3>Primary Address:</h3>
-            <span className='text-2xl'>
-              {address.street}, {address.city}, {address.state} {address.zip}, {address.country}
-            </span>
+            {isLoadingAddresses ? (
+              <LoadingIndicator message='Loading address...' />
+            ) : (
+              <div>
+                {primaryAddress ? (
+                  <span className='text-2xl'>
+                    {primaryAddress?.street}, {primaryAddress?.city}, {primaryAddress?.state}{' '}
+                    {primaryAddress?.zip},
+                  </span>
+                ) : (
+                  <span> no primary address set</span>
+                )}
+              </div>
+            )}
             <Edit3
               color='#22b453'
               onClick={() => {
@@ -132,12 +154,12 @@ const ProfileMain: React.FC<UserMenuProp> = ({
       {showAddressForm ? (
         <section className='fixed flex flex-col items-center justify-center left-0 top-0 w-full h-screen'>
           <AddressForm
-            addressData={address}
+            addressData={primaryAddress}
             onClose={() => {
               setShowAddressForm(false);
             }}
             apiCall={async addressData => {
-              console.log('addressData', addressData);
+              await addressFormApiCall(addressData);
             }}
           />
         </section>
