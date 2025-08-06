@@ -40,5 +40,18 @@ const getUserAddresses = asyncHandler(
     res.status(200).json(addresses);
   }
 );
+
+const updateAddress = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { street, city, state, zip, latitude, longitude } = req.body;
+    const { address_id: addressId } = req.params;
+
+    const userId = (req.user as UserType).id;
+    if (!userId) throw new AppError('Unauthorized', 401);
+
+    // const addresses = await getAddressesForUser(userId);
+    res.status(200).json(addressId);
+  }
+);
 // getUserAddresses, updateAddress, deleteAddress
-export { addAddress, getUserAddresses };
+export { addAddress, getUserAddresses, updateAddress };
