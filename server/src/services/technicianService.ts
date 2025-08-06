@@ -34,7 +34,7 @@ const isTechnician = async (email: string): Promise<boolean> => {
     return exists !== null;
   } catch (error: any) {
     throw new Error(
-      `Error setting user as technician, user email ${email}: ${error.message}`
+      `Error checking if user is a technician, user email ${email}: ${error.message}`
     );
   }
 };
