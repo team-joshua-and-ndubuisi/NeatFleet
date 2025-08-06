@@ -9,16 +9,20 @@ const PayButton = () => {
   const [error, setError] = useState<ConfirmError>();
   const { user } = useAuthStore();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setLoading(true);
-
-    confirm({ email: user.email }).then(result => {
+    try {
+      const result = await confirm({ email: user.email });
       if (result.type === 'error') {
         setError(result.error);
-        console.error(error);
+      } else if (result.type === 'success') {
+        // make a post request to db with booking data
       }
+    } catch (e) {
+      setError(e as ConfirmError);
+    } finally {
       setLoading(false);
-    });
+    }
   };
 
   return (
