@@ -54,6 +54,18 @@ const addressValidator = [
     .withMessage('State code must be uppercase'),
 
   body('zip').isPostalCode('US').withMessage('Invalid U.S. ZIP code'),
+  body('latitude')
+    .optional({ nullable: true })
+    .isFloat()
+    .withMessage('Invalid latitude'),
+  body('longitude')
+    .optional({ nullable: true })
+    .isFloat()
+    .withMessage('Invalid longitude'),
+  body('isPrimary')
+    .optional()
+    .isBoolean()
+    .withMessage('isPrimary must be a boolean'),
 ];
 
 const checkValidations = async (
