@@ -11,7 +11,7 @@ const PayButton = () => {
 
   const handleClick = () => {
     setLoading(true);
-    // TODO: add current user email
+
     confirm({ email: user.email }).then(result => {
       if (result.type === 'error') {
         setError(result.error);
