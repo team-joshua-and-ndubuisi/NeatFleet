@@ -1,3 +1,4 @@
+import { Edit3 } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,6 +7,14 @@ interface UserMenuProp {
   userType: string;
   userName: string;
   bookingsCompleted?: number; //Admin Only
+  address: {
+    addressId: string;
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
   years: number;
   rating?: number; //techs only
   bookings: [] | number; //client only
@@ -21,6 +30,14 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   userName,
   years,
   location,
+  address = {
+    addressId: '1234',
+    street: '123 grove street',
+    city: 'Dallas',
+    state: 'TX',
+    zip: '75201',
+    country: 'USA',
+  },
   image,
   bookings,
   rating,
@@ -40,7 +57,18 @@ const ProfileMain: React.FC<UserMenuProp> = ({
           />
           <span className=' text-3xl font-semibold py-5'>{userName}</span>
           <span>ID: {userId} </span>
-          <span className='text-3xl text-center py-5'>{location} Memphis, Alabama</span>
+          <span className='text-3xl text-center py-5 flex'>{location}</span>
+          <section className='bg-slate-100 p-5 rounded-lg shadow-lg relative'>
+            <h3>Primary Address:</h3>
+            <span className='text-2xl'>
+              {address.street}, {address.city}, {address.state} {address.zip}, {address.country}
+            </span>
+            <Edit3
+              color='#22b453'
+              onClick={() => {}}
+              className='hover:cursor-pointer rounded-2xl shadow-2xl absolute top-2 right-2'
+            />
+          </section>
           <span className='text-3xl text-center py-5'>Phone Number: #{phoneNumber}</span>
           <span className='text-3xl text-center py-5'>Email: {email}</span>
         </div>
