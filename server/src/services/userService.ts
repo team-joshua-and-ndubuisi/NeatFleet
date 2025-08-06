@@ -102,6 +102,7 @@ const getUserProfile = async (userId: string) => {
               user: true, // get technician name
             },
           },
+          service: true, // include service to get service name
         },
         orderBy: { service_date: 'desc' },
       },
@@ -118,9 +119,9 @@ const getUserProfile = async (userId: string) => {
   const mapBooking = (b: (typeof user.Booking)[number]) => ({
     booking_id: b.id,
     technician_name: `${b.technician.user.first_name} ${b.technician.user.last_name}`,
+    service_name: b.service.name,
     status: b.service_status,
     date: b.service_date,
-    details: b.service_notes,
     rating_score: b.rating_score,
     rating_comment: b.rating_comment,
   });
