@@ -136,10 +136,22 @@ const getUserProfile = async (userId: string) => {
   };
 };
 
+const getUserRole = async (
+  userId: string
+): Promise<'technician' | 'customer'> => {
+  const technician = await prismaClient.technician.findUnique({
+    where: { user_id: userId },
+    select: { id: true },
+  });
+
+  return technician ? 'technician' : 'customer';
+};
+
 export {
   getUserIdByEmail,
   createUser,
   deactivateUserByEmail,
   getUserWithRole,
   getUserProfile,
+  getUserRole,
 };

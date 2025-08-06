@@ -11,6 +11,7 @@ import {
   getUserWithRole,
 } from '../services/userService';
 import { ExtendedErrorT } from '../types/error';
+import { AuthedUser } from '../types';
 const User = prisma.user;
 
 // @desc    Register new user
@@ -129,7 +130,7 @@ const loginUser = asyncHandler(
 // @access  Private
 const userProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const userId = (req.user as UserType).id;
+    const userId = (req.user as AuthedUser).id;
 
     const user = await getUserWithRole(userId);
 
