@@ -1,3 +1,5 @@
+import AddressForm from '@/features/profile/components/AddressForm';
+import { Edit3 } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,6 +8,14 @@ interface UserMenuProp {
   userType: string;
   userName: string;
   bookingsCompleted?: number; //Admin Only
+  address?: {
+    addressId: string;
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
   years: number;
   rating?: number; //techs only
   bookings: [] | number; //client only
@@ -21,6 +31,14 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   userName,
   years,
   location,
+  address = {
+    addressId: '1234',
+    street: '123 grove street',
+    city: 'Dallas',
+    state: 'TX',
+    zip: '75201',
+    country: 'USA',
+  },
   image,
   bookings,
   rating,
@@ -28,6 +46,8 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   userId,
   email,
 }) => {
+  const [showAddressForm, setShowAddressForm] = React.useState(false);
+
   return (
     <div className='bg-primary-50 '>
       <div className='flex w-full h-1/2 border-3 border border-black py-10 flex-col  lg:flex-row lg:justify-center  md:flex-row md:justify-center rounded'>
@@ -40,7 +60,20 @@ const ProfileMain: React.FC<UserMenuProp> = ({
           />
           <span className=' text-3xl font-semibold py-5'>{userName}</span>
           <span>ID: {userId} </span>
-          <span className='text-3xl text-center py-5'>{location} Memphis, Alabama</span>
+          <span className='text-3xl text-center py-5 flex'>{location}</span>
+          <section className='bg-slate-100 p-5 rounded-lg shadow-lg relative'>
+            <h3>Primary Address:</h3>
+            <span className='text-2xl'>
+              {address.street}, {address.city}, {address.state} {address.zip}, {address.country}
+            </span>
+            <Edit3
+              color='#22b453'
+              onClick={() => {
+                setShowAddressForm(true);
+              }}
+              className='hover:cursor-pointer rounded-2xl shadow-2xl absolute top-2 right-2'
+            />
+          </section>
           <span className='text-3xl text-center py-5'>Phone Number: #{phoneNumber}</span>
           <span className='text-3xl text-center py-5'>Email: {email}</span>
         </div>
@@ -95,6 +128,20 @@ const ProfileMain: React.FC<UserMenuProp> = ({
           </div>
         </div>
       </div>
+
+      {showAddressForm ? (
+        <section className='fixed flex flex-col items-center justify-center left-0 top-0 w-full h-screen'>
+          <AddressForm
+            addressData={address}
+            onClose={() => {
+              setShowAddressForm(false);
+            }}
+            apiCall={async addressData => {
+              console.log('addressData', addressData);
+            }}
+          />
+        </section>
+      ) : null}
     </div>
   );
 };
