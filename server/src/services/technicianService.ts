@@ -1,12 +1,12 @@
-import prismaClient from '../config/prisma';
-import { getUserIdByEmail } from './userService';
 import {
   Technician,
   TechnicianAvailability,
   TimeBlock,
 } from '../../generated/prisma';
-import { calculateYears } from '../utils/dateUtils'; // assuming your utility lives here
+import prismaClient from '../config/prisma';
 import { AppError } from '../types/error';
+import { calculateYears } from '../utils/dateUtils'; // assuming your utility lives here
+import { getUserIdByEmail } from './userService';
 
 const createTechnician = async (userId: string): Promise<Technician> => {
   try {
@@ -249,12 +249,12 @@ const countCompletedBookings = (technician: any): number => {
 
 export {
   createTechnician,
-  isTechnician,
-  getTechnicianRating,
-  updateRating,
-  setTechnicianAvailability,
-  getTechIdByEmail,
   getTechAvailabilities,
+  getTechIdByEmail,
   getTechnicianId,
   getTechnicianProfile,
+  getTechnicianRating,
+  isTechnician,
+  setTechnicianAvailability,
+  updateRating,
 };
