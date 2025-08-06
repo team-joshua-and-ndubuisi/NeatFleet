@@ -1,3 +1,4 @@
+import AddressForm from '@/features/profile/components/AddressForm';
 import { Edit3 } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -7,7 +8,7 @@ interface UserMenuProp {
   userType: string;
   userName: string;
   bookingsCompleted?: number; //Admin Only
-  address: {
+  address?: {
     addressId: string;
     street: string;
     city: string;
@@ -45,6 +46,8 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   userId,
   email,
 }) => {
+  const [showAddressForm, setShowAddressForm] = React.useState(false);
+
   return (
     <div className='bg-primary-50 '>
       <div className='flex w-full h-1/2 border-3 border border-black py-10 flex-col  lg:flex-row lg:justify-center  md:flex-row md:justify-center rounded'>
@@ -65,7 +68,9 @@ const ProfileMain: React.FC<UserMenuProp> = ({
             </span>
             <Edit3
               color='#22b453'
-              onClick={() => {}}
+              onClick={() => {
+                setShowAddressForm(true);
+              }}
               className='hover:cursor-pointer rounded-2xl shadow-2xl absolute top-2 right-2'
             />
           </section>
@@ -123,6 +128,20 @@ const ProfileMain: React.FC<UserMenuProp> = ({
           </div>
         </div>
       </div>
+
+      {showAddressForm ? (
+        <section className='fixed flex flex-col items-center justify-center left-0 top-0 w-full h-screen'>
+          <AddressForm
+            addressData={address}
+            onClose={() => {
+              setShowAddressForm(false);
+            }}
+            apiCall={async addressData => {
+              console.log('addressData', addressData);
+            }}
+          />
+        </section>
+      ) : null}
     </div>
   );
 };

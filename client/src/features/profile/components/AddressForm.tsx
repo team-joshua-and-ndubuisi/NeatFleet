@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { CircleX } from 'lucide-react';
 
 interface AddressRequestI {
   addressId: string;
@@ -22,9 +23,10 @@ interface AddressRequestI {
 interface AddressFormProps {
   addressData?: AddressRequestI;
   apiCall: (addressDetails: AddressRequestI) => Promise<void>;
+  onClose?: () => void; // Optional callback to close the form
 }
 
-const AddressForm = ({ apiCall, addressData }: AddressFormProps) => {
+const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
   return (
     <form
       className='max-w-md w-full p-6'
@@ -60,9 +62,22 @@ const AddressForm = ({ apiCall, addressData }: AddressFormProps) => {
         }
       }}
     >
-      <Card className='w-full max-w-sm'>
+      <Card className='w-full max-w-sm relative'>
+        <CircleX
+          className='absolute top-5 right-5 text-2xl font-bold text-red-500 hover:cursor-pointer'
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            }
+          }}
+        />
         {/* hidden field to store address ID */}
-        <Input id='addressId' type='text' value={addressData?.addressId || ''} hidden={true} />
+        <Input
+          id='addressId'
+          type='text'
+          defaultValue={addressData?.addressId || ''}
+          hidden={true}
+        />
         <CardHeader>
           <CardTitle>Address</CardTitle>
           <CardDescription>Enter your address details below</CardDescription>
