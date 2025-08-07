@@ -115,6 +115,10 @@ const getUserProfile = async (userId: string) => {
       upcoming: upcoming.map(mapBooking),
       past: past.map(mapBooking),
     },
+    stats: {
+      bookings_completed: 0,
+      years_on_platform: 0,
+    },
   };
 };
 

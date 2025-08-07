@@ -5,13 +5,11 @@ import { User as UserType } from '../../generated/prisma';
 import { logger } from '../config/logger';
 import prisma from '../config/prisma';
 import issueJWT from '../lib/issueJWT';
-import {
-  createUser,
-  getUserProfile,
-  getUserWithRole,
-} from '../services/userService';
+import { createUser, getUserProfile } from '../services/userService';
 import { ExtendedErrorT } from '../types/error';
 import { AuthedUser } from '../types';
+import { calculateYears } from '../utils/dateUtils';
+import { numOfCompletedBookings } from '../services/bookingService';
 const User = prisma.user;
 
 // @desc    Register new user
@@ -131,14 +129,20 @@ const loginUser = asyncHandler(
 const userProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const userId = (req.user as AuthedUser).id;
+    const userRole = (req.user as AuthedUser).role;
+    const userCreatedDate = (req.user as AuthedUser).created_at;
 
-    const user = await getUserWithRole(userId);
-
-    if (user.isTechnician) {
+    if (userRole === 'technician') {
+      const techId = (req.user as AuthedUser).technicianId;
       // const profile = await getTechnicianProfile(userId);
       // res.status(200).json(profile);
     } else {
       const profile = await getUserProfile(userId);
+      profile.stats = {
+        bookings_completed: await numOfCompletedBookings(userId, userRole),
+        years_on_platform: calculateYears(userCreatedDate),
+      };
+
       res.status(200).json(profile);
     }
   }
