@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import { getUserRole } from '../services/userService';
+import { getTechnicianId } from '../services/technicianService';
 
 const isAuth = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
@@ -16,7 +17,20 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
       }
 
       const role = await getUserRole(user.id);
-      req.user = { ...user, role };
+
+      let technicianId = null;
+      if (role === 'technician') {
+        technicianId = await getTechnicianId(user.id);
+        if (!technicianId) {
+          return res
+            .status(403)
+            .json({ message: 'Technician profile not found' });
+        }
+      }
+
+      req.user = { ...user, role, technicianId };
+      console.log('CHECK POINT 1');
+      console.log(technicianId);
       next();
     }
   )(req, res, next);
