@@ -1,8 +1,9 @@
 export type Address = string | null;
 export type Apartment = string | null;
 export type City = string | null;
-export type Zipcode = number | null;
+export type Zipcode = string | null;
 export type State =
+  | ''
   | 'AL'
   | 'AK'
   | 'AZ'

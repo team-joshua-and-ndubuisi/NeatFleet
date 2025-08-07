@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 interface BookingProps {
   name: string;
-  status: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
   date: number | string;
   details: string;
   rating: number;
@@ -27,8 +27,9 @@ const BookingCard: React.FC<BookingProps> = ({ name, status, date, details, rati
                   'text-accent-red': status === 'cancelled',
                 },
                 {
-                  'text-primary': status === 'upcoming',
-                }
+                  'text-primary': status === 'scheduled',
+                },
+                { 'text-accent-green': status === 'in_progress' || status === 'completed' }
               )}
             >
               {status}
@@ -42,7 +43,7 @@ const BookingCard: React.FC<BookingProps> = ({ name, status, date, details, rati
           <span>{details}</span>
         </div>
         <div className='border  py-3 text-wrap w-1/5 lg:text-xl md:text-xl text-sm border-round-5x rounded-br-lg rounded-tr-lg text-center'>
-          <span>Rating: {rating}</span>
+          <span>Rating: {rating || 'not rated yet'}</span>
         </div>
       </div>
     </div>
