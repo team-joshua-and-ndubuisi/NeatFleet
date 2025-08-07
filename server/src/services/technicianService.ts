@@ -157,6 +157,19 @@ const getTechIdByEmail = async (email: string): Promise<string> => {
   }
 };
 
+const getTechnicianId = async (userId: string): Promise<string> => {
+  const technician = await prismaClient.technician.findUnique({
+    where: { user_id: userId },
+    select: { id: true },
+  });
+
+  if (!technician) {
+    throw new Error(`Technician with userId ${userId} not found`);
+  }
+
+  return technician.id;
+};
+
 export {
   createTechnician,
   isTechnician,
@@ -165,4 +178,5 @@ export {
   setTechnicianAvailability,
   getTechIdByEmail,
   getTechAvailabilities,
+  getTechnicianId,
 };
