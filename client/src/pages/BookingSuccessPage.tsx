@@ -10,7 +10,7 @@ const BookingSuccessPage: React.FC = () => {
     user_id: profile?.user.id,
     service_id: formData?.service?.id,
     technician_id: formData?.technician?.id,
-    service_date: formData?.date,
+    service_date: formData.date?.toISOString(),
     time_block: formData?.timeSlot,
     address_street: formData?.address,
     address_city: formData?.city,
