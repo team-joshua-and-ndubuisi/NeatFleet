@@ -191,6 +191,8 @@ const getTechnicianProfile = async (userId: string) => {
     role: 'technician',
     first_name: technician.user.first_name,
     last_name: technician.user.last_name,
+    email: technician.user.email,
+    phone: technician.user.phone,
     rating_score: technician.current_rating,
     stats: {
       bookings_completed: countCompletedBookings(technician),
