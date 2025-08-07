@@ -10,4 +10,5 @@ import { User as UserType } from '../../generated/prisma';
 
 export type AuthedUser = UserType & {
   role: 'technician' | 'customer' | 'admin';
+  technicianId?: string; //optional, since not all users are technicians
 };
