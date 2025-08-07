@@ -29,8 +29,6 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
       }
 
       req.user = { ...user, role, technicianId };
-      console.log('CHECK POINT 1');
-      console.log(technicianId);
       next();
     }
   )(req, res, next);
