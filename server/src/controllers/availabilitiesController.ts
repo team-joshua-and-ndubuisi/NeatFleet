@@ -1,13 +1,13 @@
 // server/src/controllers/availabilityController.ts
+import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import { Request, Response, NextFunction } from 'express';
+import { TimeBlock } from '../../generated/prisma';
+import { logger } from '../config/logger';
 import {
+  getOpenTimeBlocks,
   getTechniciansByServiceDateAndTimeBlock,
   getUpcomingAvailableDatesByServiceId,
-  getOpenTimeBlocks,
 } from '../services/availabilityService';
-import { logger } from '../config/logger';
-import { TimeBlock } from '../../generated/prisma';
 
 /**
  * The following allows one step by step to progressively
@@ -23,7 +23,7 @@ import { TimeBlock } from '../../generated/prisma';
  * @route   GET /api/availabilities/service/:service_id
  * @access  Public
  */
-const getServiceAvailability = asyncHandler(
+const getServiceAvailabilities = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { date, time_block } = req.query;
 
@@ -139,4 +139,4 @@ const getAvailableTechnicians = asyncHandler(
   }
 );
 
-export { getServiceAvailability };
+export { getServiceAvailabilities };

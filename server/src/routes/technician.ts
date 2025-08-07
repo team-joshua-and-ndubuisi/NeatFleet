@@ -1,19 +1,19 @@
 import { Router } from 'express';
 import {
-  addAvailability,
+  addAvailabilities,
   deleteAvailability,
   updateAvailability,
 } from '../controllers/technicianController';
 
 const router = Router();
 
-router.post('/:technician_id/availabilities/:availability_id', addAvailability);
+router.post('/:technicianId/availabilities', addAvailabilities);
 router.patch(
-  '/:technician_id/availabilities/:availability_id',
+  '/:technicianId/availabilities/:availabilityId',
   updateAvailability
 );
 router.delete(
-  '/:technician_id/availabilities/:availability_id',
+  '/:technicianId/availabilities/:availabilityId',
   deleteAvailability
 );
 
