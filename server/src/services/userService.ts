@@ -72,25 +72,6 @@ const createUser = async ({
   }
 };
 
-const getUserWithRole = async (userId: string) => {
-  logger.info(`Attempting to find user with id ${userId}`);
-  const user = await prismaClient.user.findUnique({
-    where: { id: userId },
-    include: { technician: true },
-  });
-
-  if (!user) throw new AppError('User not found', 404);
-
-  const userInfo = {
-    id: user.id,
-    email: user.email,
-    isTechnician: user.technician,
-  };
-
-  logger.info(`User found`, userInfo);
-  return userInfo;
-};
-
 const getUserProfile = async (userId: string) => {
   const user = await prismaClient.user.findUnique({
     where: { id: userId },
@@ -152,7 +133,6 @@ export {
   getUserIdByEmail,
   createUser,
   deactivateUserByEmail,
-  getUserWithRole,
   getUserProfile,
   getUserRole,
 };
