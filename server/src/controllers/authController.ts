@@ -131,20 +131,13 @@ const userProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const userId = (req.user as AuthedUser).id;
     const userRole = (req.user as AuthedUser).role;
-    const userCreatedDate = (req.user as AuthedUser).created_at;
 
-    if (userRole === 'technician') {
-      const profile = await getTechnicianProfile(userId);
-      res.status(200).json(profile);
-    } else {
-      const profile = await getUserProfile(userId);
-      profile.stats = {
-        bookings_completed: await numOfCompletedBookings(userId, userRole),
-        years_on_platform: calculateYears(userCreatedDate),
-      };
+    const profile =
+      userRole === 'technician'
+        ? await getTechnicianProfile(userId)
+        : await getUserProfile(userId);
 
-      res.status(200).json(profile);
-    }
+    res.status(200).json(profile);
   }
 );
 

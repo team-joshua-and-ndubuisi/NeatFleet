@@ -2,6 +2,8 @@ import prismaClient from '../config/prisma'; // Ensure your db connection is set
 import { User } from '../../generated/prisma';
 import { AppError, ExtendedErrorT } from '../types/error';
 import { logger } from '../config/logger';
+import { calculateYears } from '../utils/dateUtils';
+import { numOfCompletedBookings } from './bookingService';
 
 const getUserIdByEmail = async (email: string): Promise<string | null> => {
   try {
@@ -80,10 +82,10 @@ const getUserProfile = async (userId: string) => {
         include: {
           technician: {
             include: {
-              user: true, // get technician name
+              user: true,
             },
           },
-          service: true, // include service to get service name
+          service: true,
         },
         orderBy: { service_date: 'desc' },
       },
@@ -92,7 +94,7 @@ const getUserProfile = async (userId: string) => {
 
   if (!user) throw new AppError('User not found', 404);
 
-  const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+  const today = new Date().toISOString().split('T')[0];
 
   const upcoming = user.Booking.filter(b => b.service_date >= today);
   const past = user.Booking.filter(b => b.service_date < today);
@@ -116,8 +118,8 @@ const getUserProfile = async (userId: string) => {
       past: past.map(mapBooking),
     },
     stats: {
-      bookings_completed: 0,
-      years_on_platform: 0,
+      bookings_completed: await numOfCompletedBookings(userId, 'customer'),
+      years_on_platform: calculateYears(user.created_at),
     },
   };
 };
