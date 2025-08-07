@@ -21,7 +21,7 @@ interface UserMenuProp {
   };
   years: number;
   rating?: number; //techs only
-  bookings: [] | number; //client only
+  bookings: number; //client only
   location: string;
   image?: string;
   phoneNumber?: string;
@@ -35,7 +35,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   years = 0,
   location = '',
   image = '#',
-  bookings = [],
+  bookings = 0,
   rating = '',
   phoneNumber = '',
   // userId = '',

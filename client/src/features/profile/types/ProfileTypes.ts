@@ -12,12 +12,12 @@
 //   techRating: number;
 // };
 
-type BookingT = {
+export type BookingT = {
   booking_id: string;
   technician_name: string;
   client_name: string;
   service_name: string;
-  status: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
   date: string;
   rating_score: number;
   rating_comment: string;
