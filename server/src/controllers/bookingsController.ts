@@ -7,6 +7,7 @@ import {
   createBooking,
   deleteBookingById,
   editBooking,
+  getBookingById,
   getTechnicianBookings,
   getUserBookings,
 } from '../services/bookingService';
@@ -53,6 +54,19 @@ const addBooking = asyncHandler(
     const newBooking = req.body;
     const result = await createBooking(newBooking);
     res.status(201).json(result);
+  }
+);
+
+// @desc    Get booking by ID
+// @route   GET /api/bookings/:bookingId
+// @access  Private
+const getBooking = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { bookingId } = req.params;
+    validateId(bookingId);
+
+    const result = await getBookingById(bookingId);
+    res.status(200).json(result);
   }
 );
 
@@ -141,6 +155,7 @@ export {
   addBooking,
   checkoutStripe,
   deleteBooking,
+  getBooking,
   getBookings,
   updateBooking,
 };
