@@ -25,21 +25,21 @@ interface UserMenuProp {
   location: string;
   image?: string;
   phoneNumber?: string;
-  userId: string; //used for fetching profile data
+  // userId: string; //used for fetching profile data
   email: string; //used for fetching profile data
 }
 
 const ProfileMain: React.FC<UserMenuProp> = ({
-  userType,
-  userName,
-  years,
-  location,
-  image,
-  bookings,
-  rating,
-  phoneNumber,
-  userId,
-  email,
+  userType = '',
+  userName = '',
+  years = 0,
+  location = '',
+  image = '#',
+  bookings = [],
+  rating = '',
+  phoneNumber = '',
+  // userId = '',
+  email = '',
 }) => {
   const [showAddressForm, setShowAddressForm] = React.useState(false);
   const userToken = useAuthStore(state => state.token);
@@ -51,13 +51,15 @@ const ProfileMain: React.FC<UserMenuProp> = ({
 
   let primaryAddress: AddressT | undefined;
 
-  let addressFormApiCall = updateAddress;
+  let addressFormApiCall = updateAddress; //changes based on whether address exists or not
 
   //no addresses found change api call to addAddress
   if (!addressesData || addressesData.length === 0) {
     primaryAddress = undefined;
     addressFormApiCall = addAddress;
   }
+
+  primaryAddress = addressesData?.find(address => address.isPrimary);
 
   return (
     <div className='bg-primary-50 '>
@@ -70,7 +72,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
             alt='Profile Picture'
           />
           <span className=' text-3xl font-semibold py-5'>{userName}</span>
-          <span>ID: {userId} </span>
+          {/* <span>ID: {userId} </span> */}
           <span className='text-3xl text-center py-5 flex'>{location}</span>
           <section className='bg-slate-100 p-5 rounded-lg shadow-lg relative'>
             <h3>Primary Address:</h3>
@@ -105,10 +107,12 @@ const ProfileMain: React.FC<UserMenuProp> = ({
               Number of Bookings: <br />
               {bookings}
             </span>
-            <span className='py-5 text-center text-2xl font-semibold'>
-              Rating <br />
-              {rating}
-            </span>
+            {rating ? (
+              <span className='py-5 text-center text-2xl font-semibold'>
+                Rating <br />
+                {rating}
+              </span>
+            ) : null}
             <span className='py-5 text-2xl font-semibold text-center'>
               Years at NeatFleet: <br />
               {years}
