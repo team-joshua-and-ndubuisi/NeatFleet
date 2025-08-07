@@ -10,6 +10,7 @@ import { ExtendedErrorT } from '../types/error';
 import { AuthedUser } from '../types';
 import { calculateYears } from '../utils/dateUtils';
 import { numOfCompletedBookings } from '../services/bookingService';
+import { getTechnicianProfile } from '../services/technicianService';
 const User = prisma.user;
 
 // @desc    Register new user
@@ -133,9 +134,8 @@ const userProfile = asyncHandler(
     const userCreatedDate = (req.user as AuthedUser).created_at;
 
     if (userRole === 'technician') {
-      const techId = (req.user as AuthedUser).technicianId;
-      // const profile = await getTechnicianProfile(userId);
-      // res.status(200).json(profile);
+      const profile = await getTechnicianProfile(userId);
+      res.status(200).json(profile);
     } else {
       const profile = await getUserProfile(userId);
       profile.stats = {
