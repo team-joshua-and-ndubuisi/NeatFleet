@@ -1,14 +1,12 @@
 import { axiosInstance } from '@/api';
-import { TechnicianBooking } from '@/features/bookings';
+import { BookingT } from '@/features/bookings';
 
 const url = 'bookings';
 
-export const fetchTechnicianBookings = async (
-  technicianId: string
-): Promise<TechnicianBooking[]> => {
+export const fetchTechnicianBookings = async (technicianId: string): Promise<BookingT[]> => {
   if (!technicianId) throw new Error('Technician ID required');
 
-  const response = await axiosInstance.get(`${url}/${technicianId}`);
+  const response = await axiosInstance.get(`${url}?technicianId=${technicianId}`);
 
   return response.data;
 };
