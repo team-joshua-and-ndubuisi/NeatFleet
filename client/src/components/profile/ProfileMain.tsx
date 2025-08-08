@@ -1,10 +1,11 @@
 import { AddressT, useAddAddress, useFetchAddresses, useUpdateAddress } from '@/features/profile';
 import AddressForm from '@/features/profile/components/AddressForm';
 import { Edit3 } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LoadingIndicator from '../LoadingIndicator';
 import { useAuthStore } from '@/features/auth/stores';
+import { set } from 'date-fns';
 
 //Menu at top of profile loaded based on the type of user
 interface UserMenuProp {
@@ -44,28 +45,35 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   const [showAddressForm, setShowAddressForm] = React.useState(false);
   const userToken = useAuthStore(state => state.token);
 
-  const { data: addressesData, isLoading: isLoadingAddresses } = useFetchAddresses(userToken);
+  const {
+    data: addressesData,
+    isLoading: isLoadingAddresses,
+    refetch: refetchAddressData,
+  } = useFetchAddresses(userToken);
 
   const { mutateAsync: updateAddress } = useUpdateAddress(userToken);
   const { mutateAsync: addAddress } = useAddAddress(userToken);
 
-  let primaryAddress: AddressT | undefined;
+  const [primaryAddress, setPrimaryAddress] = useState<AddressT | undefined>(undefined); //used to store the primary address
 
   let addressFormApiCall = updateAddress; //changes based on whether address exists or not
-  primaryAddress = addressesData?.find(address => address.isPrimary);
 
   //no addresses found change api call to addAddress
   if (!addressesData || !primaryAddress) {
-    primaryAddress = undefined;
     addressFormApiCall = addAddress;
   }
+
+  useEffect(() => {
+    setPrimaryAddress(addressesData?.find(address => address.isPrimary));
+  }, [addressesData]);
 
   const handlePrimaryAddressChange = async (addressId: string) => {
     const address = addressesData?.find(addr => addr.id === addressId);
 
-    console.log('address', address);
     if (!address) return;
+    setPrimaryAddress(address);
     await updateAddress({ ...address, isPrimary: true });
+    refetchAddressData();
   };
 
   return (
@@ -196,6 +204,7 @@ const ProfileMain: React.FC<UserMenuProp> = ({
             }}
             apiCall={async addressData => {
               await addressFormApiCall(addressData);
+              refetchAddressData();
             }}
           />
         </section>
