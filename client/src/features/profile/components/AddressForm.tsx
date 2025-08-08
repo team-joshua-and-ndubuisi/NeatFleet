@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CircleX } from 'lucide-react';
 import { AddressT } from '../types';
+import { LoadingIndicator } from '@/components';
+import { useState } from 'react';
 
 // interface AddressRequestI {
 //   addressId: string;
@@ -28,19 +30,22 @@ interface AddressFormProps {
 }
 
 const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
+  const [loading, setLoading] = useState(false);
+
   return (
     <form
       className='max-w-md w-full p-6'
       onSubmit={async e => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
-        const id = form?.addressId?.value;
+        const id = form?.addressId?.value || undefined;
         const street = form?.street?.value;
         const city = form?.city?.value;
         const state = form?.state?.value;
         const zip = form?.zip?.value;
         const latitude = form?.latitude?.value || 0;
         const longitude = form?.longitude?.value || 0;
+        const isPrimary = form?.isPrimary?.checked || false;
 
         console.log('Submitting address:', {
           id,
@@ -50,17 +55,32 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
           zip,
           latitude,
           longitude,
+          isPrimary,
         });
 
+        setLoading(true);
+
         if (apiCall) {
-          await apiCall({
-            id,
-            street,
-            city,
-            state,
-            zip,
-            isPrimary: true,
-          });
+          try {
+            await apiCall({
+              id,
+              street,
+              city,
+              state,
+              zip,
+              isPrimary,
+              latitude,
+              longitude,
+            });
+          } catch (error) {
+            console.error('Error submitting address:', error);
+            setLoading(false);
+          }
+
+          setLoading(false);
+          if (onClose) {
+            onClose();
+          }
         }
       }}
     >
@@ -74,7 +94,9 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
           }}
         />
         {/* hidden field to store address ID */}
+        {loading && <LoadingIndicator message='Saving address...' />}
         <Input id='addressId' type='text' defaultValue={addressData?.id || ''} hidden={true} />
+
         <CardHeader>
           <CardTitle>Address</CardTitle>
           <CardDescription>Enter your address details below</CardDescription>
@@ -120,6 +142,10 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
                 placeholder='10001'
                 required
               />
+            </div>
+            <div className='grid gap-2'>
+              <Label htmlFor='isPrimary'>Is Primary address</Label>
+              <Input className='w-1/6' id='isPrimary' type='checkbox' />
             </div>
             {/* <div className='grid gap-2'>
               <Label htmlFor='country'>Country</Label>
