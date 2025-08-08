@@ -41,7 +41,7 @@ export interface AddressT {
   state: string;
   zip: string;
   id: string;
-  isPrimary: boolean;
+  isPrimary: boolean | string;
   latitude?: number;
   longitude?: number;
 }
