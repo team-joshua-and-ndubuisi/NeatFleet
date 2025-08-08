@@ -1,13 +1,13 @@
-interface User {
+interface UserT {
   first_name: string;
   last_name: string;
 }
 
-interface Technician {
-  user: User;
+interface TechnicianT {
+  user: UserT;
 }
 
-export interface TechnicianBooking {
+export interface BookingT {
   id: string;
   user_id: string;
   service_id: string;
@@ -24,6 +24,6 @@ export interface TechnicianBooking {
   created_at: string;
   rating_score: string | null;
   rating_comment: string | null;
-  user: User;
-  technician: Technician;
+  user: UserT;
+  technician: TechnicianT;
 }

@@ -1,1 +1,1 @@
-export type { TechnicianBooking } from './TechnicianBooking';
+export type { BookingT } from './BookingT';
