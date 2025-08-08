@@ -7,7 +7,7 @@ interface Technician {
   user: User;
 }
 
-export interface TechnicianBookingsResponse {
+export interface TechnicianBooking {
   id: string;
   user_id: string;
   service_id: string;
