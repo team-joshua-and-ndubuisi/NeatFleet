@@ -145,7 +145,12 @@ const AddressForm = ({ apiCall, addressData, onClose }: AddressFormProps) => {
             </div>
             <div className='grid gap-2'>
               <Label htmlFor='isPrimary'>Is Primary address</Label>
-              <Input className='w-1/6' id='isPrimary' type='checkbox' />
+              <Input
+                defaultChecked={Boolean(addressData?.isPrimary)}
+                className='w-1/6'
+                id='isPrimary'
+                type='checkbox'
+              />
             </div>
             {/* <div className='grid gap-2'>
               <Label htmlFor='country'>Country</Label>
