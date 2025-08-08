@@ -60,6 +60,14 @@ const ProfileMain: React.FC<UserMenuProp> = ({
     addressFormApiCall = addAddress;
   }
 
+  const handlePrimaryAddressChange = async (addressId: string) => {
+    const address = addressesData?.find(addr => addr.id === addressId);
+
+    console.log('address', address);
+    if (!address) return;
+    await updateAddress({ ...address, isPrimary: true });
+  };
+
   return (
     <div className='bg-primary-50 '>
       <div className='flex w-full h-1/2 border-3 border-black py-10 flex-col  lg:flex-row lg:justify-center  md:flex-row md:justify-center rounded'>
@@ -71,10 +79,12 @@ const ProfileMain: React.FC<UserMenuProp> = ({
             alt='Profile Picture'
           />
           <span className=' text-3xl font-semibold py-5'>{userName}</span>
+
           {/* <span>ID: {userId} </span> */}
           <span className='text-3xl text-center py-5 flex'>{location}</span>
           <section className='bg-slate-100 p-5 rounded-lg shadow-lg relative'>
             <h3>Primary Address:</h3>
+
             {isLoadingAddresses ? (
               <LoadingIndicator message='Loading address...' />
             ) : (
@@ -96,7 +106,30 @@ const ProfileMain: React.FC<UserMenuProp> = ({
               }}
               className='hover:cursor-pointer rounded-2xl shadow-2xl absolute top-2 right-2'
             />
+
+            {/* address select */}
+            <section>
+              <select
+                name='address'
+                id=''
+                onChange={e => {
+                  if (!e.target.value) return;
+                  const target = e.target as HTMLSelectElement;
+                  if (target.value) handlePrimaryAddressChange(target.value);
+                }}
+              >
+                <option key={'none'} value=''>
+                  Select Address
+                </option>
+                {addressesData?.map(address => (
+                  <option key={address.id} value={address.id}>
+                    {address.street}, {address.city}, {address.state} {address.zip}
+                  </option>
+                ))}
+              </select>
+            </section>
           </section>
+
           <span className='text-3xl text-center py-5'>Phone Number: #{phoneNumber}</span>
           <span className='text-3xl text-center py-5'>Email: {email}</span>
         </div>
