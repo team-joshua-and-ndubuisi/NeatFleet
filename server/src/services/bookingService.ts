@@ -205,6 +205,31 @@ const getBookingById = async (bookingId: string): Promise<Booking> => {
   }
 
   return booking;
+}
+
+const numOfCompletedBookings = async (
+  id: string,
+  role: 'technician' | 'customer' | 'admin'
+): Promise<number> => {
+  try {
+    if (role === 'technician') {
+      return await prismaClient.booking.count({
+        where: {
+          technician_id: id,
+          service_status: 'completed',
+        },
+      });
+    } else {
+      return await prismaClient.booking.count({
+        where: {
+          user_id: id,
+          service_status: 'completed',
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Failed to count bookings: ${error}`);
+  }
 };
 
 export {
@@ -214,4 +239,5 @@ export {
   getBookingById,
   getTechnicianBookings,
   getUserBookings,
+  numOfCompletedBookings,
 };

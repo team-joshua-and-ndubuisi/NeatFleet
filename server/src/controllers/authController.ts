@@ -5,8 +5,12 @@ import { User as UserType } from '../../generated/prisma';
 import { logger } from '../config/logger';
 import prisma from '../config/prisma';
 import issueJWT from '../lib/issueJWT';
-import { createUser } from '../services/userService';
+import { createUser, getUserProfile } from '../services/userService';
 import { ExtendedErrorT } from '../types/error';
+import { AuthedUser } from '../types';
+import { calculateYears } from '../utils/dateUtils';
+import { numOfCompletedBookings } from '../services/bookingService';
+import { getTechnicianProfile } from '../services/technicianService';
 const User = prisma.user;
 
 // @desc    Register new user
@@ -125,35 +129,15 @@ const loginUser = asyncHandler(
 // @access  Private
 const userProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    if (!req.user) {
-      res.status(401).json({ message: 'User not authenticated' });
-      return;
-    }
+    const userId = (req.user as AuthedUser).id;
+    const userRole = (req.user as AuthedUser).role;
 
-    const userId = (req.user as UserType).id;
+    const profile =
+      userRole === 'technician'
+        ? await getTechnicianProfile(userId)
+        : await getUserProfile(userId);
 
-    logger.info(`Attempting to find user with id ${userId}`);
-    const user = await User.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        first_name: true,
-        last_name: true,
-        email: true,
-        phone: true,
-      },
-    });
-
-    if (!user) {
-      logger.warn(`No user found with id ${userId}`);
-      const error: ExtendedErrorT = new Error('No user found');
-      error.statusCode = 404;
-      next(error);
-      return;
-    }
-
-    logger.info(`User found`, user);
-    res.status(200).json({ user });
+    res.status(200).json(profile);
   }
 );
 
