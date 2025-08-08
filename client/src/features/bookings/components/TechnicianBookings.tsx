@@ -7,7 +7,7 @@ interface TechnicianBookingsProps {
 }
 
 const TechnicianBookings: React.FC<TechnicianBookingsProps> = ({ technicianId }) => {
-  const { data: techniciansBookings, isLoading, error } = useFetchTechnicianBookings(technicianId);
+  const { data: technicianBookings, isLoading, error } = useFetchTechnicianBookings(technicianId);
 
   if (isLoading) return <LoadingIndicator message='Loading technician bookings' />;
 
@@ -15,7 +15,7 @@ const TechnicianBookings: React.FC<TechnicianBookingsProps> = ({ technicianId })
 
   return (
     <div>
-      {techniciansBookings?.map(booking => (
+      {technicianBookings?.map(booking => (
         <Booking key={booking.id} booking={booking} />
       ))}
     </div>
