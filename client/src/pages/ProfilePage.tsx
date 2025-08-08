@@ -22,7 +22,6 @@ const ProfilePage: React.FC = () => {
     return <div className='text-red-500 text-center'>Error loading profile data.</div>;
   }
 
-  console.log('userProfileData', userProfileData);
   function convertDate(date: string) {
     const newdate = new Date(date);
 
@@ -49,8 +48,8 @@ const ProfilePage: React.FC = () => {
           years={userProfileData?.stats?.years_on_platform}
           // location={userProfileData?.location}
           // image={userProfileData?.image}
-          bookingsCompleted={userProfileData?.stats?.bookings_completed}
-          bookings={0}
+          bookingsCompleted={userProfileData?.stats?.bookings_completed || 0}
+          bookings={userProfileData.bookings.upcoming.length}
           phoneNumber={userProfileData?.phone}
           // userId={userProfileData?.user?.id}
           email={userProfileData?.email}
