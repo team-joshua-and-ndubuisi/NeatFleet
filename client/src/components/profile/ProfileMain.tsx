@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LoadingIndicator from '../LoadingIndicator';
 import { useAuthStore } from '@/features/auth/stores';
-import { set } from 'date-fns';
 
 //Menu at top of profile loaded based on the type of user
 interface UserMenuProp {
