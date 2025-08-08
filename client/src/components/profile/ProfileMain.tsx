@@ -52,14 +52,13 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   let primaryAddress: AddressT | undefined;
 
   let addressFormApiCall = updateAddress; //changes based on whether address exists or not
+  primaryAddress = addressesData?.find(address => address.isPrimary);
 
   //no addresses found change api call to addAddress
-  if (!addressesData || addressesData.length === 0) {
+  if (!addressesData || !primaryAddress) {
     primaryAddress = undefined;
     addressFormApiCall = addAddress;
   }
-
-  primaryAddress = addressesData?.find(address => address.isPrimary);
 
   return (
     <div className='bg-primary-50 '>
