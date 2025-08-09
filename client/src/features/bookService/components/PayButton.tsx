@@ -1,22 +1,28 @@
 import { useCheckout } from '@stripe/react-stripe-js';
 import { ConfirmError } from '@stripe/stripe-js';
 import { useState } from 'react';
+import { useAuthStore } from '@/features/auth';
 
 const PayButton = () => {
   const { confirm } = useCheckout();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ConfirmError>();
+  const { user } = useAuthStore();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setLoading(true);
-    // TODO: add current user email
-    confirm({ email: 'guest@gmail.com' }).then(result => {
+    try {
+      const result = await confirm({ email: user.email });
       if (result.type === 'error') {
         setError(result.error);
-        console.error(error);
+      } else if (result.type === 'success') {
+        // make a post request to db with booking data
       }
+    } catch (e) {
+      setError(e as ConfirmError);
+    } finally {
       setLoading(false);
-    });
+    }
   };
 
   return (

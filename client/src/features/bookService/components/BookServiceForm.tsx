@@ -15,6 +15,8 @@ import { useFetchServices } from '@/features/services';
 import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { PayButton } from '@/features/bookService';
 
 interface SectionTitleProps {
   title: string;
@@ -401,91 +403,10 @@ const ServiceBookingForm: React.FC = () => {
       {formData.address && formData.city && formData.state && formData.zipcode && (
         <div>
           <HorizontalLine />
-          <SectionTitle title='Choose your payment:' />
-          <div className='space-y-2 flex flex-col'>
-            <div>
-              <label htmlFor='cardName'>Name on Card</label>
-              <input
-                type='text'
-                id='cardName'
-                name='cardName'
-                value={formData.cardName || ''}
-                onChange={e => handleChange('cardName', e.target.value)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-              />
-            </div>
-
-            <div>
-              <label htmlFor='cardNumber'>Card Number</label>
-              <input
-                type='text'
-                id='cardNumber'
-                name='cardNumber'
-                value={formData.cardNumber || ''}
-                onChange={e => handleChange('cardNumber', e.target.value)}
-                placeholder='1234 5678 9012 3456'
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-              />
-            </div>
-
-            <div className='grid grid-cols-2 gap-4'>
-              <div>
-                <label htmlFor='expiry'>Expiration</label>
-                <input
-                  type='text'
-                  id='expiry'
-                  name='expiry'
-                  value={formData.expiry || ''}
-                  onChange={e => handleChange('expiry', e.target.value)}
-                  placeholder='MM/YY'
-                  className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-                />
-              </div>
-
-              <div>
-                <label htmlFor='cvc'>CVC</label>
-                <input
-                  type='text'
-                  id='cvc'
-                  name='cvc'
-                  value={formData.cvc || ''}
-                  onChange={e => handleChange('cvc', e.target.value)}
-                  placeholder='123'
-                  className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor='zip'>Billing ZIP Code</label>
-              <input
-                type='text'
-                id='zip'
-                name='zip'
-                value={formData.zip || ''}
-                onChange={e => handleChange('zip', e.target.value)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-              />
-            </div>
-          </div>
+          <PaymentElement />
+          <PayButton />
         </div>
       )}
-
-      {formData.cardName &&
-        formData.cardNumber &&
-        formData.cvc &&
-        formData.expiry &&
-        formData.zip && (
-          <button
-            type='submit'
-            className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8'
-          >
-            Reserve
-          </button>
-        )}
-
-      {/* Empty div for auto-scroll */}
-      <div ref={scrollRef}></div>
     </form>
   );
 };

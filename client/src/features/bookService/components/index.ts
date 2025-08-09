@@ -1,3 +1,4 @@
 import BookServiceForm from './BookServiceForm';
+import PayButton from './PayButton';
 
-export { BookServiceForm };
+export { BookServiceForm, PayButton };
