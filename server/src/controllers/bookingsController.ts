@@ -15,6 +15,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET as string, {
   apiVersion: '2025-03-31.basil' as any,
 });
 
+// @desc    Create a Stripe PaymentIntent and return the client secret for payment confirmation
+// @route   POST /api/bookings/create-intent
+// @access  Public
+const createPaymentIntent = asyncHandler(async (req, res) => {
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 2000, // cents
+    currency: 'usd',
+    automatic_payment_methods: { enabled: true },
+  });
+
+  res.send({ clientSecret: paymentIntent.client_secret });
+});
+
 // @desc    Create Checkout Session
 // @route   POST /api/bookings/create-checkout-session
 // @access  Private
@@ -139,6 +152,7 @@ const getBookings = asyncHandler(
 
 export {
   addBooking,
+  createPaymentIntent,
   checkoutStripe,
   deleteBooking,
   getBookings,

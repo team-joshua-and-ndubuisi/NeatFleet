@@ -15,3 +15,4 @@ export type { CVC } from './Payment';
 export type { Expiry } from './Payment';
 export type { Zip } from './Payment';
 export type { AvailableDate, AvailableTime, AvailableTechnician } from './Availability';
+export type { CreateIntentResponse } from './CreateIntentResponse';

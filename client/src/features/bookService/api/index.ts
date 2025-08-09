@@ -3,3 +3,4 @@ export { fetchAvailableTimes } from './availableTimesApi';
 export { fetchAvailableTechnicians } from './availableTechniciansApi';
 export { postBooking } from './bookServiceApi';
 export * from './fetchBookingsApi';
+export { createIntent, confirmPayment } from './paymentApi';

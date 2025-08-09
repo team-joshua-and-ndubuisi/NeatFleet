@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
@@ -17,6 +17,12 @@ import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
 import { PaymentElement } from '@stripe/react-stripe-js';
 import { PayButton } from '@/features/bookService';
+import { formatDate } from '@/lib/utils';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { createIntent } from '@/features/bookService';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
 interface SectionTitleProps {
   title: string;
@@ -59,6 +65,7 @@ interface ValidationErrors {
 const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
   const [errors, setErrors] = React.useState<ValidationErrors>({});
+  const [stripeSecret, setStripeSecret] = useState<string | null>(null);
 
   const {
     data: services,
@@ -91,6 +98,22 @@ const ServiceBookingForm: React.FC = () => {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [formData]);
+
+  const getStripeSecret = async () => {
+    const res = await createIntent();
+    console.log(res);
+    if (typeof res === 'string') {
+      setStripeSecret(res);
+    }
+  };
+
+  // getStripeSecret();
+
+  useEffect(() => {
+    if (formData.address && formData.city && formData.state && formData.zipcode) {
+      getStripeSecret();
+    }
+  }, [formData.address && formData.city && formData.state && formData.zipcode]);
 
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
     setFormData({ [key]: value });
@@ -211,13 +234,13 @@ const ServiceBookingForm: React.FC = () => {
           {availableDates && availableDates.length > 0 && (
             <DatePicker
               showIcon
-              includeDates={availableDates?.map(date => new Date(date)) || []}
+              dateFormat='MMM d, yyyy'
+              includeDates={availableDates?.map(formatDate)}
               selected={formData.date}
               onChange={date => handleChange('date', date)}
               className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
               placeholderText='Pick a date'
               minDate={new Date()}
-              dateFormat='MMMM d, yyyy'
             />
           )}
         </div>
@@ -400,11 +423,13 @@ const ServiceBookingForm: React.FC = () => {
       )}
 
       {/* Payment section */}
-      {formData.address && formData.city && formData.state && formData.zipcode && (
+      {formData.address && formData.city && formData.state && formData.zipcode && stripeSecret && (
         <div>
           <HorizontalLine />
-          <PaymentElement />
-          <PayButton />
+          <Elements stripe={stripePromise} options={{ clientSecret: stripeSecret }}>
+            <PaymentElement />
+            <PayButton clientSecret={stripeSecret} />
+          </Elements>
         </div>
       )}
     </form>
