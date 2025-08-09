@@ -16,9 +16,7 @@ type CreateBookingInput = {
 
 type UpdateBookingInput = Partial<CreateBookingInput>;
 
-const createBooking = async (
-  newBooking: CreateBookingInput
-): Promise<Booking> => {
+const createBooking = async (newBooking: CreateBookingInput): Promise<any> => {
   const { user_id, technician_id } = newBooking;
 
   const user = await prismaClient.user.findUnique({ where: { id: user_id } });
@@ -54,18 +52,40 @@ const createBooking = async (
 const getUserBookings = async (
   userId: string,
   serviceStatus?: ServiceStatus,
-  serviceDate?: string
-): Promise<Booking[]> => {
+  serviceDate?: string,
+  limit?: string
+): Promise<any[]> => {
   const user = await prismaClient.user.findUnique({ where: { id: userId } });
   if (!user) {
     throw new Error(`User not found.`);
   }
+
+  const take = Number(limit);
 
   const bookings = await prismaClient.booking.findMany({
     where: {
       user_id: userId,
       service_status: serviceStatus,
       service_date: serviceDate,
+    },
+    take: limit ? take : undefined,
+    include: {
+      user: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
+      technician: {
+        select: {
+          user: {
+            select: {
+              first_name: true,
+              last_name: true,
+            },
+          },
+        },
+      },
     },
   });
   return bookings;
@@ -76,7 +96,7 @@ const getTechnicianBookings = async (
   serviceStatus?: ServiceStatus,
   serviceDate?: string,
   limit?: string
-): Promise<Booking[]> => {
+): Promise<any[]> => {
   const technician = await prismaClient.technician.findUnique({
     where: { id: technicianId },
   });
@@ -94,6 +114,24 @@ const getTechnicianBookings = async (
       service_date: serviceDate,
     },
     take: limit ? take : undefined,
+    include: {
+      user: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
+      technician: {
+        select: {
+          user: {
+            select: {
+              first_name: true,
+              last_name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return bookings;
@@ -102,7 +140,7 @@ const getTechnicianBookings = async (
 const editBooking = async (
   bookingId: string,
   updatedBooking: UpdateBookingInput
-): Promise<Booking> => {
+): Promise<any> => {
   const existing = await prismaClient.booking.findUnique({
     where: { id: bookingId },
   });
@@ -137,10 +175,69 @@ const deleteBookingById = async (bookingId: string): Promise<Booking> => {
   return booking;
 };
 
+const getBookingById = async (bookingId: string): Promise<Booking> => {
+  const booking = await prismaClient.booking.findUnique({
+    where: {
+      id: bookingId,
+    },
+    include: {
+      user: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
+      technician: {
+        select: {
+          user: {
+            select: {
+              first_name: true,
+              last_name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!booking) {
+    throw new Error(`Booking not found.`);
+  }
+
+  return booking;
+}
+
+const numOfCompletedBookings = async (
+  id: string,
+  role: 'technician' | 'customer' | 'admin'
+): Promise<number> => {
+  try {
+    if (role === 'technician') {
+      return await prismaClient.booking.count({
+        where: {
+          technician_id: id,
+          service_status: 'completed',
+        },
+      });
+    } else {
+      return await prismaClient.booking.count({
+        where: {
+          user_id: id,
+          service_status: 'completed',
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Failed to count bookings: ${error}`);
+  }
+};
+
 export {
   createBooking,
   deleteBookingById,
   editBooking,
+  getBookingById,
   getTechnicianBookings,
   getUserBookings,
+  numOfCompletedBookings,
 };

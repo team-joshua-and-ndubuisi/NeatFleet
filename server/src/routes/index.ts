@@ -4,6 +4,7 @@ import authRoutes from './auth';
 import availabilityRoutes from './availabilities';
 import bookingsRoutes from './bookings';
 import servicesRoutes from './services';
+import technicianRoutes from './technician';
 import usersRoutes from './users';
 
 const router = Router();
@@ -13,5 +14,6 @@ router.use('/users', isAuth, usersRoutes);
 router.use('/bookings', bookingsRoutes);
 router.use('/services', servicesRoutes);
 router.use('/availabilities', availabilityRoutes);
+router.use('/technicians', technicianRoutes);
 
 export default router;

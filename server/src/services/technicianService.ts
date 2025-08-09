@@ -1,10 +1,12 @@
-import prismaClient from '../config/prisma';
-import { getUserIdByEmail } from './userService';
 import {
   Technician,
   TechnicianAvailability,
   TimeBlock,
 } from '../../generated/prisma';
+import prismaClient from '../config/prisma';
+import { AppError } from '../types/error';
+import { calculateYears } from '../utils/dateUtils'; // assuming your utility lives here
+import { getUserIdByEmail } from './userService';
 
 const createTechnician = async (userId: string): Promise<Technician> => {
   try {
@@ -34,78 +36,98 @@ const isTechnician = async (email: string): Promise<boolean> => {
     return exists !== null;
   } catch (error: any) {
     throw new Error(
-      `Error setting user as technician, user email ${email}: ${error.message}`
+      `Error checking if user is a technician, user email ${email}: ${error.message}`
     );
   }
 };
 
-//ISSUE with return type
-const getTechnicianRating = async (userId: string): Promise<number | null> => {
-  try {
-    const technicianRating = await prismaClient.technician.findUnique({
-      where: { user_id: userId },
-      select: { current_rating: true },
-    });
+type TechnicianAvailabilityInput = {
+  technicianId: string;
+  newAvailabilities: { availableDate: string; timeBlock: TimeBlock }[];
+};
 
-    if (!technicianRating) {
-      throw new Error(`Technician with user_id ${userId} not found`);
+const setTechnicianAvailabilities = async ({
+  technicianId,
+  newAvailabilities,
+}: TechnicianAvailabilityInput) => {
+  try {
+    const technician = await prismaClient.technician.findUnique({
+      where: { id: technicianId },
+    });
+    if (!technician) {
+      throw new Error(`Technician not found.`);
     }
 
-    return technicianRating.current_rating?.toNumber() ?? null;
-  } catch (error: any) {
-    throw new Error(
-      `Error fetching technician with id ${userId}  Message: ${error.message}`
+    const availabilities = await prismaClient.technicianAvailability.createMany(
+      {
+        data: newAvailabilities.map(availability => ({
+          technician_id: technicianId,
+          available_date: availability.availableDate,
+          time_block: availability.timeBlock,
+        })),
+        skipDuplicates: true,
+      }
     );
+
+    return {
+      count: availabilities.count,
+      message: `Successfully created ${availabilities.count} availabilities`,
+    };
+  } catch (err) {
+    throw new Error(`Error during availability creation: ${err}`);
   }
 };
 
-//ISSUE with return type
-const updateRating = async (
-  userId: string,
-  newRating: number
-): Promise<number | null> => {
+type EditAvailabilityInput = {
+  availabilityId: string;
+  newAvailability: { availableDate: string; timeBlock: TimeBlock };
+};
+
+const editAvailability = async ({
+  availabilityId,
+  newAvailability,
+}: EditAvailabilityInput) => {
   try {
-    const updatedTechnician = await prismaClient.technician.update({
-      where: { user_id: userId },
-      data: { current_rating: newRating },
-      select: { current_rating: true },
+    const availability = await prismaClient.technicianAvailability.findUnique({
+      where: { id: availabilityId },
+    });
+    if (!availability) {
+      throw new Error(`Availability not found.`);
+    }
+
+    const updatedAvailability =
+      await prismaClient.technicianAvailability.update({
+        where: { id: availabilityId },
+        data: {
+          available_date: newAvailability.availableDate,
+          time_block: newAvailability.timeBlock,
+        },
+      });
+
+    return updatedAvailability;
+  } catch (err) {
+    throw new Error(`Error during availability creation: ${err}`);
+  }
+};
+
+const removeAvailability = async (availabilityId: string) => {
+  try {
+    const availability = await prismaClient.technicianAvailability.findUnique({
+      where: { id: availabilityId },
+    });
+    if (!availability) {
+      throw new Error(`Availability not found.`);
+    }
+
+    const result = await prismaClient.technicianAvailability.delete({
+      where: { id: availabilityId },
     });
 
-    return updatedTechnician.current_rating?.toNumber() ?? null;
-  } catch (error: any) {
-    throw new Error(
-      `Error updating rating for technician with user_id ${userId}: ${error.message}`
-    );
+    return result;
+  } catch (err) {
+    throw new Error(`Error during availability creation: ${err}`);
   }
 };
-
-const setTechnicianAvailability = async ({
-  techId,
-  availableDate,
-  timeBlock,
-}: {
-  techId: string;
-  availableDate: string; // e.g. '2025-08-01'
-  timeBlock: TimeBlock;
-}): Promise<TechnicianAvailability> => {
-  try {
-    const availability = await prismaClient.technicianAvailability.create({
-      data: {
-        technician_id: techId,
-        available_date: availableDate,
-        time_block: timeBlock,
-      },
-    });
-
-    return availability;
-  } catch (error: any) {
-    throw new Error(
-      `Error setting availability for technician ${techId}: ${error.message}`
-    );
-  }
-};
-
-// const getAllTechniciansInfo;
 
 //This returns the entire row, until we figure what we exactly need
 const getTechAvailabilities = async (
@@ -157,12 +179,102 @@ const getTechIdByEmail = async (email: string): Promise<string> => {
   }
 };
 
+const getTechnicianId = async (userId: string): Promise<string> => {
+  const technician = await prismaClient.technician.findUnique({
+    where: { user_id: userId },
+    select: { id: true },
+  });
+
+  if (!technician) {
+    throw new Error(`Technician with userId ${userId} not found`);
+  }
+
+  return technician.id;
+};
+
+const getTechnicianProfile = async (userId: string) => {
+  const technician = await fetchTechnicianWithBookings(userId);
+  const today = getToday();
+
+  const upcomingBookings = technician.Booking.filter(b =>
+    isUpcoming(b.service_date, today)
+  );
+  const pastBookings = technician.Booking.filter(b =>
+    isPast(b.service_date, today)
+  );
+
+  const formatBookings = (bookings: typeof technician.Booking) => {
+    return bookings.map(formatBooking);
+  };
+
+  return {
+    role: 'technician',
+    first_name: technician.user.first_name,
+    last_name: technician.user.last_name,
+    email: technician.user.email,
+    phone: technician.user.phone,
+    rating_score: technician.current_rating,
+    stats: {
+      bookings_completed: countCompletedBookings(technician),
+      years_on_platform: calculateYears(technician.user.created_at),
+    },
+    bookings: {
+      upcoming: formatBookings(upcomingBookings),
+      past: formatBookings(pastBookings),
+    },
+  };
+};
+
+const fetchTechnicianWithBookings = async (userId: string) => {
+  const technician = await prismaClient.technician.findUnique({
+    where: { user_id: userId },
+    include: {
+      user: true,
+      Booking: {
+        include: {
+          user: true, // client's name
+          service: true, // service name
+        },
+        orderBy: { service_date: 'desc' },
+      },
+    },
+  });
+
+  if (!technician) throw new AppError('Technician not found', 404);
+  return technician;
+};
+
+const getToday = (): string => {
+  return new Date().toISOString().split('T')[0]; // returns YYYY-MM-DD
+};
+
+const isUpcoming = (date: string, today: string): boolean => date >= today;
+const isPast = (date: string, today: string): boolean => date < today;
+
+const formatBooking = (b: any) => ({
+  booking_id: b.id,
+  client_name: `${b.user.first_name} ${b.user.last_name}`,
+  service_name: b.service.name,
+  status: b.service_status,
+  date: b.service_date,
+  rating_score: b.rating_score,
+  rating_comment: b.rating_comment,
+});
+
+const countCompletedBookings = (technician: any): number => {
+  return technician.Booking.filter(
+    (b: { service_status: string }) => b.service_status === 'completed'
+  ).length;
+};
+
 export {
   createTechnician,
-  isTechnician,
-  getTechnicianRating,
-  updateRating,
-  setTechnicianAvailability,
-  getTechIdByEmail,
+  editAvailability,
   getTechAvailabilities,
+  getTechIdByEmail,
+  getTechnicianId,
+  getTechnicianProfile,
+  isTechnician,
+  removeAvailability,
+  setTechnicianAvailabilities,
 };
