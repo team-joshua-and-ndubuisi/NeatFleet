@@ -1,14 +1,47 @@
 //query using tanstack to fetch
 //query key will be booking ID
 //Enabled: must have a status>previous status
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { fetchCurrentStatus, updateStatus } from '@/features/statusUpdate';
 
-import { useQuery } from '@tanstack/react-query';
-import { fetchCurrentStatus } from '/Users/yassahreed/collabs/NeatFleet/client/src/features/statusUpdate/api/techStatusAPI';
+interface StatusVariable{
+  bookingId: string | undefined,
+  newStatus: number | string
+}
 
 export const usefetchCurrentStatus = (bookingId: string | null | undefined) => {
   return useQuery({
-    queryKey: ['bookingStatus', bookingId],
+    queryKey: ['serviceStatus', bookingId],
     queryFn: () => fetchCurrentStatus(bookingId),
     enabled: !!bookingId,
   });
 };
+
+export const useUpdateStatus=()=>{
+  const queryClient =  useQueryClient()
+  return useMutation<any, Error, StatusVariable>({
+      mutationFn: ({ bookingId, newStatus }:StatusVariable) => updateStatus(bookingId, newStatus),
+      
+      //fire before updateStatus
+      onMutate: async(variables)=>{
+      const { bookingId, newStatus } = variables;
+
+      const previousStatus = queryClient.getQueryData(['bookingStatus', bookingId]);
+
+        //optimistic status update
+      queryClient.setQueryData(['bookingStatus', bookingId], newStatus);
+        
+        return {previousStatus}
+      },
+      onSuccess: (result, variables, )=>{
+        //replace optimistic with result
+        queryClient.setQueryData(['bookingStatus', variables.bookingId], result);
+      },
+      onError: (error, variables, context) => {
+        if (context?.previousStatus !== undefined) {
+        queryClient.setQueryData(['bookingStatus', variables.bookingId], context.previousStatus);
+      }
+    }
+
+})
+}

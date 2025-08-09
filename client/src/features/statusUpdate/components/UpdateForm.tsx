@@ -12,55 +12,100 @@
     //when submitted it will increment service status by 1 
     //trigger api to update backend
 import { useParams } from 'react-router-dom';
-import React from 'react'
+import React, {useState} from 'react'
 import BookingDetails from './BookingDetails'
-import useStatusStore from '../stores/statusStore'
 import { ServiceStatusCode, serviceStatusLabels } from "../types/ServiceStatus";
-import { Button } from '/Users/yassahreed/collabs/NeatFleet/client/src/components/ui/button';
-import { usefetchCurrentStatus } from '/Users/yassahreed/collabs/NeatFleet/client/src/features/statusUpdate/hooks/useFetchStatus';
-import LoadingComponent from "/Users/yassahreed/collabs/NeatFleet/client/src/components/LoadingIndicator"
-import ErrorComponent from "/Users/yassahreed/collabs/NeatFleet/client/src/components/ErrorComponent"
+import { Button } from '@/components/ui/button';
+import { usefetchCurrentStatus, useUpdateStatus } from '@/features/statusUpdate';
+import LoadingComponent from "@/components/LoadingIndicator"
+import ErrorComponent from "@/components/ErrorComponent"
 
 
 const UpdateForm: React.FC = () => {
-    //getting booking id
-const bookingId= useParams()
-    //managing change in state for client
-const {status, setStatus} = useStatusStore();
-    //updating state change for server
-const {
-    data: bookingStatus,
-}=usefetchCurrentStatus(bookingId?.id)
+    const { bookingId } = useParams()
+    const updateStatusMutation = useUpdateStatus()
+    const [errors, setErrors] = useState('')
+    const [status, setStatus] = useState(null)
+    let nextStatus:number|string;
 
-//changing state to new status
-    function handleStatus<serviceStatusLabels>(status:serviceStatusLabels){
-        setStatus(serviceStatusLabels)
+
+    //calling api
+
+    // const {data}= usefetchCurrentStatus(bookingId)
+    const data = 'on_the_way'
+
+    //setting value of next status
+    const handleSubmit = (e:any) => {
+        e.preventDefault();
+        if(status != null){
+            updateStatusMutation.mutate({
+                 bookingId: bookingId, 
+                 newStatus: status
+            });
+        }else{
+            setErrors('Please select an update status')
+        }
     }
-//post req to update status 
-    const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-        const response = await fetch('http://localhost:3000/bookingid', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(status),
-        });
-  
-        const result = await response.json();
-        console.log('Response:', result);
-      } catch (error) {
-        console.error('Error updating status:', error);
-      }
-    }; 
+    
+    const handleStatusUpdate =(updatedStatus:string|number)=>{
+        //ServiceStatus in db
+        const currentStatusValue = ServiceStatusCode[data] 
+        //converint enum to number for comparison
+        const nextStatusValue = Number(updatedStatus)
+
+        setErrors('')
+        if(nextStatusValue ==currentStatusValue){
+            setErrors(`Already up-to-date`)
+            // setStatus(null)
+            return
+        }
+        if(currentStatusValue +1 < nextStatusValue ){
+            setErrors(`Please Select next status before moving forward`)
+            // setStatus(null)
+            return
+        }
+        if(currentStatusValue > nextStatusValue){
+            setErrors(`Client has already been already been updated. Please select next status update`)
+            // setStatus(null)
+            return
+        }else if(nextStatusValue  == currentStatusValue + 1 ){
+        //Valid Selection
+        setErrors('')
+         setStatus(ServiceStatusCode[nextStatusValue])
+        console.log("what was pressed", nextStatusValue ,'valid option',nextStatus, 'ServiceStatusCode[2]', ServiceStatusCode[2])
+        }
+       
+
+
+}
+
 
     return(
-        <div>
+        <div className="mx-auto">
             <h1>Update Service Status</h1>
             {/* iterate through values of service status to create buttons */}
-            <div>
-
-            </div>
-            <Button>Update Status</Button>
+            
+                <div className="flex flex-col gap-4 w-1/2 justify-center">
+                    {status!=null && <p>Current status is {status}</p>}
+                    {Object.entries(serviceStatusLabels).map(([key,statusOptions], index)=>{
+                        return(
+                            //adding conditonal if button is == or more that key
+                            <Button 
+                                onClick = {()=>handleStatusUpdate(key)}
+                                className={(ServiceStatusCode[data]>index)? 'opacity-50':
+                                          (ServiceStatusCode[data] ===index)? 'border-white':
+                                          'bg-[#2DD4BF]'}
+                                value={key}
+                                key={index}>
+                                {statusOptions}
+                            </Button>
+                        )
+                })}
+                </div>
+                <Button className="my-10" onClick={handleSubmit}>
+                Update Status
+            </Button>
+            {errors && <p style={{ color: 'red' }}> {errors}</p>}
         <div>
 
         </div>
