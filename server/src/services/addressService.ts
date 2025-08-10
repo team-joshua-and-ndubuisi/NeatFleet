@@ -4,14 +4,16 @@ import { AppError } from '../types/error';
 
 const getAddressesForUser = async (userId: string): Promise<Address[]> => {
   try {
-    const addresses = await prismaClient.address.findMany({
+    return await prismaClient.address.findMany({
       where: { user_id: userId },
+      orderBy: [
+        { isPrimary: 'desc' }, // Primary first
+      ],
     });
-
-    return addresses;
   } catch (error: any) {
-    throw new Error(
-      `Error fetching addresses for userId ${userId}: ${error.message}`
+    throw new AppError(
+      `Error fetching addresses for userId ${userId}: ${error.message}`,
+      500
     );
   }
 };
