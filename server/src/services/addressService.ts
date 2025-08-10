@@ -108,30 +108,55 @@ const updateUserAddress = async ({
   latitude,
   longitude,
   isPrimary,
-}: UpdateAddressInput) => {
-  // Verify address ownership
-  const address = await prismaClient.address.findUnique({
-    where: { id: addressId },
-  });
+}: UpdateAddressInput): Promise<Address> => {
+  try {
+    const updated = await prismaClient.$transaction(async tx => {
+      // Verify address ownership
+      const existing = await tx.address.findUnique({
+        where: { id: addressId },
+      });
+      if (!existing || existing.user_id !== userId) {
+        throw new AppError('Address not found or unauthorized', 404);
+      }
 
-  if (!address || address.user_id !== userId) {
-    throw new AppError('Address not found or unauthorized', 404);
+      // If making this one primary, flip off current primary first
+      if (isPrimary === true) {
+        await tx.address.updateMany({
+          where: { user_id: userId, isPrimary: true },
+          data: { isPrimary: false },
+        });
+      }
+
+      // Perform the update
+      const address = await tx.address.update({
+        where: { id: addressId },
+        data: {
+          street,
+          city,
+          state,
+          zip,
+          latitude,
+          longitude,
+          ...(isPrimary !== undefined && { isPrimary }), // only touch when provided
+        },
+      });
+
+      return address;
+    });
+
+    return updated;
+  } catch (e: any) {
+    if (e?.statusCode) throw e; // rethrow AppError from ownership check
+
+    if (e?.code === 'P2002') {
+      throw new AppError(
+        'Address conflicts with an existing record or primary already set.',
+        409
+      );
+    }
+
+    throw new AppError(`Error updating address: ${e.message}`, 500);
   }
-
-  const returnAddress = await prismaClient.address.update({
-    where: { id: addressId },
-    data: {
-      street,
-      city,
-      state,
-      zip,
-      latitude,
-      longitude,
-      ...(isPrimary !== undefined && { isPrimary }),
-    },
-  });
-
-  return returnAddress;
 };
 
 export { createAddress, getAddressesForUser, updateUserAddress };
