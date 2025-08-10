@@ -109,9 +109,10 @@ model Technician {
 }
 
 model Service {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String @db.VarChar(255)
-  description String @db.Text
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  cost        Decimal? @db.Decimal(10, 2)
 
   technicianService TechnicianService[]
   Booking           Booking[]
