@@ -23,3 +23,11 @@ export function formatDate(date: string) {
   const correctDate = new Date(year, month - 1, day);
   return correctDate;
 }
+
+export function capitalizeFirstLetter(word: string) {
+  return word.slice(0, 1).toUpperCase() + word.slice(1);
+}
+
+export function titleCase(words: string) {
+  return words.split(' ').map(capitalizeFirstLetter).join(' ');
+}
