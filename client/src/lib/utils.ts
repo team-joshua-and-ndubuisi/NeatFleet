@@ -17,3 +17,9 @@ export function createLocalPersistStore<T>(stateCreater: StateCreator<T>, storeN
     })
   );
 }
+
+export function formatDate(date: string) {
+  const [year, month, day] = date.split('-').map(Number);
+  const correctDate = new Date(year, month - 1, day);
+  return correctDate;
+}
