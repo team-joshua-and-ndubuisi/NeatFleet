@@ -48,14 +48,12 @@ const PayButton = () => {
         service_notes: 'Please be careful with the antique vase in the living room.',
       };
       //make the booking
-      console.log(submissionData);
+      // console.log(submissionData);
       const bookingResponce = await postBooking(submissionData);
-
+      console.log(bookingResponce);
       // Navigate with bookingData so success page can use it without re-fetching
       //create the route with the booking ID in the url as parameters -> that way when we have booking/:booking_id/success page now we can use that booking_id to fetch that booking (this is how we will get the data for the invoice)
-      navigate('/service-catalog/booking/success', {
-        state: { submissionData, paymentIntentId: paymentIntent.id },
-      });
+      navigate(`/service-catalog/booking/${bookingResponce.id}/success`);
     }
 
     setLoading(false);

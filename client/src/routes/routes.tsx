@@ -32,7 +32,7 @@ const AppRoutes: React.FC = () => {
             <Route path='/signup' element={<SignupPage />} />
             <Route path='/service-catalog'>
               <Route index element={<ServiceCatalogPage />} />
-              <Route path='booking/success' element={<BookingSuccessPage />} />
+              <Route path='booking/:booking_id/success' element={<BookingSuccessPage />} />
               <Route path='book-technician' element={<TechSelectionPage />} />
               <Route path='booking-tech'>
                 <Route path=':id' element={<ScheduleServicePage />} />
