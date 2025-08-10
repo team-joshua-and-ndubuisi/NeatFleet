@@ -1,6 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { useAuthStore } from '@/features/auth';
+import { axiosInstance } from '@/api';
 import {
   TimeSlot,
   FormFieldKey,
@@ -15,8 +20,10 @@ import { useFetchServices } from '@/features/services';
 import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
-import { PaymentElement } from '@stripe/react-stripe-js';
 import { PayButton } from '@/features/bookService';
+import { formatDate } from '@/lib/utils';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
 interface SectionTitleProps {
   title: string;
@@ -60,6 +67,11 @@ const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
   const [errors, setErrors] = React.useState<ValidationErrors>({});
 
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [isCreatingIntent, setIsCreatingIntent] = useState(false);
+
+  const { user } = useAuthStore();
+
   const {
     data: services,
     isLoading: areServicesLoading,
@@ -91,6 +103,52 @@ const ServiceBookingForm: React.FC = () => {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [formData]);
+
+  useEffect(() => {
+    const shouldCreateIntent = !!(
+      formData.address &&
+      formData.city &&
+      formData.state &&
+      formData.zipcode &&
+      formData.service
+    );
+    if (!shouldCreateIntent) {
+      setClientSecret(null);
+      return;
+    }
+
+    // create intent (amount in cents) — calculate amount server-side in production
+    const createIntent = async () => {
+      try {
+        setIsCreatingIntent(true);
+        // Example: choose amount based on selected service (here we use 2000 cents as example)
+        const amount = 2000; // adapt to your service model
+        const resp = await axiosInstance.post('bookings/create-payment-intent', {
+          amount,
+          user_id: user?.id,
+          service_id: formData?.service?.id,
+          technician_id: formData?.technician?.id,
+        });
+        console.log(resp.data);
+        setClientSecret(resp.data.clientSecret);
+      } catch (err) {
+        console.error('Failed to create payment intent', err);
+        setClientSecret(null);
+      } finally {
+        setIsCreatingIntent(false);
+      }
+    };
+
+    createIntent();
+  }, [
+    formData.address,
+    formData.city,
+    formData.state,
+    formData.zipcode,
+    formData.service,
+    formData.technician,
+    user,
+  ]);
 
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
     setFormData({ [key]: value });
@@ -211,7 +269,7 @@ const ServiceBookingForm: React.FC = () => {
           {availableDates && availableDates.length > 0 && (
             <DatePicker
               showIcon
-              includeDates={availableDates?.map(date => new Date(date)) || []}
+              includeDates={availableDates?.map(formatDate)}
               selected={formData.date}
               onChange={date => handleChange('date', date)}
               className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
@@ -400,11 +458,14 @@ const ServiceBookingForm: React.FC = () => {
       )}
 
       {/* Payment section */}
-      {formData.address && formData.city && formData.state && formData.zipcode && (
+      {isCreatingIntent && <div className='text-sm text-muted'>Preparing payment...</div>}
+      {formData.address && formData.city && formData.state && formData.zipcode && clientSecret && (
         <div>
           <HorizontalLine />
-          <PaymentElement />
-          <PayButton />
+          <Elements stripe={stripePromise} options={{ clientSecret }}>
+            <PaymentElement />
+            <PayButton />
+          </Elements>
         </div>
       )}
     </form>
