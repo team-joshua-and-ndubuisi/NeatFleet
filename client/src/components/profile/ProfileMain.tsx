@@ -1,7 +1,7 @@
-import { AddressT, useAddAddress, useFetchAddresses, useUpdateAddress } from '@/features/profile';
+import { useAddAddress, useFetchAddresses, useUpdateAddress } from '@/features/profile';
 import AddressForm from '@/features/profile/components/AddressForm';
 import { Edit3 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import LoadingIndicator from '../LoadingIndicator';
 import { useAuthStore } from '@/features/auth/stores';
@@ -53,7 +53,9 @@ const ProfileMain: React.FC<UserMenuProp> = ({
   const { mutateAsync: updateAddress } = useUpdateAddress(userToken);
   const { mutateAsync: addAddress } = useAddAddress(userToken);
 
-  const [primaryAddress, setPrimaryAddress] = useState<AddressT | undefined>(undefined); //used to store the primary address
+  const primaryAddress = addressesData
+    ? addressesData?.find(address => address.isPrimary)
+    : undefined; //used to store the primary address
 
   let addressFormApiCall = updateAddress; //changes based on whether address exists or not
 
@@ -62,15 +64,10 @@ const ProfileMain: React.FC<UserMenuProp> = ({
     addressFormApiCall = addAddress;
   }
 
-  useEffect(() => {
-    setPrimaryAddress(addressesData?.find(address => address.isPrimary));
-  }, [addressesData]);
-
   const handlePrimaryAddressChange = async (addressId: string) => {
     const address = addressesData?.find(addr => addr.id === addressId);
 
     if (!address) return;
-    setPrimaryAddress(address);
     await updateAddress({ ...address, isPrimary: true });
     refetchAddressData();
   };
