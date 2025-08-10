@@ -1,24 +1,14 @@
-//Form that the tech will be using to update status
-
-//tech should only have access to the form on the day of service
-
-//psuedo
 //if service date == current date then they can access form : "Service is not scheduled until"
-//tech ID must also match ID of tech in booking 
-
-//Series of conditionals for post(aka status updates) based on the number the status is on
-    //if ServiceStatus[current] == ServiceStatus + 1 then make that button visiable and clicklable 
-//Button/Click event to update status after selecting it
-    //when submitted it will increment service status by 1 
-    //trigger api to update backend
-import { useParams } from 'react-router-dom';
+//tech ID must also match ID of tech in booking (routing)
+//adding loading component
+import { useParams, Navigate } from 'react-router-dom';
 import React, {useState} from 'react'
 import BookingDetails from './BookingDetails'
 import { ServiceStatusCode, serviceStatusLabels } from "../types/ServiceStatus";
 import { Button } from '@/components/ui/button';
 import { usefetchCurrentStatus, useUpdateStatus } from '@/features/statusUpdate';
-import LoadingComponent from "@/components/LoadingIndicator"
-import ErrorComponent from "@/components/ErrorComponent"
+// import LoadingComponent from "@/components/LoadingIndicator"
+// import ErrorComponent from "@/components/ErrorComponent"
 
 
 const UpdateForm: React.FC = () => {
@@ -26,17 +16,20 @@ const UpdateForm: React.FC = () => {
     const updateStatusMutation = useUpdateStatus()
     const [errors, setErrors] = useState('')
     const [status, setStatus] = useState(null)
-    let nextStatus:number|string;
-
-
-    //calling api
-
-    // const {data}= usefetchCurrentStatus(bookingId)
-    const data = 'on_the_way'
+    //getting current service status
+    if(!bookingId){
+       return <Navigate to='/profile' />
+    }
+    
+    const {data}= usefetchCurrentStatus(bookingId)
+   
+    console.log(data)
+    
 
     //setting value of next status
     const handleSubmit = (e:any) => {
         e.preventDefault();
+        console.log('bookingid', bookingId)
         if(status != null){
             updateStatusMutation.mutate({
                  bookingId: bookingId, 
@@ -48,6 +41,9 @@ const UpdateForm: React.FC = () => {
     }
     
     const handleStatusUpdate =(updatedStatus:string|number)=>{
+        if(!data){
+           return setErrors('Error updating status. Please reload page.')
+        }
         //ServiceStatus in db
         const currentStatusValue = ServiceStatusCode[data] 
         //converint enum to number for comparison
@@ -72,7 +68,8 @@ const UpdateForm: React.FC = () => {
         //Valid Selection
         setErrors('')
          setStatus(ServiceStatusCode[nextStatusValue])
-        console.log("what was pressed", nextStatusValue ,'valid option',nextStatus, 'ServiceStatusCode[2]', ServiceStatusCode[2])
+         
+        console.log("what was pressed", nextStatusValue, 'ServiceStatusCode[2]', ServiceStatusCode[2])
         }
        
 
@@ -86,15 +83,15 @@ const UpdateForm: React.FC = () => {
             {/* iterate through values of service status to create buttons */}
             
                 <div className="flex flex-col gap-4 w-1/2 justify-center">
-                    {status!=null && <p>Current status is {status}</p>}
+                    {status!=null ? <p> {status} is selected. Please click update to confirm your selection</p> :<p>Please select a status</p>}
                     {Object.entries(serviceStatusLabels).map(([key,statusOptions], index)=>{
                         return(
                             //adding conditonal if button is == or more that key
                             <Button 
                                 onClick = {()=>handleStatusUpdate(key)}
-                                className={(ServiceStatusCode[data]>index)? 'opacity-50':
-                                          (ServiceStatusCode[data] ===index)? 'border-white':
-                                          'bg-[#2DD4BF]'}
+                                className={(ServiceStatusCode[data]>index)? 'opacity-50 cursor-not-allowed bg-[#2DD4BF]':
+                                          (ServiceStatusCode[data] ===index)? 'border-white bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] ':
+                                          ' hover:shadow-xl hover:ring-4 hover:ring-[#2DD4BF] hover:ring-opacity-20'}
                                 value={key}
                                 key={index}>
                                 {statusOptions}
@@ -102,7 +99,12 @@ const UpdateForm: React.FC = () => {
                         )
                 })}
                 </div>
-                <Button className="my-10" onClick={handleSubmit}>
+                <Button className={`my-10
+                ${status !== null 
+                    ? 'bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] text-white shadow-2xl ring-4 ring-[#2DD4BF] ring-opacity-40 hover:ring-opacity-60 transform hover:scale-102' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }
+                `} onClick={handleSubmit}>
                 Update Status
             </Button>
             {errors && <p style={{ color: 'red' }}> {errors}</p>}

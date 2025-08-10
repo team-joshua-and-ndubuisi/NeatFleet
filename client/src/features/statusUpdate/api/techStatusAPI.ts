@@ -1,29 +1,28 @@
-//will be placed inside of the tanstack query FN
-//this will be getting data to the backend to update the status of the service
 
 import { axiosInstance } from '@/api';
+const serverUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
 
-const url = 'bookings/';
+const url = '/bookings';
 //get current service status
 export const fetchCurrentStatus = async (
   bookingId: string | null | undefined
 ): Promise<string> => {
   if (!bookingId) throw new Error('Booking ID is required');
 
-  const response = await axiosInstance.get<{ serviceStatus: string }>(`${url}/${bookingId}`);
-
-  return response.data.serviceStatus;
+  const response = await axiosInstance.get(`${url}/${bookingId}`);
+  return response.data.service_status;
 };
+
 //update current bookung status
 export const updateStatus= async(
-  bookingId: string | null | undefined,
+  bookingId: string | null | undefined ,
 
   nextStatus: string | null | undefined)=>{
   try{
-    const response = await fetch('http://localhost:3000/api/bookings', {
-        method: 'POST',
+    const response = await fetch(`${serverUrl}${url}/${bookingId}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({updatedStatus: nextStatus, bookingId: bookingId}),
+        body: JSON.stringify({service_status: nextStatus}),
       });
 
       const result = await response.json();

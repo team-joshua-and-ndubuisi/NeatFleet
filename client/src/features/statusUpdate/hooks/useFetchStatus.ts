@@ -9,7 +9,7 @@ interface StatusVariable{
   newStatus: number | string
 }
 
-export const usefetchCurrentStatus = (bookingId: string | null | undefined) => {
+export const usefetchCurrentStatus = (bookingId: string ) => {
   return useQuery({
     queryKey: ['serviceStatus', bookingId],
     queryFn: () => fetchCurrentStatus(bookingId),
@@ -37,11 +37,11 @@ export const useUpdateStatus=()=>{
         //replace optimistic with result
         queryClient.setQueryData(['bookingStatus', variables.bookingId], result);
       },
-      onError: (error, variables, context) => {
-        if (context?.previousStatus !== undefined) {
-        queryClient.setQueryData(['bookingStatus', variables.bookingId], context.previousStatus);
-      }
-    }
+    //   onError: (error, variables, context) => {
+    //     if (context?.previousStatus !== undefined) {
+    //     queryClient.setQueryData(['bookingStatus', variables.bookingId], context.previousStatus);
+    //   }
+    // }
 
 })
 }
