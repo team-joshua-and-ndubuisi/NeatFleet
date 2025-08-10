@@ -2,6 +2,29 @@ import prismaClient from '../config/prisma'; // Ensure your db connection is set
 import { Address } from '../../generated/prisma';
 import { AppError } from '../types/error';
 
+type CreateAddressInput = {
+  userId: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  latitude?: number;
+  longitude?: number;
+  isPrimary?: boolean;
+};
+
+type UpdateAddressInput = {
+  addressId: string;
+  userId: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  latitude: number | null;
+  longitude: number | null;
+  isPrimary?: boolean;
+};
+
 const getAddressesForUser = async (userId: string): Promise<Address[]> => {
   try {
     return await prismaClient.address.findMany({
@@ -16,16 +39,6 @@ const getAddressesForUser = async (userId: string): Promise<Address[]> => {
       500
     );
   }
-};
-
-type CreateAddressInput = {
-  userId: string;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  latitude?: number;
-  longitude?: number;
 };
 
 const createAddress = async ({
@@ -54,18 +67,6 @@ const createAddress = async ({
   } catch (error: any) {
     throw new Error(`Error creating user: ${error.message}`);
   }
-};
-
-type UpdateAddressInput = {
-  addressId: string;
-  userId: string;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  latitude: number | null;
-  longitude: number | null;
-  isPrimary?: boolean;
 };
 
 const updateUserAddress = async ({
