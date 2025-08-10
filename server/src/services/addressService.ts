@@ -41,6 +41,7 @@ const getAddressesForUser = async (userId: string): Promise<Address[]> => {
   }
 };
 
+// Create Address (transactional when isPrimary=true)
 const createAddress = async ({
   userId,
   street,
@@ -49,23 +50,51 @@ const createAddress = async ({
   zip,
   latitude,
   longitude,
+  isPrimary,
 }: CreateAddressInput): Promise<Address> => {
+  const makePrimary = isPrimary === true;
+  console.log('CHECK POINT - is primary? ', isPrimary);
+
   try {
-    const address = await prismaClient.address.create({
-      data: {
-        user_id: userId,
-        street,
-        city,
-        state,
-        zip,
-        latitude,
-        longitude,
-      },
+    const created = await prismaClient.$transaction(async tx => {
+      if (makePrimary) {
+        // Flip off any existing primary for this user
+        await tx.address.updateMany({
+          where: { user_id: userId, isPrimary: true },
+          data: { isPrimary: false },
+        });
+      }
+
+      // Create the new address
+      const address = await tx.address.create({
+        data: {
+          user_id: userId,
+          street,
+          city,
+          state,
+          zip,
+          latitude,
+          longitude,
+          isPrimary: makePrimary,
+        },
+      });
+
+      return address;
     });
 
-    return address;
-  } catch (error: any) {
-    throw new Error(`Error creating user: ${error.message}`);
+    return created;
+  } catch (e: any) {
+    // Handle unique violations:
+    // - composite unique (user_id, street, city, state, zip)
+    // - partial unique index on (user_id) where is_primary = true (if you add it)
+    if (e?.code === 'P2002') {
+      throw new AppError(
+        'Address conflicts with an existing record or primary already set.',
+        409
+      );
+    }
+
+    throw new AppError(`Error creating address: ${e.message}`, 500);
   }
 };
 
