@@ -18,8 +18,8 @@ type StatsT = {
   years_on_platform: number;
 };
 
-type UserT = {
-  role: 'admin' | 'technician' | 'client';
+export interface ProfileT {
+  role: 'admin' | 'technician' | 'customer';
   id: string;
   first_name: string;
   last_name: string;
@@ -28,7 +28,7 @@ type UserT = {
   rating_score: string;
   bookings: BookingsT;
   stats: StatsT;
-};
+}
 // type TechnicianT = {
 //   techId: string;
 //   techName: string;
@@ -45,9 +45,9 @@ type UserT = {
 //   status: string;
 // };
 
-export interface UserProfileT {
-  user: UserT;
-}
+// export interface UserProfileT {
+//   user: UserT;
+// }
 
 export interface AddressT {
   street: string;
