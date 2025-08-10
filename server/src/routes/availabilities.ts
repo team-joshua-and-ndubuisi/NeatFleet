@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getServiceAvailability } from '../controllers/availabilityController';
+import { getServiceAvailabilities } from '../controllers/availabilitiesController';
 
 const router = Router();
 
-router.get('/service/:service_id', getServiceAvailability);
+router.get('/service/:service_id', getServiceAvailabilities);
 
 export default router;

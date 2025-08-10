@@ -17,6 +17,7 @@ datasource db {
 
 enum ServiceStatus {
   scheduled
+  on_the_way
   in_progress
   completed
   cancelled
@@ -89,6 +90,10 @@ model Address {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  // NOTE: There is a partial unique index on ("user_id") where "isPrimary" = TRUE.
+  // See migration: CREATE UNIQUE INDEX "one_primary_address_per_user" ON "addresses" ("user_id") WHERE "isPrimary" = TRUE;
+  // This ensures only one primary address per user.
+
   @@unique([user_id, street, city, state, zip]) // Enforces no duplicate addresses per user
   @@map("addresses")
 }
@@ -108,9 +113,10 @@ model Technician {
 }
 
 model Service {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String @db.VarChar(255)
-  description String @db.Text
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  cost        Decimal? @db.Decimal(10, 2)
 
   technicianService TechnicianService[]
   Booking           Booking[]
