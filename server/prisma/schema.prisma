@@ -90,6 +90,10 @@ model Address {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  // NOTE: There is a partial unique index on ("user_id") where "isPrimary" = TRUE.
+  // See migration: CREATE UNIQUE INDEX "one_primary_address_per_user" ON "addresses" ("user_id") WHERE "isPrimary" = TRUE;
+  // This ensures only one primary address per user.
+
   @@unique([user_id, street, city, state, zip]) // Enforces no duplicate addresses per user
   @@map("addresses")
 }
