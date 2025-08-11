@@ -6,8 +6,9 @@ import {
   getBooking,
   getBookings,
   updateBooking,
-  getInvoiceForBooking,
 } from '../controllers/bookingsController';
+import { isAuth } from '../middleware/authMiddleware';
+import { addInvoice } from '../controllers/invoicesController';
 const router = Router();
 
 router.post('/create-checkout-session', checkoutStripe);
@@ -17,7 +18,7 @@ router.get('/:bookingId', getBooking);
 router.patch('/:bookingId', updateBooking);
 router.delete('/:bookingId', deleteBooking);
 
-router.get('/:bookingId/invoice', getInvoiceForBooking);
-// router.post('/:bookingId/invoice', createInvoiceForBooking);
+// router.get('/:bookingId/invoice', isAuth, );
+router.post('/:bookingId/invoice', isAuth, addInvoice);
 
 export default router;
