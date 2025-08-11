@@ -18,11 +18,11 @@ export interface BookingT {
   address_city: string;
   address_state: string;
   address_zip: string;
-  service_status: string;
-  service_notes: string | null;
+  service_status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+  service_notes: string;
   payment_status: string;
   created_at: string;
-  rating_score: string | null;
+  rating_score: number;
   rating_comment: string | null;
   user: UserT;
   technician: TechnicianT;

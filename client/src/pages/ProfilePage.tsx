@@ -7,22 +7,23 @@ import { useFetchProfile } from '@/features/profile';
 import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
 import { useFetchBookings } from '@/features/bookService';
+import { BookingT } from '@/features/bookings';
 
-type BookingT = {
-  id: string;
-  address_city: string;
-  address_street: string;
-  address_zip: string;
-  rating_score: number;
-  rating_comment: string;
-  service_id: string;
-  user_id: string;
-  technician_id: string;
-  service_date: string;
-  service_notes: string;
-  time_block: string;
-  service_status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
-};
+// type BookingT = {
+//   id: string;
+//   address_city: string;
+//   address_street: string;
+//   address_zip: string;
+//   rating_score: number;
+//   rating_comment: string;
+//   service_id: string;
+//   user_id: string;
+//   technician_id: string;
+//   service_date: string;
+//   service_notes: string;
+//   time_block: string;
+//   service_status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+// };
 
 const MOCK_USER_DATA = {
   type: 'tech',
@@ -83,17 +84,17 @@ const ProfilePage: React.FC = () => {
       <ProfileContainer>
         <h1 className='text-5xl text-center py-5'>Profile </h1>
         <ProfileMain
-          userType={userProfileData.user.userType}
-          userName={userProfileData.user.first_name + ' ' + userProfileData.user.last_name}
+          userType={userProfileData.role}
+          userName={userProfileData.first_name + ' ' + userProfileData.last_name}
           rating={MOCK_USER_DATA.rating}
           years={MOCK_USER_DATA.years}
           location={MOCK_USER_DATA.location}
           image={MOCK_USER_DATA.image}
           bookingsCompleted={MOCK_USER_DATA.bc}
           bookings={bookingsData?.length || 0}
-          phoneNumber={userProfileData.user.phone}
-          userId={userProfileData.user.id}
-          email={userProfileData.user.email}
+          phoneNumber={userProfileData.phone}
+          userId={userProfileData.id}
+          email={userProfileData.email}
         />
         <BookingSnippet title='Scheduled Bookings'>
           {scheduledBookings.map((booking, index) => {

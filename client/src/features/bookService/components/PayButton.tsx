@@ -39,7 +39,7 @@ const PayButton = () => {
         user_id: user?.id,
         service_id: formData?.service?.id,
         technician_id: formData?.technician?.id,
-        service_date: formData?.date, //&& formatDate(formData?.date),
+        service_date: formData.date ? formData.date.toISOString().split('T')[0] : null, //&& formatDate(formData?.date),
         time_block: formData?.timeSlot,
         address_street: formData?.address,
         address_city: formData?.city,
