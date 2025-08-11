@@ -1,1 +1,1 @@
-export { fetchCurrentStatus, updateStatus } from './techStatusAPI';
+export { fetchCurrentStatus, updateStatus, fetchCurrentBooking } from './techStatusAPI';

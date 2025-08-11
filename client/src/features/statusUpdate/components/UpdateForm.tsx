@@ -7,6 +7,7 @@ import BookingDetails from './BookingDetails'
 import { ServiceStatusCode, serviceStatusLabels } from "../types/ServiceStatus";
 import { Button } from '@/components/ui/button';
 import { usefetchCurrentStatus, useUpdateStatus } from '@/features/statusUpdate';
+import ProgressBar  from './ProgressBar'
 // import LoadingComponent from "@/components/LoadingIndicator"
 // import ErrorComponent from "@/components/ErrorComponent"
 
@@ -16,15 +17,17 @@ const UpdateForm: React.FC = () => {
     const updateStatusMutation = useUpdateStatus()
     const [errors, setErrors] = useState('')
     const [status, setStatus] = useState(null)
-    //getting current service status
-    if(!bookingId){
-       return <Navigate to='/profile' />
-    }
-    
+    if(!bookingId) return <Navigate to='/profile'/>;
+     //getting current service status
     const {data}= usefetchCurrentStatus(bookingId)
-   
-    console.log(data)
+    //converting enum status to number
+    const currentStatusValue = Number(ServiceStatusCode[data])
     
+    const statuses = Object.entries(serviceStatusLabels)
+    .map(([key, label]) => ({
+      id: Number(key),
+      label: label
+    }));
 
     //setting value of next status
     const handleSubmit = (e:any) => {
@@ -42,13 +45,15 @@ const UpdateForm: React.FC = () => {
     
     const handleStatusUpdate =(updatedStatus:string|number)=>{
         if(!data){
+            updateStatusMutation.mutate({
+                bookingId: bookingId, 
+                newStatus: 'scheduled'
+            })
            return setErrors('Error updating status. Please reload page.')
         }
-        //ServiceStatus in db
-        const currentStatusValue = ServiceStatusCode[data] 
+     
         //converint enum to number for comparison
         const nextStatusValue = Number(updatedStatus)
-
         setErrors('')
         if(nextStatusValue ==currentStatusValue){
             setErrors(`Already up-to-date`)
@@ -71,26 +76,23 @@ const UpdateForm: React.FC = () => {
          
         console.log("what was pressed", nextStatusValue, 'ServiceStatusCode[2]', ServiceStatusCode[2])
         }
-       
-
 
 }
-
-
     return(
-        <div className="mx-auto">
-            <h1>Update Service Status</h1>
+        <div className="mx-auto w-full md:w-3/4 flex flex-col items-center border rounded border-4 border-[#2DD4BF] shadow-md bg-white">
+            <h1 className="my-10 text-2xl font-semibold ">Update Service Status</h1>
             {/* iterate through values of service status to create buttons */}
             
                 <div className="flex flex-col gap-4 w-1/2 justify-center">
+                    <p className="text-xl text-center text-[#3B82F6] font-semibold">Current status is {serviceStatusLabels[currentStatusValue]}</p>
                     {status!=null ? <p> {status} is selected. Please click update to confirm your selection</p> :<p>Please select a status</p>}
                     {Object.entries(serviceStatusLabels).map(([key,statusOptions], index)=>{
                         return(
                             //adding conditonal if button is == or more that key
                             <Button 
                                 onClick = {()=>handleStatusUpdate(key)}
-                                className={(ServiceStatusCode[data]>index)? 'opacity-50 cursor-not-allowed bg-[#2DD4BF]':
-                                          (ServiceStatusCode[data] ===index)? 'border-white bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] ':
+                                className={currentStatusValue>index? 'opacity-50 cursor-not-allowed bg-[#2DD4BF]':
+                                          currentStatusValue ===index? ' border border-black bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] outline outline-offset-4 ':
                                           ' hover:shadow-xl hover:ring-4 hover:ring-[#2DD4BF] hover:ring-opacity-20'}
                                 value={key}
                                 key={index}>
@@ -109,9 +111,8 @@ const UpdateForm: React.FC = () => {
             </Button>
             {errors && <p style={{ color: 'red' }}> {errors}</p>}
         <div>
-
+       
         </div>
-        <BookingDetails/>
         </div>
     )
 }

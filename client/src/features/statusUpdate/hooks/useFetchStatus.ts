@@ -2,12 +2,20 @@
 //query key will be booking ID
 //Enabled: must have a status>previous status
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { fetchCurrentStatus, updateStatus } from '@/features/statusUpdate';
+import { fetchCurrentStatus, updateStatus, fetchCurrentBooking } from '@/features/statusUpdate';
 
 interface StatusVariable{
   bookingId: string | undefined,
   newStatus: number | string
 }
+
+export const usefetchCurrentBooking = (bookingId: string ) => {
+  return useQuery({
+    queryKey: ['bookingId', bookingId],
+    queryFn: () => fetchCurrentBooking(bookingId),
+    enabled: !!bookingId,
+  });
+};
 
 export const usefetchCurrentStatus = (bookingId: string ) => {
   return useQuery({

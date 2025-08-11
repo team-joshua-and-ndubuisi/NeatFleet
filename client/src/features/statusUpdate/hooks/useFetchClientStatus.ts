@@ -7,8 +7,8 @@ export const usefetchPollStatus = (bookingId: string ) => {
       queryKey: ['serviceStatus', bookingId],
       queryFn: () => fetchCurrentStatus(bookingId),
       enabled: !!bookingId,
-      refetchInterval: (data)=>{
-        (data =="completed")? false : 10000
-      }
+      refetchInterval: (data:boolean|number)=> (data =="completed")? false : 10000,
+      refetchIntervalInBackground: true,
+      retry: true,
     });
   };
