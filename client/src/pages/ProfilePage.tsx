@@ -6,8 +6,23 @@ import ProfileContainer from '@/components/profile/ProfileContainer';
 import { useFetchProfile } from '@/features/profile';
 import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
-import { BookingT, useFetchBookings } from '@/features/bookService';
+import { useFetchBookings } from '@/features/bookService';
 
+type BookingT = {
+  id: string;
+  address_city: string;
+  address_street: string;
+  address_zip: string;
+  rating_score: number;
+  rating_comment: string;
+  service_id: string;
+  user_id: string;
+  technician_id: string;
+  service_date: string;
+  service_notes: string;
+  time_block: string;
+  service_status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+};
 
 const MOCK_USER_DATA = {
   type: 'tech',
