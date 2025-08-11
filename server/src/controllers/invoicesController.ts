@@ -8,7 +8,7 @@ import {
   getInvoiceByBookingId,
   createInvoiceForBooking,
 } from '../services/invoiceService';
-
+import { getBookingById } from '../services/bookingService';
 /**
  * @desc    Create invoice for a booking
  * @route   POST /api/bookings/:bookingId/invoice
@@ -17,11 +17,20 @@ import {
  */
 const addInvoice = asyncHandler(
   async (req: Request, res: Response, _next: NextFunction) => {
+    const userId = (req.user as UserType)?.id;
+    if (!userId) throw new AppError('Unauthorized', 401);
+
     const { bookingId } = req.params;
+
+    // Ensure booking exists
+    const booking = await getBookingById(bookingId);
+    if (!booking) throw new AppError('Booking not found', 404);
+
+    // Ownership check
+    if (booking.user_id !== userId) {
+      throw new AppError('Forbidden', 403);
+    }
     const { cost, tax_percent: taxPercent } = req.body;
-    console.log('CHECK POINT');
-    console.log(cost);
-    console.log(req.body);
 
     const invoice = await createInvoiceForBooking({
       bookingId,

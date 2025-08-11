@@ -8,6 +8,10 @@ import {
   updateBooking,
 } from '../controllers/bookingsController';
 import { isAuth } from '../middleware/authMiddleware';
+import {
+  checkValidations,
+  invoiceValidator,
+} from '../middleware/inputValidators';
 import { addInvoice } from '../controllers/invoicesController';
 const router = Router();
 
@@ -19,6 +23,12 @@ router.patch('/:bookingId', updateBooking);
 router.delete('/:bookingId', deleteBooking);
 
 // router.get('/:bookingId/invoice', isAuth, );
-router.post('/:bookingId/invoice', isAuth, addInvoice);
+router.post(
+  '/:bookingId/invoice',
+  isAuth,
+  invoiceValidator,
+  checkValidations,
+  addInvoice
+);
 
 export default router;
