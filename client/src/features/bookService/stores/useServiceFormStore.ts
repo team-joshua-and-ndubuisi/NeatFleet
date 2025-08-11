@@ -20,7 +20,11 @@ export const useServiceFormStore = create<ServiceFormState>()(
   persist(
     set => ({
       formData: initialFormState,
-      reset: () => set({ formData: initialFormState }),
+      reset: () => {
+        set({ formData: initialFormState });
+        //clear persisted localStorage
+        useServiceFormStore.persist.clearStorage();
+      },
       setFormData: (update: Partial<FormData>) =>
         set(state => {
           const updatedField = Object.keys(update)[0] as keyof FormData;

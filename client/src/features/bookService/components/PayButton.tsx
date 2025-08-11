@@ -13,7 +13,7 @@ const PayButton = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { formData } = useServiceFormStore();
+  const { formData, reset } = useServiceFormStore();
 
   const handleClick = async () => {
     setLoading(true);
@@ -51,6 +51,9 @@ const PayButton = () => {
       // console.log(submissionData);
       const bookingResponce = await postBooking(submissionData);
       console.log(bookingResponce);
+      //clear persisted data and reset zustand state store
+      reset();
+
       // Navigate with bookingData so success page can use it without re-fetching
       //create the route with the booking ID in the url as parameters -> that way when we have booking/:booking_id/success page now we can use that booking_id to fetch that booking (this is how we will get the data for the invoice)
       navigate(`/service-catalog/booking/${bookingResponce.id}/success`);
