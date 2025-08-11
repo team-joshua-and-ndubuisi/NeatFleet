@@ -1,6 +1,7 @@
 import React from 'react';
 import { RealTimeStatus } from '@/features/statusUpdate/components';
 
+
 const StatusPage: React.FC = () => {
   return (
     <div className='mt-16 px-8 bg-center bg-cover bg-[url(images/background-design.svg)] '>

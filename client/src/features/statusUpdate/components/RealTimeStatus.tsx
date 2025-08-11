@@ -1,5 +1,4 @@
 import React from 'react';
-// import { useParams, Navigate } from 'react-router-dom';
 import BookingDetails from './BookingDetails';
 import ProgressBar from './ProgressBar';
 import UpdateForm from './UpdateForm';
@@ -12,11 +11,9 @@ import {useFetchProfile} from '@/features/profile'
 import { useAuthStore } from '@/features/auth/stores';
 
 
-interface BookingProps {
-  bookingId: string;
-}
 
-const RealTimeStatus: React.FC<BookingProps> = () => {
+
+const RealTimeStatus: React.FC = () => {
   const { bookingId } = useParams();
   const userToken = useAuthStore(state => state.token);
 
