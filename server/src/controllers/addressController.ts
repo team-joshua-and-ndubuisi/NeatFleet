@@ -13,7 +13,8 @@ import {
 // Create Address
 const addAddress = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { street, city, state, zip, latitude, longitude } = req.body;
+    const { street, city, state, zip, latitude, longitude, isPrimary } =
+      req.body;
     const userId = (req.user as UserType).id;
 
     if (!userId) throw new AppError('Unauthorized', 401);
@@ -26,6 +27,7 @@ const addAddress = asyncHandler(
       zip,
       latitude,
       longitude,
+      isPrimary,
     });
 
     logger.info(`Address created for user ${userId}`);
