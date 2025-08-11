@@ -65,7 +65,10 @@ const BookingSuccessPage: React.FC = () => {
       <p>
         User: {data?.user.first_name} {data?.user.last_name}
       </p>
-      <button onClick={generatePDF} className='mt-4 px-4 py-2 bg-blue-500 text-white rounded'>
+      <button
+        onClick={generatePDF}
+        className='mt-4 px-4 py-2 bg-blue-500 text-white rounded text-lg cursor-pointer hover:text-secondary'
+      >
         Download Invoice PDF
       </button>
     </div>
