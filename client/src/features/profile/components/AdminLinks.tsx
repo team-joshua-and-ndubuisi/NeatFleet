@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function AdminLinks() {
+const AdminLinks: React.FC = () => {
   return (
     <div className='flex flex-col items-center'>
       <Link
@@ -18,6 +18,6 @@ function AdminLinks() {
       </Link>
     </div>
   );
-}
+};
 
 export default AdminLinks;
