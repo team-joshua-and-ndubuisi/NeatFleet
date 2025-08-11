@@ -1,4 +1,4 @@
-type BookingT = {
+export interface BookingT {
   booking_id: string;
   client_name: string;
   date: string;
@@ -6,17 +6,17 @@ type BookingT = {
   rating_score: number;
   service_name: string;
   status: string;
-};
+}
 
 type BookingsT = {
   past: BookingT[];
   upcoming: BookingT[];
 };
 
-type StatsT = {
+export interface StatsT {
   bookings_completed: number;
   years_on_platform: number;
-};
+}
 
 export interface ProfileT {
   role: 'admin' | 'technician' | 'customer';
