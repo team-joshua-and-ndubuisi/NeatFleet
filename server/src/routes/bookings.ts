@@ -12,7 +12,7 @@ import {
   checkValidations,
   invoiceValidator,
 } from '../middleware/inputValidators';
-import { addInvoice } from '../controllers/invoicesController';
+import { addInvoice, getInvoice } from '../controllers/invoicesController';
 const router = Router();
 
 router.post('/create-checkout-session', checkoutStripe);
@@ -22,7 +22,7 @@ router.get('/:bookingId', getBooking);
 router.patch('/:bookingId', updateBooking);
 router.delete('/:bookingId', deleteBooking);
 
-// router.get('/:bookingId/invoice', isAuth, );
+router.get('/:bookingId/invoice', isAuth, getInvoice);
 router.post(
   '/:bookingId/invoice',
   isAuth,

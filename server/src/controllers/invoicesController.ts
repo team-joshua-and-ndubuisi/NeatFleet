@@ -43,23 +43,39 @@ const addInvoice = asyncHandler(
   }
 );
 
-// /**
-//  * @desc    Get invoice for a booking
-//  * @route   GET /api/bookings/:bookingId/invoice
-//  * @access  Private (booking owner, technician, or admin)
-//  */
-// const getInvoice = asyncHandler(
-//   async (req: Request, res: Response, _next: NextFunction) => {
-//     const userId = (req.user as UserType)?.id;
-//     if (!userId) throw new AppError('Unauthorized', 401);
+/**
+ * @desc    Get invoice for a booking
+ * @route   GET /api/bookings/:bookingId/invoice
+ * @access  Private (booking owner, technician, or admin)
+ */
+const getInvoice = asyncHandler(async (req: Request, res: Response) => {
+  const userId = (req.user as UserType)?.id;
+  if (!userId) throw new AppError('Unauthorized', 401);
 
-//     const { bookingId } = req.params;
-//     const invoice = await getInvoiceByBookingId({ bookingId, userId });
+  const { bookingId } = req.params;
 
-//     if (!invoice) throw new AppError('Invoice not found', 404);
-//     res.status(200).json(invoice);
-//   }
-// );
+  // Ensure booking exists
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    select: { user_id: true },
+  });
+
+  if (!booking) {
+    throw new AppError('Booking not found', 404);
+  }
+
+  // Ownership check
+  if (booking.user_id !== userId) {
+    throw new AppError('Forbidden', 403);
+  }
+
+  const invoice = await getInvoiceByBookingId(bookingId);
+  if (!invoice) {
+    throw new AppError('Invoice not found', 404);
+  }
+
+  res.status(200).json(invoice);
+});
 
 // /**
 //  * @desc    Update invoice for a booking
@@ -103,4 +119,4 @@ const addInvoice = asyncHandler(
 //   }
 // );
 
-export { addInvoice };
+export { addInvoice, getInvoice };
