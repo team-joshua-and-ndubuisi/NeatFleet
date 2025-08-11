@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ServiceStatusCode, serviceStatusLabels } from '../types/ServiceStatus';
 import { Button } from '@/components/ui/button';
 import { useUpdateStatus } from '@/features/statusUpdate';
@@ -13,18 +13,37 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
   const updateStatusMutation = useUpdateStatus();
   const [errors, setErrors] = useState('');
   const [status, setStatus] = useState('');
-  //getting current service status
-
   //converting enum status to number
-  const currentStatusValue = ServiceStatusCode[data as keyof typeof ServiceStatusCode];
+  const [currentStatusValue, setCurrentStatusValue] = useState(ServiceStatusCode[data as keyof typeof ServiceStatusCode])
+    
+
+    useEffect(() => {
+      if (updateStatusMutation.isSuccess && status) {
+        // Update local state when mutation succeeds
+        const newStatusValue = ServiceStatusCode[status as keyof typeof ServiceStatusCode];
+        setCurrentStatusValue(newStatusValue);
+        setStatus(''); // Reset form
+        setErrors(''); // Clear any errors
+      }
+    }, [updateStatusMutation.isSuccess, status]);
+
+    useEffect(() => {
+      if (updateStatusMutation.isError) {
+        setErrors('Failed to update status. Please try again.');
+      }
+    }, [updateStatusMutation.isError]);
+
+  //converting enum status to service label
   function getStatusName(statusString: string): string {
     const enumKey = statusString as keyof typeof ServiceStatusCode;
     const statusInd = ServiceStatusCode[enumKey];
 
     return serviceStatusLabels[statusInd];
     }
+    console.log('status', status, 'currentStatusValue', currentStatusValue)
   //setting value of next status
-  const handleSubmit = () => {
+  const handleSubmit = (e:React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     if (status != '') {
       updateStatusMutation.mutate({
         bookingId: bookingId,
@@ -45,7 +64,6 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
       });
       return setErrors('Error updating status. Please reload page.');
     }
-    console.log("updated status",updatedStatus, "next stat value:", typeof nextStatusValue, ServiceStatusCode[nextStatusValue] )
 
     setErrors('');
     if (nextStatusValue == currentStatusValue) {
@@ -100,7 +118,7 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
         })}
       </div>
       <Button
-        className={`my-10
+        className={`my-10  hover:opacity-100
                 ${
                   status !== null
                     ? 'bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] text-white shadow-2xl ring-4 ring-[#2DD4BF] ring-opacity-40 hover:ring-opacity-60 transform hover:scale-102'

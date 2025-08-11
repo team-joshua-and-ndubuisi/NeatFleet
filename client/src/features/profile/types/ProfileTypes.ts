@@ -1,11 +1,34 @@
-type UserT = {
-  userType: 'admin' | 'tech' | 'client';
+export interface BookingT {
+  booking_id: string;
+  client_name: string;
+  date: string;
+  rating_comment: string;
+  rating_score: number;
+  service_name: string;
+  status: string;
+}
+
+type BookingsT = {
+  past: BookingT[];
+  upcoming: BookingT[];
+};
+
+export interface StatsT {
+  bookings_completed: number;
+  years_on_platform: number;
+}
+
+export interface ProfileT {
+  role: 'admin' | 'technician' | 'customer';
   id: string;
   first_name: string;
   last_name: string;
   email: string;
   phone: string;
-};
+  rating_score: string;
+  bookings: BookingsT;
+  stats: StatsT;
+}
 // type TechnicianT = {
 //   techId: string;
 //   techName: string;
@@ -22,9 +45,9 @@ type UserT = {
 //   status: string;
 // };
 
-export interface UserProfileT {
-  user: UserT;
-}
+// export interface UserProfileT {
+//   user: UserT;
+// }
 
 export interface AddressT {
   street: string;
