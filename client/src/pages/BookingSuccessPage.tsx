@@ -51,26 +51,32 @@ const BookingSuccessPage: React.FC = () => {
   };
 
   return (
-    <div className='bg-primary-50 text-xl font-lato text-foreground '>
-      <h1>Booking Confirmed!</h1>
-      <p>Booking ID:{booking_id}</p>
-      <p>Service: {service?.name}</p>
-      <p>Service Status: {data && capitalizeFirstLetter(data?.service_status)}</p>
-      <p>Service Date: {data?.service_date.slice(0, 10)}</p>
-      <p>Service Notes: {data?.service_notes}</p>
-      <p>Time Block: {data && capitalizeFirstLetter(data?.time_block)}</p>
-      <p>
-        Address: {data?.address_street}, {data?.address_city}, {data?.address_zip}
-      </p>
-      <p>
-        User: {data?.user.first_name} {data?.user.last_name}
-      </p>
-      <button
-        onClick={generatePDF}
-        className='mt-4 px-4 py-2 bg-blue-500 text-white rounded text-lg cursor-pointer hover:text-secondary'
-      >
-        Download Invoice PDF
-      </button>
+    <div className='flex min-h-screen items-center justify-center bg-primary-50 font-lato'>
+      <div className='bg-white shadow-lg rounded-xl p-8 max-w-lg w-full flex flex-col items-center'>
+        <h1 className='text-3xl font-bold mb-6 text-center text-primary-600'>Booking Confirmed!</h1>
+
+        <div className='text-left space-y-2 w-full text-xl text-foreground'>
+          <p>Booking ID: {booking_id}</p>
+          <p>Service: {service?.name}</p>
+          <p>Service Status: {data && capitalizeFirstLetter(data?.service_status)}</p>
+          <p>Service Date: {data?.service_date.slice(0, 10)}</p>
+          <p>Service Notes: {data?.service_notes}</p>
+          <p>Time Block: {data && capitalizeFirstLetter(data?.time_block)}</p>
+          <p>
+            Address: {data?.address_street}, {data?.address_city}, {data?.address_zip}
+          </p>
+          <p>
+            User: {data?.user.first_name} {data?.user.last_name}
+          </p>
+        </div>
+
+        <button
+          onClick={generatePDF}
+          className='mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg text-lg hover:bg-blue-600 transition cursor-pointer'
+        >
+          Download Invoice PDF
+        </button>
+      </div>
     </div>
   );
 };
