@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
 
   const { data: userProfileData, isLoading, isError } = useFetchProfile(userToken);
   const { data: bookingsData } = useFetchBookings(userId, userToken);
-
+  
   if (isLoading) {
     return <LoadingIndicator message='Loading profile...' />;
   }

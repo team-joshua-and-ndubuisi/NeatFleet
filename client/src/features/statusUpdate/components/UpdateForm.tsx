@@ -1,25 +1,31 @@
-import { useParams } from 'react-router-dom';
 import React, { useState } from 'react';
 import { ServiceStatusCode, serviceStatusLabels } from '../types/ServiceStatus';
 import { Button } from '@/components/ui/button';
-import { useFetchCurrentStatus, useUpdateStatus } from '@/features/statusUpdate';
+import { useUpdateStatus } from '@/features/statusUpdate';
 // import LoadingComponent from "@/components/LoadingIndicator"
 // import ErrorComponent from "@/components/ErrorComponent"
+interface BookingProps {
+  bookingId: string;
+  data: string;
+}
 
-const UpdateForm: React.FC = () => {
-  const { bookingId } = useParams();
+const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
   const updateStatusMutation = useUpdateStatus();
   const [errors, setErrors] = useState('');
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState('');
   //getting current service status
-  const { data } = useFetchCurrentStatus(bookingId);
+
   //converting enum status to number
-  const currentStatusValue = Number(ServiceStatusCode[data]);
+  const currentStatusValue = ServiceStatusCode[data as keyof typeof ServiceStatusCode];
+  function getStatusName(statusString: string): string {
+    const enumKey = statusString as keyof typeof ServiceStatusCode;
+    const statusInd = ServiceStatusCode[enumKey];
+
+    return serviceStatusLabels[statusInd];
+    }
   //setting value of next status
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('bookingid', bookingId);
-    if (status != null) {
+  const handleSubmit = () => {
+    if (status != '') {
       updateStatusMutation.mutate({
         bookingId: bookingId,
         newStatus: status,
@@ -30,6 +36,8 @@ const UpdateForm: React.FC = () => {
   };
 
   const handleStatusUpdate = (updatedStatus: string | number) => {
+    const nextStatusValue = updatedStatus as ServiceStatusCode;
+
     if (!data) {
       updateStatusMutation.mutate({
         bookingId: bookingId,
@@ -37,35 +45,24 @@ const UpdateForm: React.FC = () => {
       });
       return setErrors('Error updating status. Please reload page.');
     }
+    console.log("updated status",updatedStatus, "next stat value:", typeof nextStatusValue, ServiceStatusCode[nextStatusValue] )
 
-    //converint enum to number for comparison
-    const nextStatusValue = Number(updatedStatus);
     setErrors('');
     if (nextStatusValue == currentStatusValue) {
       setErrors(`Already up-to-date`);
-      // setStatus(null)
       return;
     }
     if (currentStatusValue + 1 < nextStatusValue) {
       setErrors(`Please Select next status before moving forward`);
-      // setStatus(null)
       return;
     }
     if (currentStatusValue > nextStatusValue) {
       setErrors(`Client has already been already been updated. Please select next status update`);
-      // setStatus(null)
       return;
     } else if (nextStatusValue == currentStatusValue + 1) {
       //Valid Selection
       setErrors('');
       setStatus(ServiceStatusCode[nextStatusValue]);
-
-      console.log(
-        'what was pressed',
-        nextStatusValue,
-        'ServiceStatusCode[2]',
-        ServiceStatusCode[2]
-      );
     }
   };
   return (
@@ -77,8 +74,8 @@ const UpdateForm: React.FC = () => {
         <p className='text-xl text-center text-[#3B82F6] font-semibold'>
           Current status is {serviceStatusLabels[currentStatusValue]}
         </p>
-        {status != null ? (
-          <p> {status} is selected. Please click update to confirm your selection</p>
+        {status != '' ? (
+          <p> {getStatusName(status)} is selected. Please click update to confirm your selection</p>
         ) : (
           <p>Please select a status</p>
         )}

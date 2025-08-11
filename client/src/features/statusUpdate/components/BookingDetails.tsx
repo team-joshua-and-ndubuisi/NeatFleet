@@ -1,45 +1,36 @@
 //Generic Page that has the booking detail
 import React from 'react';
 
-import { useParams } from 'react-router-dom';
-import { useFetchCurrentBooking } from '../hooks';
-import LoadingComponent from '@/components/LoadingIndicator';
-import ErrorComponent from '@/components/ErrorComponent';
-
 interface Booking {
   technician: {
     user: {
-      first_name: string;
-      last_name: string;
+      first_name: string | undefined | undefined;
+      last_name: string | undefined;
     };
   };
   user: {
-    first_name: string;
-    last_name: string;
+    first_name: string | undefined;
+    last_name: string | undefined;
   };
-  address: string;
-  status: string;
-  date: string;
-  address_street: string;
-  address_city: string;
-  address_state: string;
-  address_zip: string;
-  time_block: string;
-  service_date: string;
-  payment_status: string;
+  address: string | undefined;
+  status: string | undefined;
+  date: string | undefined;
+  address_street: string | undefined;
+  address_city: string | undefined;
+  address_state: string | undefined;
+  address_zip: string | undefined;
+  time_block: string | undefined;
+  service_date: string | undefined;
+  payment_status: string | undefined;
 }
-
-const BookingDetails: React.FC = () => {
-  const { bookingId } = useParams();
-  const { data: bookingData, isLoading, error } = useFetchCurrentBooking(bookingId);
+interface BookingProps {
+  bookingId: string;
+  bookingData: Booking;
+}
+const BookingDetails: React.FC<BookingProps> = ({ bookingData }) => {
   const booking = bookingData as Booking;
-  if (isLoading || booking === undefined) {
-    return <LoadingComponent />;
-  }
-  if (error) {
-    return <ErrorComponent />;
-  }
-  const replaceFirstLetter = str => {
+
+  const replaceFirstLetter = (str: string) => {
     if (!str) return str;
     const firstChar = str.charAt(0);
     const toggledChar =

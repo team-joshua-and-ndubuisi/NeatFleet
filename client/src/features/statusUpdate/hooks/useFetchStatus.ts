@@ -6,11 +6,34 @@ import { fetchCurrentStatus, updateStatus, fetchCurrentBooking } from '@/feature
 
 interface StatusVariable {
   bookingId: string | undefined;
-  newStatus: number | string;
+  newStatus: string;
+}
+interface Booking {
+  technician: {
+    user: {
+      first_name: string;
+      last_name: string;
+    };
+  };
+  user: {
+    first_name: string;
+    last_name: string;
+  };
+  address: string;
+  status: string;
+  date: string;
+  address_street: string;
+  address_city: string;
+  address_state: string;
+  address_zip: string;
+  time_block: string;
+  service_date: string;
+  payment_status: string;
+  service_status: string;
 }
 
-export const useFetchCurrentBooking = (bookingId: string) => {
-  return useQuery({
+export const useFetchCurrentBooking = (bookingId?: string) => {
+  return useQuery<Booking>({
     queryKey: ['bookingId', bookingId],
     queryFn: () => fetchCurrentBooking(bookingId),
     enabled: !!bookingId,

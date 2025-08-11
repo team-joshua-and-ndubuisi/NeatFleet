@@ -1,22 +1,19 @@
 //UI for the User to see the progress of the service
-import { useFetchPollStatus } from '../hooks';
-import { useParams } from 'react-router-dom';
 import { ServiceStatusCode, serviceStatusLabels } from '../types/ServiceStatus';
-
 import React from 'react';
-const ProgressBar: React.FC = () => {
-  const { bookingId } = useParams();
-
-  const { data } = useFetchPollStatus(bookingId);
-
-  const currentStatus = Number(ServiceStatusCode[data]);
-
+interface BookingProps {
+  bookingId: string;
+  status: string;
+}
+const ProgressBar: React.FC<BookingProps> = ({ status }) => {
   const statuses = Object.entries(serviceStatusLabels)
     .filter(([key, label]) => label != 'Cancelled' && key != '100')
     .map(([key, label]) => ({
       id: Number(key),
       label: label,
     }));
+
+  const currentStatusIndex = ServiceStatusCode[status as keyof typeof ServiceStatusCode];
 
   return (
     <div className='my-10 md:w-3/4 mx-auto border border-4 rounded border-[#2DD4BF] text-lg/7 bg-white'>
@@ -33,7 +30,7 @@ const ProgressBar: React.FC = () => {
         <div
           className='absolute top-0 left-0 h-2 rounded-full bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] transition-all duration-700 ease-in-out'
           style={{
-            width: `${currentStatus >= 3 ? 100 : (currentStatus / 3) * 100}%`,
+            width: `${currentStatusIndex >= 3 ? 100 : (currentStatusIndex / 3) * 100}%`,
           }}
         ></div>
 
@@ -46,7 +43,7 @@ const ProgressBar: React.FC = () => {
           >
             <div
               className={`w-6 h-6 rounded-full border-4 transition-all duration-500 ${
-                currentStatus >= status.id
+                currentStatusIndex >= status.id
                   ? 'bg-gradient-to-br from-[#2DD4BF] to-[#3B82F6] border-white shadow-lg scale-110'
                   : 'bg-white border-gray-300'
               }`}
@@ -61,7 +58,7 @@ const ProgressBar: React.FC = () => {
           <div key={status.id} className='flex flex-col items-center text-center flex-1'>
             <div
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                currentStatus >= status.id
+                currentStatusIndex >= status.id
                   ? 'bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] text-white shadow-md'
                   : 'bg-white text-gray-500 border border-gray-200'
               }`}
@@ -70,7 +67,7 @@ const ProgressBar: React.FC = () => {
             </div>
 
             {/* Active Status Indicator */}
-            {currentStatus === status.id && (
+            {currentStatusIndex === status.id && (
               <div className='mt-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-semibold'>
                 Current
               </div>
@@ -84,11 +81,11 @@ const ProgressBar: React.FC = () => {
         <p className='text-gray-600'>
           Status:{' '}
           <span className='font-semibold text-gray-800'>
-            {serviceStatusLabels[currentStatus] || 'Not Started'}
+            {serviceStatusLabels[currentStatusIndex] || 'Not Started'}
           </span>
         </p>
         <div className='my-2 text-sm text-gray-500'>
-          Step {currentStatus + 1 || 0} of {statuses.length}
+          Step {currentStatusIndex + 1 || 0} of {statuses.length}
         </div>
       </div>
     </div>
