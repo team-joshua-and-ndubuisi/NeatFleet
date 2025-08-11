@@ -6,26 +6,13 @@ import ProfileContainer from '@/components/profile/ProfileContainer';
 import { useFetchProfile } from '@/features/profile';
 import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
-import { BookingT, useFetchBookings } from '@/features/bookService';
-
-
-const MOCK_USER_DATA = {
-  type: 'tech',
-  name: 'JohnDoe123',
-  bc: 42,
-  years: 5,
-  rating: 4.7,
-  // bookings: pastBookings,
-  location: 'New York, NY',
-  image: 'https://example.com/profile-pictures/johndoe.jpg',
-};
 
 const ProfilePage: React.FC = () => {
   const userToken = useAuthStore(state => state.token);
-  const userId = useAuthStore(state => state.user.id);
+  // const userId = useAuthStore(state => state.user.id);
 
   const { data: userProfileData, isLoading, isError } = useFetchProfile(userToken);
-  const { data: bookingsData } = useFetchBookings(userId, userToken);
+  // const { data: bookingsData } = useFetchBookings(userId, userToken);
 
   if (isLoading) {
     return <LoadingIndicator message='Loading profile...' />;
@@ -44,52 +31,39 @@ const ProfilePage: React.FC = () => {
       day: '2-digit',
     });
   }
-  // function getStars(rating:any){
-  //   const stars= Array(5).fill(0)
 
-  //   return stars.map((_, index)=>{
-  //     return(
-  //       <div data-orientation="horizontal">
-  //          < Star
-  //           key={index}
-  //           className=""
-  //           color= {(rating)>index? "Orange": "gray"}
-  //           />
-  //       </div>
-  //    )
-
-  //   })
-  // }
-
-  const { scheduledBookings, pastBookings } = sortBookings(bookingsData || []);
+  // const { scheduledBookings, pastBookings } = sortBookings(bookingsData || []);
+  const scheduledBookings = userProfileData.bookings.upcoming;
+  const pastBookings = userProfileData.bookings.past;
 
   return (
     <div>
       <ProfileContainer>
         <h1 className='text-5xl text-center py-5'>Profile </h1>
         <ProfileMain
-          userType={userProfileData.user.userType}
-          userName={userProfileData.user.first_name + ' ' + userProfileData.user.last_name}
-          rating={MOCK_USER_DATA.rating}
-          years={MOCK_USER_DATA.years}
-          location={MOCK_USER_DATA.location}
-          image={MOCK_USER_DATA.image}
-          bookingsCompleted={MOCK_USER_DATA.bc}
-          bookings={bookingsData?.length || 0}
-          phoneNumber={userProfileData.user.phone}
-          userId={userProfileData.user.id}
-          email={userProfileData.user.email}
+          location=''
+          userType={userProfileData?.role}
+          userName={userProfileData?.first_name + ' ' + userProfileData?.last_name}
+          rating={userProfileData?.rating_score}
+          years={userProfileData?.stats?.years_on_platform}
+          // location={userProfileData?.location}
+          // image={userProfileData?.image}
+          bookingsCompleted={userProfileData?.stats?.bookings_completed || 0}
+          bookings={userProfileData.bookings.upcoming.length}
+          phoneNumber={userProfileData?.phone}
+          // userId={userProfileData?.user?.id}
+          email={userProfileData?.email}
         />
         <BookingSnippet title='Scheduled Bookings'>
           {scheduledBookings.map((booking, index) => {
             return (
               <BookingCard
-                id={booking.id}
+                id={booking.booking_id}
                 key={index}
-                name={'booking data missing name'}
-                status={booking.service_status}
-                date={convertDate(booking.service_date)}
-                details={booking.service_notes}
+                name={booking.technician_name}
+                status={booking.status}
+                date={convertDate(booking.date)}
+                details={booking.service_name}
                 rating={booking.rating_score}
               />
             );
@@ -99,12 +73,12 @@ const ProfilePage: React.FC = () => {
           {pastBookings.map((booking, index) => {
             return (
               <BookingCard
-                id={booking.id}
+                id={booking.booking_id}
                 key={index}
-                name={'Booking data missing name'}
-                status={booking.service_status}
-                date={convertDate(booking.service_date)}
-                details={booking.service_notes}
+                name={booking.technician_name}
+                status={booking.status}
+                date={convertDate(booking.date)}
+                details={booking.service_name}
                 rating={booking.rating_score}
               />
             );
@@ -114,16 +88,5 @@ const ProfilePage: React.FC = () => {
     </div>
   );
 };
-
-function sortBookings(bookings: BookingT[]) {
-  const pastBookings = bookings.filter(
-    booking => booking.service_status === 'cancelled' || booking.service_status === 'completed'
-  );
-  const scheduledBookings = bookings.filter(
-    booking => booking.service_status === 'scheduled' || booking.service_status === 'in_progress'
-  );
-
-  return { pastBookings, scheduledBookings };
-}
 
 export default ProfilePage;
