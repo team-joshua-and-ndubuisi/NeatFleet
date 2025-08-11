@@ -8,7 +8,6 @@ import { useAuthStore } from '@/features/auth/stores';
 import { LoadingIndicator } from '@/components';
 import { BookingT, useFetchBookings } from '@/features/bookService';
 
-
 const MOCK_USER_DATA = {
   type: 'tech',
   name: 'JohnDoe123',

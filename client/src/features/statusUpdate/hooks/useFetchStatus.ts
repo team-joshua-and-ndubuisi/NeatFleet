@@ -4,12 +4,12 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { fetchCurrentStatus, updateStatus, fetchCurrentBooking } from '@/features/statusUpdate';
 
-interface StatusVariable{
-  bookingId: string | undefined,
-  newStatus: number | string
+interface StatusVariable {
+  bookingId: string | undefined;
+  newStatus: number | string;
 }
 
-export const usefetchCurrentBooking = (bookingId: string ) => {
+export const useFetchCurrentBooking = (bookingId: string) => {
   return useQuery({
     queryKey: ['bookingId', bookingId],
     queryFn: () => fetchCurrentBooking(bookingId),
@@ -17,7 +17,7 @@ export const usefetchCurrentBooking = (bookingId: string ) => {
   });
 };
 
-export const usefetchCurrentStatus = (bookingId: string ) => {
+export const useFetchCurrentStatus = (bookingId: string) => {
   return useQuery({
     queryKey: ['serviceStatus', bookingId],
     queryFn: () => fetchCurrentStatus(bookingId),
@@ -25,31 +25,28 @@ export const usefetchCurrentStatus = (bookingId: string ) => {
   });
 };
 
-export const useUpdateStatus=()=>{
-  const queryClient =  useQueryClient()
-  return useMutation<any, Error, StatusVariable>({
-      mutationFn: ({ bookingId, newStatus }:StatusVariable) => updateStatus(bookingId, newStatus),
-      
-      //fire before updateStatus
-      onMutate: async(variables)=>{
+export const useUpdateStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, StatusVariable>({
+    mutationFn: ({ bookingId, newStatus }: StatusVariable) => updateStatus(bookingId, newStatus),
+
+    onMutate: async variables => {
       const { bookingId, newStatus } = variables;
 
       const previousStatus = queryClient.getQueryData(['bookingStatus', bookingId]);
 
-        //optimistic status update
+      //optimistic status update
       queryClient.setQueryData(['bookingStatus', bookingId], newStatus);
-        
-        return {previousStatus}
-      },
-      onSuccess: (result, variables, )=>{
-        //replace optimistic with result
-        queryClient.setQueryData(['bookingStatus', variables.bookingId], result);
-      },
+
+      return { previousStatus };
+    },
+    onSuccess: (result, variables) => {
+      queryClient.setQueryData(['bookingStatus', variables.bookingId], result);
+    },
     //   onError: (error, variables, context) => {
     //     if (context?.previousStatus !== undefined) {
     //     queryClient.setQueryData(['bookingStatus', variables.bookingId], context.previousStatus);
     //   }
     // }
-
-})
-}
+  });
+};

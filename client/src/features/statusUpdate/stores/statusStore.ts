@@ -17,9 +17,9 @@
 //         }catch(err){
 //             set({isLoading:false, error: true})
 //         }
-//     }, 
+//     },
 //     setStatus: (status)=>set((state)=>({status: ServiceStatusCode.nextStatus(state)}))
- 
+
 // })
 // const useStatusStore=create(statusStore)
 // export default useStatusStore
