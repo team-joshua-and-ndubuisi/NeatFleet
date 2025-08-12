@@ -1,1 +1,1 @@
-export type { ProfileT, AddressT } from './ProfileTypes';
+export type { ProfileT, StatsT, AddressT, BookingT } from './ProfileTypes';

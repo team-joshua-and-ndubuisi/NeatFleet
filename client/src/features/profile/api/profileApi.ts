@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api';
-import { ProfileT } from '@/features/profile/types/';
+import { ProfileT } from '@/features/profile';
 
 const url = '/auth/profile';
 
