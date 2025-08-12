@@ -68,6 +68,20 @@ const addressValidator = [
     .withMessage('isPrimary must be a boolean'),
 ];
 
+const invoiceValidator = [
+  body('cost')
+    .isNumeric()
+    .withMessage('Cost must be a number')
+    .custom(value => value >= 0)
+    .withMessage('Cost must be non-negative'),
+
+  body('tax_percent')
+    .isNumeric()
+    .withMessage('Tax percent must be a number')
+    .custom(value => value >= 0)
+    .withMessage('Tax percent must be non-negative'),
+];
+
 const checkValidations = async (
   req: Request,
   res: Response,
@@ -104,4 +118,5 @@ export {
   titleValidator,
   userIdValidator,
   addressValidator,
+  invoiceValidator,
 };
