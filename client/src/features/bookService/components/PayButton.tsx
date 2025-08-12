@@ -43,7 +43,7 @@ const PayButton = () => {
         user_id: user?.id,
         service_id: formData?.service?.id,
         technician_id: formData?.technician?.id,
-        service_date: formData.date ? formData.date.toISOString().split('T')[0] : null, //&& formatDate(formData?.date),
+        service_date: formData.date, //&& formatDate(formData?.date),
         time_block: formData?.timeSlot,
         address_street: formData?.address,
         address_city: formData?.city,
@@ -60,7 +60,7 @@ const PayButton = () => {
 
       // Navigate with bookingData so success page can use it without re-fetching
       //create the route with the booking ID in the url as parameters -> that way when we have booking/:booking_id/success page now we can use that booking_id to fetch that booking (this is how we will get the data for the invoice)
-      navigate(`/service-catalog/booking/${bookingResponce.id}/success`);
+      navigate(`/book-service/booking/${bookingResponce.id}/success`);
     }
 
     setLoading(false);

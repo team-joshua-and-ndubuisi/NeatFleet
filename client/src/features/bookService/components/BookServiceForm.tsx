@@ -21,7 +21,7 @@ import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
 import { PayButton } from '@/features/bookService';
-import { formatDate } from '@/lib/utils';
+import { formatDate, stringifyDate } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
@@ -90,6 +90,12 @@ const ServiceBookingForm: React.FC = () => {
     isLoading: areTimesLoading,
     error: timesError,
   } = useFetchAvailableTimes(formData.service?.id, formData.date);
+
+  useEffect(() => {
+    if (timesError) {
+      console.log(timesError);
+    }
+  }, [timesError]);
 
   const {
     data: technicians,
@@ -279,8 +285,12 @@ const ServiceBookingForm: React.FC = () => {
             <DatePicker
               showIcon
               includeDates={availableDates?.map(formatDate)}
-              selected={formData.date}
-              onChange={date => handleChange('date', date)}
+              selected={formData.date ? formatDate(formData?.date) : null}
+              onChange={date => {
+                if (date) {
+                  handleChange('date', stringifyDate(date));
+                }
+              }}
               className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
               placeholderText='Pick a date'
               minDate={new Date()}

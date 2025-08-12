@@ -5,7 +5,7 @@ import { Address, City, State, Apartment, Zipcode } from '@/features/bookService
 
 export interface FormData {
   service: Service | null;
-  date: Date | null;
+  date: string | null;
   timeSlot: TimeSlot | null;
   technician: Technician | null;
   address: Address | null;
