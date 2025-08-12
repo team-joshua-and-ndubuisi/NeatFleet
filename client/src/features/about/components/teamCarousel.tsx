@@ -199,7 +199,7 @@ export default function TeamCarousel() {
                           <Badge
                             key={skill}
                             variant='secondary'
-                            className='text-xs text-white border-2'
+                            className='text-xs text-white border-2 bg-blue-500'
                           >
                             {skill}
                           </Badge>
