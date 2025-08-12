@@ -30,7 +30,7 @@ const AppRoutes: React.FC = () => {
             <Route path='/home' element={<Navigate to='/' />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
-            <Route path='/service-catalog'>
+            <Route path='/book-service'>
               <Route index element={<ServiceCatalogPage />} />
               <Route path='booking/:booking_id/success' element={<BookingSuccessPage />} />
               <Route path='book-technician' element={<TechSelectionPage />} />
