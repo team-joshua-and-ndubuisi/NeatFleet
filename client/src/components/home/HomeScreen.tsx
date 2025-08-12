@@ -1,8 +1,8 @@
-import BusinessInfoCard from './BusinessInfoCard';
-import homeInfoCards from '@/data/homeInfoCards';
+
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AboutSection from './AboutSection';
+import Location from './Location';
 import Services from './Services';
 import Footer from '@/components/Footer';
 
@@ -29,14 +29,17 @@ const HomeScreen = () => {
       <div>
         <Services />
       </div>
+      <div>
+        <Location/>
+      </div>
       {/* Company Information Section */}
-      <div className='flex-[.25] flex flex-col justify-center bg-neutral-100 px-4 py-8'>
-        <div className='grid grid-cols-1 sm:grid-cols-3 gap-6 text-center'>
+      {/* <div className='flex-[.25] flex flex-col bg-neutral-100 px-4 py-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-3 gap-6 text-center '>
           {homeInfoCards.map((card, i) => (
-            <BusinessInfoCard key={i} title={card.title} lines={card.lines} />
+           i!=1 && <BusinessInfoCard key={i} title={card.title} lines={card.lines} />
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Social Media Footer */}
       <Footer />
