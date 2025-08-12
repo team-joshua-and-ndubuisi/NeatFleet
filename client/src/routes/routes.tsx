@@ -18,6 +18,7 @@ const ManageTechniciansPage = lazy(() => import('@/pages/ManageTechniciansPage')
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const ManageAvailabilityPage = lazy(() => import('@/pages/technician/ManageAvailabilityPage'));
+const BookingSuccessPage = lazy(() => import('@/pages/BookingSuccessPage'));
 
 const AppRoutes: React.FC = () => {
   return (
@@ -29,8 +30,9 @@ const AppRoutes: React.FC = () => {
             <Route path='/home' element={<Navigate to='/' />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
-            <Route path='/service-catalog'>
+            <Route path='/book-service'>
               <Route index element={<ServiceCatalogPage />} />
+              <Route path='booking/:booking_id/success' element={<BookingSuccessPage />} />
               <Route path='book-technician' element={<TechSelectionPage />} />
               <Route path='booking-tech'>
                 <Route path=':id' element={<ScheduleServicePage />} />

@@ -3,10 +3,10 @@ import { fetchAvailableTimes } from '@/features/bookService';
 
 export const useFetchAvailableTimes = (
   serviceId: string | null | undefined,
-  date: Date | null | undefined
+  date: string | null | undefined
 ) => {
   return useQuery({
-    queryKey: ['availableTimes', serviceId, date?.toISOString()],
+    queryKey: ['availableTimes', serviceId, date],
     queryFn: () => fetchAvailableTimes(serviceId, date),
     enabled: !!serviceId && !!date,
   });

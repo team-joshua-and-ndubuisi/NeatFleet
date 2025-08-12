@@ -5,18 +5,16 @@ const url = '/availabilities/service';
 
 export const fetchAvailableTechnicians = async (
   serviceId: string | null | undefined,
-  date: Date | null | undefined,
+  date: string | null | undefined,
   time: string | null | undefined
 ): Promise<Technician[]> => {
   if (!serviceId || !date || !time) {
     throw new Error('Service ID, date, and time are required');
   }
 
-  const formattedDate = date.toISOString().split('T')[0];
-
   const response = await axiosInstance.get<{ technicians: Technician[] }>(`${url}/${serviceId}`, {
     params: {
-      date: formattedDate,
+      date,
       time_block: time,
     },
   });

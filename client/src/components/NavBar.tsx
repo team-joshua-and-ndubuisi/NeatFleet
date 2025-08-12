@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { NavItemType } from '@/types';
 import { cn } from '@/lib/utils';
+import { SoapDispenserDroplet } from 'lucide-react';
 
 interface NavBarProps {
   heading?: string;
@@ -45,7 +46,10 @@ const NavBar: React.FC<NavBarProps> = ({ heading, navItems }) => {
   return (
     <nav className='bg-blue-500 text-primary-foreground shadow-md'>
       <div className='flex justify-between items-center px-6 py-4'>
-        <h1 className='text-2xl md:text-4xl font-bold'>{heading}</h1>
+        <div className='flex items-center space-x-2'>
+          <SoapDispenserDroplet className='h-8 w-8' />
+          <h1 className='text-2xl md:text-4xl font-bold'>{heading}</h1>
+        </div>
 
         {/* Desktop Navigation */}
         <div className='hidden md:block'>
@@ -67,7 +71,10 @@ const NavBar: React.FC<NavBarProps> = ({ heading, navItems }) => {
             </SheetTrigger>
             <SheetContent side='right' className='w-[300px] sm:w-[400px]'>
               <SheetHeader>
-                <SheetTitle className='text-left'>{heading}</SheetTitle>
+                <SheetTitle className='flex items-center space-x-2 text-left'>
+                  <SoapDispenserDroplet />
+                  <span>{heading}</span>
+                </SheetTitle>
               </SheetHeader>
               <div className='mt-6'>
                 <NavItems mobile />
