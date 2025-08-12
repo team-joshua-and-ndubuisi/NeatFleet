@@ -12,17 +12,21 @@ const PayButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  const { user, token } = useAuthStore();
   const { formData, reset } = useServiceFormStore();
 
   const handleClick = async () => {
-    setLoading(true);
-    setError(null);
+    if (!token) {
+      setError('You must be logged in to make reserve an appointment and pay');
+    }
 
     if (!stripe || !elements) {
       throw new Error('Stripe payment intent not found');
       return;
     }
+
+    setLoading(true);
+    setError(null);
 
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
@@ -62,12 +66,14 @@ const PayButton = () => {
     setLoading(false);
   };
 
+  if (!user) return null;
+
   return (
     <div>
       <button
         disabled={loading}
         onClick={handleClick}
-        className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8'
+        className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8 cursor-pointer'
       >
         {loading ? 'Processing…' : 'Reserve & Pay'}
       </button>

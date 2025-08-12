@@ -22,6 +22,7 @@ import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
 import { PayButton } from '@/features/bookService';
 import { formatDate } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
@@ -66,11 +67,11 @@ interface ValidationErrors {
 const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
   const [errors, setErrors] = React.useState<ValidationErrors>({});
-
+  const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isCreatingIntent, setIsCreatingIntent] = useState(false);
 
-  const { user } = useAuthStore();
+  const { user, token } = useAuthStore();
 
   const {
     data: services,
@@ -105,6 +106,12 @@ const ServiceBookingForm: React.FC = () => {
   }, [formData]);
 
   useEffect(() => {
+    //if no user is logged in (no token created) do not call Stripe API
+    if (!token) {
+      setClientSecret(null);
+      return;
+    }
+
     const shouldCreateIntent = !!(
       formData.address &&
       formData.city &&
@@ -112,6 +119,7 @@ const ServiceBookingForm: React.FC = () => {
       formData.zipcode &&
       formData.service
     );
+
     if (!shouldCreateIntent) {
       setClientSecret(null);
       return;
@@ -129,7 +137,7 @@ const ServiceBookingForm: React.FC = () => {
           service_id: formData?.service?.id,
           technician_id: formData?.technician?.id,
         });
-        console.log(resp.data);
+        // console.log(resp.data);
         setClientSecret(resp.data.clientSecret);
       } catch (err) {
         console.error('Failed to create payment intent', err);
@@ -148,6 +156,7 @@ const ServiceBookingForm: React.FC = () => {
     formData.service,
     formData.technician,
     user,
+    token,
   ]);
 
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
@@ -459,15 +468,35 @@ const ServiceBookingForm: React.FC = () => {
 
       {/* Payment section */}
       {isCreatingIntent && <div className='text-sm text-muted'>Preparing payment...</div>}
-      {formData.address && formData.city && formData.state && formData.zipcode && clientSecret && (
-        <div>
-          <HorizontalLine />
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <PaymentElement />
-            <PayButton />
-          </Elements>
-        </div>
-      )}
+
+      {formData.timeSlot &&
+        formData.address &&
+        formData.city &&
+        formData.state &&
+        formData.zipcode && (
+          <div>
+            <HorizontalLine />
+            {!token ? (
+              <div className='mt-4'>
+                <button
+                  type='button'
+                  onClick={() => navigate('/login')}
+                  className='w-full py-3 px-4 bg-secondary-500 text-white rounded-lg hover:bg-primary-600 transition cursor-pointer mt-8'
+                >
+                  Sign in to Reserve & Pay
+                </button>
+              </div>
+            ) : (
+              clientSecret &&
+              token && (
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <PaymentElement />
+                  <PayButton />
+                </Elements>
+              )
+            )}
+          </div>
+        )}
     </form>
   );
 };
