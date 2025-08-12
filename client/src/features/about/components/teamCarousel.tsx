@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Mail, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const teamMembers = [
@@ -16,7 +16,7 @@ const teamMembers = [
     avatar:
       'https://media.licdn.com/dms/image/v2/D4E03AQFnIcDh9KmVVg/profile-displayphoto-shrink_800_800/B4EZYSiqWNHgAc-/0/1744067798913?e=1758153600&v=beta&t=2CGmVIZkvjJUUi6R0hCuwMUpj2rUmG2WIr0nF6h67Mk',
     skills: [
-      'Software Engineer',
+      'Full Stack Developer',
       'TypeScript',
       'React',
       'Node.js',
@@ -47,7 +47,7 @@ const teamMembers = [
   {
     id: 4,
     name: 'Justin Cloud',
-    role: 'Backend Engineer',
+    role: 'Full Stack Developer',
     avatar:
       'https://media.licdn.com/dms/image/v2/C4D03AQFM-NR9v3Avsg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1647979704590?e=1758153600&v=beta&t=psMCUxykULlWh0WiYR2SALhSJlJfa6TELu096V0noeI',
     location: 'Greater Seattle Area',
@@ -67,7 +67,7 @@ const teamMembers = [
   {
     id: 6,
     name: 'Max Campos',
-    role: 'Backend Engineer',
+    role: 'Full Stack Developer',
     location: 'Madrid, Community of Madrid, Spain',
     // email: 'alex@company.com',
     avatar:
@@ -77,7 +77,7 @@ const teamMembers = [
   {
     id: 7,
     name: 'Andrew Smith',
-    role: 'Backend Developer',
+    role: 'Full Stack Developer',
     location: 'Woburn, MA',
     // email: 'emily@company.com',
     avatar:
@@ -199,7 +199,7 @@ export default function TeamCarousel() {
                           <Badge
                             key={skill}
                             variant='secondary'
-                            className='text-xs text-white border-2 bg-blue-500'
+                            className='text-xs text-white border-2 bg-primary-600'
                           >
                             {skill}
                           </Badge>
