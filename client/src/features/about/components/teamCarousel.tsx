@@ -29,7 +29,7 @@ const teamMembers = [
     name: 'Jesus Mendoza',
     role: 'Full Stack Developer',
     location: 'Fort Worth, TX',
-    // email: 'jesus.doza@gmail.com',
+    // email: 'sdafasd..com',
     avatar:
       'https://media.licdn.com/dms/image/v2/C5603AQG-Q4XodRXnRA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1652397815554?e=1758153600&v=beta&t=Q70eliRVgiK2gS5ZndBPu1QBGeOFJ1HWObdW_yIH8iA',
     skills: ['Software Engineer', 'TypeScript', 'React', 'Node.js', 'Cypress', 'Node'],
@@ -196,7 +196,11 @@ export default function TeamCarousel() {
                       <p className='text-xs font-medium text-muted-foreground mb-1'>Skills</p>
                       <div className='flex flex-wrap gap-1 justify-center'>
                         {member.skills.slice(0, 3).map(skill => (
-                          <Badge key={skill} variant='secondary' className='text-xs'>
+                          <Badge
+                            key={skill}
+                            variant='secondary'
+                            className='text-xs text-white border-2'
+                          >
                             {skill}
                           </Badge>
                         ))}
@@ -215,10 +219,10 @@ export default function TeamCarousel() {
                       <p className='text-xs text-center'>{member.achievements[0]}</p>
                     </div> */}
 
-                    <div className='flex items-center gap-1 text-xs text-muted-foreground'>
+                    {/* <div className='flex items-center gap-1 text-xs text-muted-foreground'>
                       <Mail className='w-3 h-3' />
                       <span>{member.email}</span>
-                    </div>
+                    </div> */}
                   </div>
                 </CardContent>
               </Card>
