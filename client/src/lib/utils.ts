@@ -24,6 +24,11 @@ export function formatDate(date: string) {
   return correctDate;
 }
 
+export function stringifyDate(date: Date) {
+  const stringDate = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() + 1 < 10 ? `0${date.getDate()}` : date.getDate()}`;
+  return stringDate;
+}
+
 export function capitalizeFirstLetter(word: string) {
   return word.slice(0, 1).toUpperCase() + word.slice(1);
 }
