@@ -32,7 +32,6 @@ export default function AvailableDayPicker({ clickCallback }: AvailableDayPicker
       <Calendar
         mode='multiple'
         onDayClick={day => {
-          console.log('day', day);
           if (clickCallback) {
             clickCallback(day);
           }

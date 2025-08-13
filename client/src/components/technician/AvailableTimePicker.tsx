@@ -7,35 +7,34 @@ interface SelectionsI {
 }
 
 type AvailableTimePickerPropT = {
-  selections?: SelectionsI[];
-  // range?: { start: Date; end: Date };
+  selections?: SelectionsI[]; //options user can select
   clickCallback?: (time: string) => void;
+  editAll?: boolean;
 };
 
 export default function AvailableTimePicker({
   clickCallback,
   selections = [],
+  editAll,
 }: AvailableTimePickerPropT) {
-  //if timeslots provided use them from props
+  //ui buttons for user to select time slots
   let timeSelections: JSX.Element[] = [];
 
-  const selectedTimes = selections.filter(slot => slot.isSelected).map(slot => slot.value);
+  //filter by seleted items then return string array of the values to set as seleted in ui
+  const filteredSelections = selections.filter(slot => slot.isSelected);
 
-  // useEffect(() => {
-  //   setSelectedTimes(() => selections.filter(slot => slot.isSelected).map(slot => slot.value));
-  // }, [selections]);
-
-  //if range provided then create the timeslots for the range
-  // if (range) {
-  //   const timeSlotsForRange = createTimeSelectionFromRange(range.start, range.end);
-  //   timeSelections = timeSlotsForRange.map(time => {
-  //     return timeSelectionButton(time, clickCallback);
-  //   });
-  // }
+  //set up selected options by getting values for component to use
+  const selectedTimes =
+    filteredSelections.length > 0
+      ? filteredSelections.map(slot => slot.value)
+      : editAll
+        ? undefined
+        : [];
 
   timeSelections = selections.map(slot => {
     return (
       <ToggleGroupItem
+        key={slot.value}
         onClick={() => {
           if (clickCallback) clickCallback(slot.value);
         }}
@@ -48,19 +47,13 @@ export default function AvailableTimePicker({
     );
   });
 
-  // const selectedTimes: string[] = selections
-  //   .filter(slot => slot.isSelected)
-  //   .map(slot => slot.value);
-
-  console.log('selectedTimes', selectedTimes);
-
   return (
     <div className=''>
       <ToggleGroup
         variant='outline'
         type='multiple'
         className='columns-3 w-11/12 mx-auto'
-        value={selectedTimes.length > 0 ? selectedTimes : []}
+        value={selectedTimes}
       >
         {timeSelections}
       </ToggleGroup>

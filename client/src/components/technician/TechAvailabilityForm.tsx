@@ -62,7 +62,6 @@ export default function TechAvailabilityForm() {
   };
 
   const handleDayClick = (day: Date) => {
-    console.log('Selected day:', day.getTime());
     setSchedule(prev => {
       if (prev.length === 0) {
         return [{ date: day, timeBlocks: [] }];
@@ -110,13 +109,15 @@ export default function TechAvailabilityForm() {
           <AvailableDayPicker clickCallback={handleDayClick} />
         </section>
 
+        {/* displays selected days and can togle single selection to edit  */}
         <section className='flex items-center justify-center'>
           <div className='bg-accent p-2 rounded-2xl'>
             <EditDay
               onSelected={handleDayToEdit}
               selections={schedule.map(scheduleForDay => scheduleForDay.date)}
             />
-            {dayToEdit && <div>{dayToEdit.toLocaleDateString()}</div>}
+            {dayToEdit && <div>Editing: {dayToEdit.toLocaleDateString()} only</div>}
+            {!dayToEdit && <div>Editing: All</div>}
           </div>
         </section>
 
@@ -124,6 +125,7 @@ export default function TechAvailabilityForm() {
           <h3 className='font-bold'>Select time available</h3>
 
           <AvailableTimePicker
+            editAll={!dayToEdit}
             clickCallback={handleTimeClick}
             selections={AvailableTimePickerOptions}
           />
@@ -139,6 +141,7 @@ export default function TechAvailabilityForm() {
   );
 }
 
+//set the time selections as selected if day is being edited or return default options
 function getAvailableTimePickerOptions(dayToEdit: Date | null, schedule: DaySchedule[]) {
   const options = [
     { option: 'Morning', isSelected: false, value: 'morning' },
@@ -146,21 +149,22 @@ function getAvailableTimePickerOptions(dayToEdit: Date | null, schedule: DaySche
     { option: 'Evening', isSelected: false, value: 'evening' },
   ];
 
+  //return default options
   if (!dayToEdit) return options;
 
+  //find schedule for day
   const daySchedule = schedule.find(day => day.date.getTime() === dayToEdit.getTime());
+
+  //no schedule found for day return default options
   if (!daySchedule) return options;
 
-  console.log('daySchedule found', daySchedule);
-
+  //update schedule of day found
   const updatedOptions = options.map(option => {
     if (daySchedule.timeBlocks.includes(option.value)) {
       return { ...option, isSelected: true };
     }
     return option;
   });
-
-  console.log('updatedOptions', updatedOptions);
 
   return updatedOptions;
 }
