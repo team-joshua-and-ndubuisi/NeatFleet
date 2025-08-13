@@ -8,19 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useProfileStore } from '@/features/profile';
 
 interface UpcomingBookingsTable {
   upcomingBookings: BookingT[];
 }
 
 const UpcomingBookingsTable: React.FC<UpcomingBookingsTable> = ({ upcomingBookings }) => {
+  const { profile } = useProfileStore();
+  console.log(profile);
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className='w-[100px]'>Service</TableHead>
           <TableHead>Date</TableHead>
-          <TableHead>Customer</TableHead>
+          <TableHead>{profile?.role === 'customer' ? 'Technician' : 'Customer'}</TableHead>
           <TableHead className='text-right'>Status</TableHead>
         </TableRow>
       </TableHeader>
@@ -30,7 +33,9 @@ const UpcomingBookingsTable: React.FC<UpcomingBookingsTable> = ({ upcomingBookin
             <TableRow key={booking.booking_id}>
               <TableCell className='font-medium'>{booking.service_name}</TableCell>
               <TableCell>{booking.date}</TableCell>
-              <TableCell>{booking.client_name}</TableCell>
+              <TableCell>
+                {profile?.role === 'customer' ? booking.technician_name : booking.client_name}
+              </TableCell>
               <TableCell className='text-right'>{booking.status}</TableCell>
             </TableRow>
           ))}
