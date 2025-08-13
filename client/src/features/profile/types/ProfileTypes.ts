@@ -1,6 +1,7 @@
 export interface BookingT {
   booking_id: string;
-  client_name: string;
+  client_name?: string;
+  technician_name?: string;
   date: string;
   rating_comment: string;
   rating_score: number;
