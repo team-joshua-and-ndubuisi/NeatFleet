@@ -1,10 +1,8 @@
 //UI for the User to see the progress of the service
 import { ServiceStatusCode, serviceStatusLabels } from '../types/ServiceStatus';
 import React from 'react';
-interface BookingProps {
-  bookingId: string;
-  status: string;
-}
+import {BookingProps} from '@/features/statusUpdate'
+
 const ProgressBar: React.FC<BookingProps> = ({ status }) => {
   const statuses = Object.entries(serviceStatusLabels)
     .filter(([key, label]) => label != 'Cancelled' && key != '100')

@@ -47,7 +47,7 @@ const AppRoutes: React.FC = () => {
             <Route element={<AuthGuard />}>
               <Route path='/profile'>
                 <Route index element={<ProfilePage />} />
-                <Route path='status' element={<StatusPage />} />
+                <Route path='status/:bookingId' element={<StatusPage />} />
                 <Route path='rating' element={<RatingPage />} />
                 <Route path='manage-services' element={<ManageServicesPage />} />
                 <Route path='manage-technicians' element={<ManageTechniciansPage />} />

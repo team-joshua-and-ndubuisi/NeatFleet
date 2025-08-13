@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ServiceStatusCode, serviceStatusLabels } from '../types/ServiceStatus';
 import { Button } from '@/components/ui/button';
 import { useUpdateStatus } from '@/features/statusUpdate';
-// import LoadingComponent from "@/components/LoadingIndicator"
-// import ErrorComponent from "@/components/ErrorComponent"
-interface BookingProps {
-  bookingId: string;
-  data: string;
-}
+import {BookingProps} from '@/features/statusUpdate'
+
 
 const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
   const updateStatusMutation = useUpdateStatus();

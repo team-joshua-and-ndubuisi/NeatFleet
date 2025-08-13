@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { NavLink } from 'react-router-dom'
 
 interface UpcomingBookingsTable {
   upcomingBookings: BookingT[];
@@ -31,7 +32,9 @@ const UpcomingBookingsTable: React.FC<UpcomingBookingsTable> = ({ upcomingBookin
               <TableCell className='font-medium'>{booking.service_name}</TableCell>
               <TableCell>{booking.date}</TableCell>
               <TableCell>{booking.client_name}</TableCell>
-              <TableCell className='text-right'>{booking.status}</TableCell>
+              <NavLink to={`status/${booking.booking_id}`}>
+                <TableCell className='text-right'>{booking.status}</TableCell>
+              </NavLink>
             </TableRow>
           ))}
       </TableBody>
