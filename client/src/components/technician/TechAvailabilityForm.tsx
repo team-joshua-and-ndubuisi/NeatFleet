@@ -140,8 +140,6 @@ export default function TechAvailabilityForm() {
 }
 
 function getAvailableTimePickerOptions(dayToEdit: Date | null, schedule: DaySchedule[]) {
-  // console.log('dayToEdit', dayToEdit);
-  // console.log('schedule', schedule);
   const options = [
     { option: 'Morning', isSelected: false, value: 'morning' },
     { option: 'Afternoon', isSelected: false, value: 'afternoon' },
