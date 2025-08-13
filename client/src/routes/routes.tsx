@@ -4,7 +4,7 @@ import { MainLayout } from '@/layouts';
 import LoadingPage from '@/pages/LoadingPage';
 import HomePage from '@/pages/HomePage';
 import AboutPage from '@/pages/AboutPage';
-import { AuthGuard, GuestGuard } from '@/features/auth';
+import { AuthGuard } from '@/features/auth';
 
 const SignupPage = lazy(() => import('@/pages/SignupPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
@@ -31,10 +31,8 @@ const AppRoutes: React.FC = () => {
             <Route index element={<HomePage />} />
             <Route path='/about' element={<AboutPage />} />
             <Route path='/home' element={<Navigate to='/' />} />
-            <Route element={<GuestGuard />}>
-              <Route path='/login' element={<LoginPage />} />
-              <Route path='/signup' element={<SignupPage />} />
-            </Route>
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup' element={<SignupPage />} />
             <Route path='/book-service'>
               <Route index element={<ServiceCatalogPage />} />
               <Route path='booking/:booking_id/success' element={<BookingSuccessPage />} />
