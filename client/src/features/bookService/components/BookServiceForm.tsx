@@ -22,7 +22,7 @@ import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
 import { PayButton } from '@/features/bookService';
 import { formatDate, stringifyDate } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
@@ -70,7 +70,7 @@ const ServiceBookingForm: React.FC = () => {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isCreatingIntent, setIsCreatingIntent] = useState(false);
-
+  const location = useLocation();
   const { user, token } = useAuthStore();
 
   const {
@@ -490,7 +490,7 @@ const ServiceBookingForm: React.FC = () => {
               <div className='mt-4'>
                 <button
                   type='button'
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/login', { state: { from: location } })}
                   className='w-full py-3 px-4 bg-secondary-500 text-white rounded-lg hover:bg-primary-600 transition cursor-pointer mt-8'
                 >
                   Sign in to Reserve & Pay
