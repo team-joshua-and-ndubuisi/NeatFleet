@@ -9,6 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useProfileStore } from '@/features/profile';
+import { Link} from 'react-router-dom'
 
 interface UpcomingBookingsTable {
   upcomingBookings: BookingT[];
@@ -36,7 +37,11 @@ const UpcomingBookingsTable: React.FC<UpcomingBookingsTable> = ({ upcomingBookin
               <TableCell>
                 {profile?.role === 'customer' ? booking.technician_name : booking.client_name}
               </TableCell>
-              <TableCell className='text-right'>{booking.status}</TableCell>
+              <TableCell className='text-right'>
+                <Link to ={`status/${booking.booking_id}`}>
+                {booking.status}
+               </Link>
+                </TableCell>
             </TableRow>
           ))}
       </TableBody>
