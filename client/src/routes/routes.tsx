@@ -14,7 +14,6 @@ const ScheduleServicePage = lazy(() => import('@/pages/ScheduleServicePage'));
 const CartPaymentPage = lazy(() => import('@/pages/CartPaymentPage'));
 const StatusPage = lazy(() => import('@/pages/StatusPage'));
 const RatingPage = lazy(() => import('@/pages/RatingPage'));
-const ManageServicesPage = lazy(() => import('@/pages/ManageServicesPage'));
 const ManageTechniciansPage = lazy(() => import('@/pages/ManageTechniciansPage'));
 // const ManageSchedulePage = lazy(() => import('@/pages/ManageSchedulePage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
@@ -49,7 +48,6 @@ const AppRoutes: React.FC = () => {
                 <Route index element={<ProfilePage />} />
                 <Route path='status' element={<StatusPage />} />
                 <Route path='rating' element={<RatingPage />} />
-                <Route path='manage-services' element={<ManageServicesPage />} />
                 <Route path='manage-technicians' element={<ManageTechniciansPage />} />
                 <Route path='/profile' element={<ProfilePage />} />
                 <Route path='manage-availability' element={<ManageAvailabilityPage />} />
