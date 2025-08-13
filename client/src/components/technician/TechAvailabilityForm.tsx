@@ -86,7 +86,7 @@ export default function TechAvailabilityForm() {
       .filter(day => day.timeBlock.length > 0);
 
     //TODO format should be different
-    const formatSchedule: any[] = [];
+    const formatSchedule: { availableDate: string; timeBlock: string }[] = [];
 
     for (const day of scheduledDays) {
       day.timeBlock.forEach(time => {
