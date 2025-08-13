@@ -8,10 +8,10 @@ import {BookingProps} from '@/features/statusUpdate'
 const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
   const updateStatusMutation = useUpdateStatus();
   const [errors, setErrors] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('');//current of the booking
   //converting enum status to number
-  const [currentStatusValue, setCurrentStatusValue] = useState(ServiceStatusCode[data as keyof typeof ServiceStatusCode])
-    
+  const [currentStatusValue, setCurrentStatusValue] = useState(ServiceStatusCode[data as keyof typeof ServiceStatusCode])//next status that is being click
+
 
     useEffect(() => {
       if (updateStatusMutation.isSuccess && status) {
@@ -60,7 +60,6 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
       });
       return setErrors('Error updating status. Please reload page.');
     }
-
     setErrors('');
     if (nextStatusValue == currentStatusValue) {
       setErrors(`Already up-to-date`);
