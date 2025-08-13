@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { MainLayout } from '@/layouts';
 import LoadingPage from '@/pages/LoadingPage';
 import HomePage from '@/pages/HomePage';
+import AboutPage from '@/pages/AboutPage';
 import { AuthGuard } from '@/features/auth';
 
 const SignupPage = lazy(() => import('@/pages/SignupPage'));
