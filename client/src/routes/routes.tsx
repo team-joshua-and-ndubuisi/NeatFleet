@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { MainLayout } from '@/layouts';
 import LoadingPage from '@/pages/LoadingPage';
 import HomePage from '@/pages/HomePage';
+import AboutPage from '@/pages/AboutPage';
 import { AuthGuard, GuestGuard } from '@/features/auth';
 
 const SignupPage = lazy(() => import('@/pages/SignupPage'));
@@ -28,6 +29,7 @@ const AppRoutes: React.FC = () => {
         <Routes>
           <Route path='/' element={<MainLayout />}>
             <Route index element={<HomePage />} />
+            <Route path='/about' element={<AboutPage />} />
             <Route path='/home' element={<Navigate to='/' />} />
             <Route element={<GuestGuard />}>
               <Route path='/login' element={<LoginPage />} />
