@@ -1,68 +1,78 @@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
-type TimeSlotT = {
-  date: Date;
-};
+interface SelectionsI {
+  option: string;
+  isSelected: boolean;
+  value: string;
+}
 
 type AvailableTimePickerPropT = {
-  timeSlots?: TimeSlotT[];
-  range?: { start: Date; end: Date };
-  clickCallback?: (time: Date) => void;
+  selections?: SelectionsI[];
+  // range?: { start: Date; end: Date };
+  clickCallback?: (time: string) => void;
 };
 
-export default function AvailableTimePicker({ range, clickCallback }: AvailableTimePickerPropT) {
+export default function AvailableTimePicker({
+  clickCallback,
+  selections = [],
+}: AvailableTimePickerPropT) {
   //if timeslots provided use them from props
   let timeSelections: JSX.Element[] = [];
 
   //if range provided then create the timeslots for the range
-  if (range) {
-    const timeSlotsForRange = createTimeSelectionFromRange(range.start, range.end);
-    timeSelections = timeSlotsForRange.map(time => {
-      return timeSelectionButton(time, clickCallback);
-    });
-  }
+  // if (range) {
+  //   const timeSlotsForRange = createTimeSelectionFromRange(range.start, range.end);
+  //   timeSelections = timeSlotsForRange.map(time => {
+  //     return timeSelectionButton(time, clickCallback);
+  //   });
+  // }
 
-  return <div className='columns-3 w-11/12 mx-auto'>{timeSelections}</div>;
-}
-
-//generate the JSX for the date passed in
-function timeSelectionButton(time: Date, callback?: (time: Date) => void) {
-  const timeString = time.toLocaleTimeString();
-  time.setMinutes(0);
-
-  const hour = timeString.split(':').slice(0, 2).join(':');
-  const amPm = timeString.split(' ')[1];
-
-  return (
-    <ToggleGroup key={time.toUTCString()} variant='outline' type='multiple' className='w-full'>
+  timeSelections = selections.map(slot => {
+    return (
       <ToggleGroupItem
         onClick={() => {
-          if (callback) callback(time);
+          if (clickCallback) clickCallback(slot.value);
         }}
-        value={hour}
+        value={slot.value}
         aria-label='Toggle'
+        className='border-3'
       >
-        <span>{hour}</span>
-        <span>{amPm}</span>
+        <span>{slot.option}</span>
       </ToggleGroupItem>
-    </ToggleGroup>
+    );
+  });
+
+  const selectedTimes: SelectionsI[] = selections.filter(slot => slot.isSelected) || [];
+
+  console.log('selectedTimes', selectedTimes);
+
+  return (
+    <div className=''>
+      <ToggleGroup
+        variant='outline'
+        type='multiple'
+        className='columns-3 w-11/12 mx-auto'
+        defaultValue={selectedTimes.map(slot => slot.value)}
+      >
+        {timeSelections}
+      </ToggleGroup>
+    </div>
   );
 }
 
-//create array of dates for start and end range one hour apart
-function createTimeSelectionFromRange(start: Date, end: Date) {
-  if (!start || !end) return [];
-
-  const currentDate = new Date(start);
-  currentDate.setMinutes(0);
-  const times: Date[] = [];
-
-  while (currentDate <= end) {
-    times.push(new Date(currentDate));
-
-    currentDate.setHours(currentDate.getHours() + 1);
-    currentDate.setMinutes(0);
-  }
-
-  return times;
-}
+// //generate the JSX for the date passed in
+// function timeSelectionButton(time: string, callback?: (time: string) => void) {
+//   return (
+//     <ToggleGroup key={time} variant='outline' type='multiple' className='w-full'>
+//       <ToggleGroupItem
+//         onClick={() => {
+//           if (callback) callback(time);
+//         }}
+//         value={time}
+//         aria-label='Toggle'
+//       >
+//         <span>{time}</span>
+//       </ToggleGroupItem>
+//     </ToggleGroup>
+//   );
+// }
