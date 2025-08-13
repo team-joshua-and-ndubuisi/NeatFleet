@@ -37,7 +37,7 @@ const TechnicianLink: React.FC<TechnicianLinkProps> = ({ name, url }) => {
   return (
     <Link
       className='bg-blue-400 text-white p-4 rounded-md flex items-center justify-center text-center'
-      to={`/service-catalog/booking-tech/${url}`}
+      to={`/book-service/booking-tech/${url}`}
     >
       {name}
     </Link>

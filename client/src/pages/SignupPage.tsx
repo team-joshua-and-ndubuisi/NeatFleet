@@ -3,10 +3,16 @@ import SignupForm from '@/features/auth/components/SignupForm';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { SignupBodyT } from '@/features/auth';
 import { useAuthStore } from '@/features/auth/stores';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 export default function SignupPage() {
   const { signup } = useAuth();
   const initAuth = useAuthStore(state => state.initAuth);
   const { mutateAsync: signupMutate, data, isError, isPending, isSuccess } = signup;
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/profile';
 
   //when data resolves, initialize auth store
   useEffect(() => {
@@ -24,6 +30,7 @@ export default function SignupPage() {
 
   if (isSuccess && data) {
     console.log('data', data);
+    navigate(from, { replace: true });
   }
   if (isError) {
     console.error('Signup failed');

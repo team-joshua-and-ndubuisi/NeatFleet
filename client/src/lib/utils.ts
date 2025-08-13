@@ -17,3 +17,22 @@ export function createLocalPersistStore<T>(stateCreater: StateCreator<T>, storeN
     })
   );
 }
+
+export function formatDate(date: string) {
+  const [year, month, day] = date.split('-').map(Number);
+  const correctDate = new Date(year, month - 1, day);
+  return correctDate;
+}
+
+export function stringifyDate(date: Date) {
+  const stringDate = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() + 1 < 10 ? `0${date.getDate()}` : date.getDate()}`;
+  return stringDate;
+}
+
+export function capitalizeFirstLetter(word: string) {
+  return word.slice(0, 1).toUpperCase() + word.slice(1);
+}
+
+export function titleCase(words: string) {
+  return words.split(' ').map(capitalizeFirstLetter).join(' ');
+}
