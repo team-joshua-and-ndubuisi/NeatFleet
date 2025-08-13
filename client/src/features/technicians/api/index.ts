@@ -1,1 +1,1 @@
-export { fetchTechnicians } from './techniciansApi';
+export * from './techniciansApi';
