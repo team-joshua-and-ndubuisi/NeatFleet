@@ -32,15 +32,28 @@ export default function TechAvailabilityForm() {
     //no day selected then update all days
     if (!dayToEdit) {
       setSchedule(prev => {
-        const updated = prev.map(day => ({ ...day, timeBlocks: [...day.timeBlocks, time] }));
-        return updated;
+        const updatedSchedule = prev.map(day => {
+          //filter times out of day
+          const hasTime = day.timeBlocks.includes(time);
+          if (hasTime) {
+            return { ...day, timeBlocks: [...day.timeBlocks.filter(t => t !== time)] };
+          } else {
+            return { ...day, timeBlocks: [...day.timeBlocks, time] };
+          }
+        });
+        return updatedSchedule;
       });
     }
 
     setSchedule(prev => {
       const updated = prev.map(day => {
         if (day.date.getTime() === dayToEdit?.getTime()) {
-          return { ...day, timeBlocks: [...day.timeBlocks, time] };
+          const hasTime = day.timeBlocks.includes(time);
+          if (hasTime) {
+            return { ...day, timeBlocks: [...day.timeBlocks.filter(t => t !== time)] };
+          } else {
+            return { ...day, timeBlocks: [...day.timeBlocks, time] };
+          }
         }
         return day;
       });

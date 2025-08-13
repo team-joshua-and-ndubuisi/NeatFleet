@@ -19,6 +19,14 @@ export default function AvailableTimePicker({
   //if timeslots provided use them from props
   let timeSelections: JSX.Element[] = [];
 
+  const selectedTimes = selections
+    ? selections.filter(slot => slot.isSelected).map(slot => slot.value)
+    : undefined;
+
+  // useEffect(() => {
+  //   setSelectedTimes(() => selections.filter(slot => slot.isSelected).map(slot => slot.value));
+  // }, [selections]);
+
   //if range provided then create the timeslots for the range
   // if (range) {
   //   const timeSlotsForRange = createTimeSelectionFromRange(range.start, range.end);
@@ -42,7 +50,9 @@ export default function AvailableTimePicker({
     );
   });
 
-  const selectedTimes: SelectionsI[] = selections.filter(slot => slot.isSelected) || [];
+  // const selectedTimes: string[] = selections
+  //   .filter(slot => slot.isSelected)
+  //   .map(slot => slot.value);
 
   console.log('selectedTimes', selectedTimes);
 
@@ -52,7 +62,7 @@ export default function AvailableTimePicker({
         variant='outline'
         type='multiple'
         className='columns-3 w-11/12 mx-auto'
-        defaultValue={selectedTimes.map(slot => slot.value)}
+        value={selectedTimes.length > 0 ? selectedTimes : undefined}
       >
         {timeSelections}
       </ToggleGroup>
