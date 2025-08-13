@@ -44,7 +44,7 @@ const AppRoutes: React.FC = () => {
                 <Route path=':id/payment' element={<CartPaymentPage />} />
               </Route>
             </Route>
-            <Route element={<AuthGuard />}>
+            {/* <Route element={<AuthGuard />}> */}
               <Route path='/profile'>
                 <Route index element={<ProfilePage />} />
                 <Route path='status/:bookingId' element={<StatusPage />} />
@@ -54,7 +54,7 @@ const AppRoutes: React.FC = () => {
                 <Route path='/profile' element={<ProfilePage />} />
                 <Route path='manage-availability' element={<ManageAvailabilityPage />} />
               </Route>
-            </Route>
+            {/* </Route> */}
           </Route>
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
