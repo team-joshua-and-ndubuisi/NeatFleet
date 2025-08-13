@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { NavLink } from 'react-router-dom';
  const Location = () => {
-  return( 
+  return(
     <div className='px-5 text-sm/8 font-medium mt-20 bg-center bg-cover bg-[url(/images/background-design.svg)]'>
       <h2 className=" text-3xl font-bold text-center mb-5"> Location</h2>
       <p className="tracking-wide text-sm/8  text-center ">NeatFleet Home and Cleaning Solutions in Dallas offers top-notch cleaning services, delivering exceptional care to your home or office across the surrounding areas.
@@ -20,13 +20,13 @@ import { NavLink } from 'react-router-dom';
               <p className="text-muted-foreground">Email: contact@neatfleet.com<br/> Phone: (972) 456-7890</p>
             </div>
         </div>
-        <NavLink to={'/service-catalog'}>
+        <NavLink to={'/book-service'}>
           <Button className='bg-[#2DD4BF] my-10 p-5 mx-auto text-lg border-[#F9FAFB] sm:text-xl max-w-[1200px] cursor-pointer md:w-1/8'>
                 Book Now!
           </Button>
         </NavLink>
       </div>
-      
+
 
   </div>)
 };
