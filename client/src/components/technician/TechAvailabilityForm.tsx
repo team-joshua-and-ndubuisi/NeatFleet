@@ -3,6 +3,7 @@ import AvailableDayPicker from './AvailableDayPicker';
 import AvailableTimePicker from './AvailableTimePicker';
 import { Button } from '../ui';
 import EditDay from './EditDay';
+import LoadingIndicator from '../LoadingIndicator';
 
 interface DaySchedule {
   date: Date;
@@ -80,17 +81,15 @@ export default function TechAvailabilityForm() {
   const AvailableTimePickerOptions = getAvailableTimePickerOptions(dayToEdit, schedule);
 
   return (
-    <section>
+    <section className='relative'>
       <form action='' onSubmit={handleSubmit} className=''>
         <section>
           <h2 className='text-4xl'>Set Your Availability</h2>
         </section>
-
         <section className='border-2 border-gray-200 mb-4 pb-4'>
           <h3 className='font-bold'>Select days available</h3>
           <AvailableDayPicker clickCallback={handleDayClick} />
         </section>
-
         {/* displays selected days and can togle single selection to edit  */}
         <section className='flex items-center justify-center'>
           <div className='bg-accent p-2 rounded-2xl'>
@@ -102,7 +101,6 @@ export default function TechAvailabilityForm() {
             {!dayToEdit && <div>Editing: All</div>}
           </div>
         </section>
-
         <section>
           <h3 className='font-bold'>Select time available</h3>
 
@@ -112,12 +110,14 @@ export default function TechAvailabilityForm() {
             selections={AvailableTimePickerOptions}
           />
         </section>
-
         <section className='mt-4'>
           <Button type='submit'>Confirm availability</Button>
         </section>
 
-        <section></section>
+        {/* <section className=' flex justify-center items-center'>
+          <div className='absolute h-screen bg-gray-600 w-full opacity-70 top-0 z-50'></div>
+          <LoadingIndicator size='lg' />
+        </section> */}
       </form>
     </section>
   );
