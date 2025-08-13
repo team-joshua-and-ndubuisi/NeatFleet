@@ -9,7 +9,15 @@ export const fetchTechnicians = async (): Promise<Technician[]> => {
   return response.data;
 };
 
-export const updateAvailability = async (id: string, availability: TechnicianAvailabilityI[]) => {
-  const res = await axiosInstance.post(`${url}/${id}/availabilities`, availability);
+export const updateAvailability = async (
+  token: string,
+  id: string,
+  availability: TechnicianAvailabilityI[]
+) => {
+  const res = await axiosInstance.post(`${url}/${id}/availabilities`, availability, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data;
 };

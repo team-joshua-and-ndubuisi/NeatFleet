@@ -4,7 +4,12 @@ import { TechnicianAvailabilityI } from '../types/Technician';
 
 export const useUpdateTechAvailability = (userToken: string) => {
   return useMutation({
-    mutationFn: (availability: TechnicianAvailabilityI[]) =>
-      updateAvailability(userToken, availability),
+    mutationFn: async ({
+      availability,
+      userId,
+    }: {
+      availability: TechnicianAvailabilityI[];
+      userId: string;
+    }) => await updateAvailability(userToken, userId, availability),
   });
 };

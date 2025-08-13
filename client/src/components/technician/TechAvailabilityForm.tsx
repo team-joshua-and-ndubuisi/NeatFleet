@@ -3,6 +3,8 @@ import AvailableDayPicker from './AvailableDayPicker';
 import AvailableTimePicker from './AvailableTimePicker';
 import { Button } from '../ui';
 import EditDay from './EditDay';
+import { useAuthStore } from '@/features/auth';
+import { useUpdateTechAvailability } from '@/features/technicians/hooks/useUpdateTechAvailabilities';
 import LoadingIndicator from '../LoadingIndicator';
 
 interface DaySchedule {
@@ -12,6 +14,14 @@ interface DaySchedule {
 
 export default function TechAvailabilityForm() {
   const [schedule, setSchedule] = useState<DaySchedule[]>([]);
+  const userToken = useAuthStore(state => state.token);
+  const userId = useAuthStore(state => state.user.id);
+
+  const {
+    mutate: updateAvailability,
+    // isSuccess: updateAvailabilitySuccess,
+    isPending: updateAvailabilityPending,
+  } = useUpdateTechAvailability(userToken);
 
   const [dayToEdit, setDayToEdit] = useState<Date | null>(null);
 
@@ -70,12 +80,27 @@ export default function TechAvailabilityForm() {
 
     const scheduledDays = schedule
       .map(day => ({
-        availableDate: day.date,
+        availableDate: day.date.toLocaleDateString().split('/').reverse().join('-'), // Format date as YYYY-MM-DD
         timeBlock: day.timeBlocks,
       }))
       .filter(day => day.timeBlock.length > 0);
 
+    //TODO format should be different
+    const formatSchedule: any[] = [];
+
+    for (const day of scheduledDays) {
+      day.timeBlock.forEach(time => {
+        formatSchedule.push({
+          availableDate: day.availableDate,
+          timeBlock: time,
+        });
+      });
+    }
+
+    console.log('formatSchedule', formatSchedule);
+
     console.log('Schedule submitted:', scheduledDays);
+    updateAvailability({ availability: scheduledDays, userId });
   };
 
   const AvailableTimePickerOptions = getAvailableTimePickerOptions(dayToEdit, schedule);
@@ -114,10 +139,12 @@ export default function TechAvailabilityForm() {
           <Button type='submit'>Confirm availability</Button>
         </section>
 
-        {/* <section className=' flex justify-center items-center'>
-          <div className='absolute h-screen bg-gray-600 w-full opacity-70 top-0 z-50'></div>
-          <LoadingIndicator size='lg' />
-        </section> */}
+        {updateAvailabilityPending ? (
+          <section className=' flex justify-center items-center'>
+            <div className='absolute h-screen bg-gray-600 w-full opacity-70 top-0 z-50'></div>
+            <LoadingIndicator size='lg' />
+          </section>
+        ) : null}
       </form>
     </section>
   );
