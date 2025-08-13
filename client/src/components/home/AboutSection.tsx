@@ -20,7 +20,7 @@ const AboutSection = () => {
             effortless. Book now and experience the convenience of sparkling clean, wherever you
             are!"
           </p>
-          <NavLink to={'/service-catalog'}>
+          <NavLink to={'/book-service'}>
             <Button className='bg-[#2DD4BF] text-lg border-[#F9FAFB] sm:text-xl max-w-[1200px] cursor-pointer'>
               Book Now
             </Button>

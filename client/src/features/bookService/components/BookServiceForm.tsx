@@ -1,6 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { useAuthStore } from '@/features/auth';
+import { axiosInstance } from '@/api';
 import {
   TimeSlot,
   FormFieldKey,
@@ -15,6 +20,11 @@ import { useFetchServices } from '@/features/services';
 import { LoadingIndicator, ErrorComponent } from '@/components';
 import { stateAbbreviations } from '@/data';
 import * as Yup from 'yup';
+import { PayButton } from '@/features/bookService';
+import { formatDate, stringifyDate } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
 interface SectionTitleProps {
   title: string;
@@ -57,6 +67,11 @@ interface ValidationErrors {
 const ServiceBookingForm: React.FC = () => {
   const { formData, setFormData } = useServiceFormStore();
   const [errors, setErrors] = React.useState<ValidationErrors>({});
+  const navigate = useNavigate();
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [isCreatingIntent, setIsCreatingIntent] = useState(false);
+
+  const { user, token } = useAuthStore();
 
   const {
     data: services,
@@ -76,6 +91,12 @@ const ServiceBookingForm: React.FC = () => {
     error: timesError,
   } = useFetchAvailableTimes(formData.service?.id, formData.date);
 
+  useEffect(() => {
+    if (timesError) {
+      console.log(timesError);
+    }
+  }, [timesError]);
+
   const {
     data: technicians,
     isLoading: areTechniciansLoading,
@@ -89,6 +110,60 @@ const ServiceBookingForm: React.FC = () => {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [formData]);
+
+  useEffect(() => {
+    //if no user is logged in (no token created) do not call Stripe API
+    if (!token) {
+      setClientSecret(null);
+      return;
+    }
+
+    const shouldCreateIntent = !!(
+      formData.address &&
+      formData.city &&
+      formData.state &&
+      formData.zipcode &&
+      formData.service
+    );
+
+    if (!shouldCreateIntent) {
+      setClientSecret(null);
+      return;
+    }
+
+    // create intent (amount in cents) — calculate amount server-side in production
+    const createIntent = async () => {
+      try {
+        setIsCreatingIntent(true);
+        // Example: choose amount based on selected service (here we use 2000 cents as example)
+        const amount = 2000; // adapt to your service model
+        const resp = await axiosInstance.post('bookings/create-payment-intent', {
+          amount,
+          user_id: user?.id,
+          service_id: formData?.service?.id,
+          technician_id: formData?.technician?.id,
+        });
+        // console.log(resp.data);
+        setClientSecret(resp.data.clientSecret);
+      } catch (err) {
+        console.error('Failed to create payment intent', err);
+        setClientSecret(null);
+      } finally {
+        setIsCreatingIntent(false);
+      }
+    };
+
+    createIntent();
+  }, [
+    formData.address,
+    formData.city,
+    formData.state,
+    formData.zipcode,
+    formData.service,
+    formData.technician,
+    user,
+    token,
+  ]);
 
   function handleChange<K extends FormFieldKey>(key: K, value: FormFieldValue<K>) {
     setFormData({ [key]: value });
@@ -209,9 +284,13 @@ const ServiceBookingForm: React.FC = () => {
           {availableDates && availableDates.length > 0 && (
             <DatePicker
               showIcon
-              includeDates={availableDates?.map(date => new Date(date)) || []}
-              selected={formData.date}
-              onChange={date => handleChange('date', date)}
+              includeDates={availableDates?.map(formatDate)}
+              selected={formData.date ? formatDate(formData?.date) : null}
+              onChange={date => {
+                if (date) {
+                  handleChange('date', stringifyDate(date));
+                }
+              }}
               className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none text-2xl text-primary'
               placeholderText='Pick a date'
               minDate={new Date()}
@@ -398,94 +477,36 @@ const ServiceBookingForm: React.FC = () => {
       )}
 
       {/* Payment section */}
-      {formData.address && formData.city && formData.state && formData.zipcode && (
-        <div>
-          <HorizontalLine />
-          <SectionTitle title='Choose your payment:' />
-          <div className='space-y-2 flex flex-col'>
-            <div>
-              <label htmlFor='cardName'>Name on Card</label>
-              <input
-                type='text'
-                id='cardName'
-                name='cardName'
-                value={formData.cardName || ''}
-                onChange={e => handleChange('cardName', e.target.value)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-              />
-            </div>
+      {isCreatingIntent && <div className='text-sm text-muted'>Preparing payment...</div>}
 
-            <div>
-              <label htmlFor='cardNumber'>Card Number</label>
-              <input
-                type='text'
-                id='cardNumber'
-                name='cardNumber'
-                value={formData.cardNumber || ''}
-                onChange={e => handleChange('cardNumber', e.target.value)}
-                placeholder='1234 5678 9012 3456'
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-              />
-            </div>
-
-            <div className='grid grid-cols-2 gap-4'>
-              <div>
-                <label htmlFor='expiry'>Expiration</label>
-                <input
-                  type='text'
-                  id='expiry'
-                  name='expiry'
-                  value={formData.expiry || ''}
-                  onChange={e => handleChange('expiry', e.target.value)}
-                  placeholder='MM/YY'
-                  className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-                />
+      {formData.timeSlot &&
+        formData.address &&
+        formData.city &&
+        formData.state &&
+        formData.zipcode && (
+          <div>
+            <HorizontalLine />
+            {!token ? (
+              <div className='mt-4'>
+                <button
+                  type='button'
+                  onClick={() => navigate('/login')}
+                  className='w-full py-3 px-4 bg-secondary-500 text-white rounded-lg hover:bg-primary-600 transition cursor-pointer mt-8'
+                >
+                  Sign in to Reserve & Pay
+                </button>
               </div>
-
-              <div>
-                <label htmlFor='cvc'>CVC</label>
-                <input
-                  type='text'
-                  id='cvc'
-                  name='cvc'
-                  value={formData.cvc || ''}
-                  onChange={e => handleChange('cvc', e.target.value)}
-                  placeholder='123'
-                  className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor='zip'>Billing ZIP Code</label>
-              <input
-                type='text'
-                id='zip'
-                name='zip'
-                value={formData.zip || ''}
-                onChange={e => handleChange('zip', e.target.value)}
-                className='w-full px-4 py-2 border rounded-lg shadow-sm bg-background focus:outline-none'
-              />
-            </div>
+            ) : (
+              clientSecret &&
+              token && (
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <PaymentElement />
+                  <PayButton />
+                </Elements>
+              )
+            )}
           </div>
-        </div>
-      )}
-
-      {formData.cardName &&
-        formData.cardNumber &&
-        formData.cvc &&
-        formData.expiry &&
-        formData.zip && (
-          <button
-            type='submit'
-            className='w-full py-3 px-4 bg-secondary-400 text-white rounded-lg hover:bg-secondary transition mt-8'
-          >
-            Reserve
-          </button>
         )}
-
-      {/* Empty div for auto-scroll */}
-      <div ref={scrollRef}></div>
     </form>
   );
 };

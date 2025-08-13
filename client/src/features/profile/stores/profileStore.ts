@@ -14,7 +14,7 @@ export const useProfileStore = create<ProfileStore>(set => ({
 // export const useProfileStore = createLocalPersistStore<ProfileStore>(
 //   set => ({
 //     profile: null,
-//     setProfile: (profile: UserProfileT) => set(() => ({ profile })),
+//     setProfile: (profile: ProfileT) => set(() => ({ profile })),
 //   }),
 //   'profileStore'
 // );
