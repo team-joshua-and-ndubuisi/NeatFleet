@@ -17,7 +17,7 @@ const HomeScreen = () => {
         <h1 className='text-5xl bg-[#F9FAFB] py-7 px-5 mb-10 text-[#3B82F6] opacity-80'>
           NeatFleet Home and Cleaning Solutions{' '}
         </h1>
-        <NavLink to={'/service-catalog'}>
+        <NavLink to={'/book-service'}>
           <Button className='text-lg border-[#F9FAFB] sm:text-xl max-w-[1200px] cursor-pointer'>
             Make an Appointment
           </Button>
