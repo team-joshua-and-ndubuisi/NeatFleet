@@ -8,12 +8,12 @@ interface SelectionsI {
 
 type AvailableTimePickerPropT = {
   selections?: SelectionsI[]; //options user can select
-  clickCallback?: (time: string) => void;
+  valueChangeCallback?: (time: string[]) => void;
   editAll?: boolean;
 };
 
 export default function AvailableTimePicker({
-  clickCallback,
+  valueChangeCallback,
   selections = [],
   editAll,
 }: AvailableTimePickerPropT) {
@@ -35,9 +35,9 @@ export default function AvailableTimePicker({
     return (
       <ToggleGroupItem
         key={slot.value}
-        onClick={() => {
-          if (clickCallback) clickCallback(slot.value);
-        }}
+        // onClick={() => {
+        //   if (valueChangeCallback) valueChangeCallback(slot.value);
+        // }}
         value={slot.value}
         aria-label='Toggle'
         className='border-3'
@@ -54,6 +54,9 @@ export default function AvailableTimePicker({
         type='multiple'
         className='columns-3 w-11/12 mx-auto'
         value={selectedTimes}
+        onValueChange={value => {
+          if (valueChangeCallback) valueChangeCallback(value);
+        }}
       >
         {timeSelections}
       </ToggleGroup>

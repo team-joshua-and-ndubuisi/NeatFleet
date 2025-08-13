@@ -10,36 +10,20 @@ interface DaySchedule {
 }
 
 export default function TechAvailabilityForm() {
-  // const currentDate = new Date();
-  // currentDate.setHours(6, 0, 0, 0); // Set the current date to today at 6 AM
-
-  // Ensure the current date is set to the nearest hour and range is 14 hours 6am to 8pm
-  // const timeRange = {
-  //   start: new Date(currentDate),
-  //   end: new Date(new Date().setHours(currentDate.getHours() + 14)), // 14 hours later,
-  // };
-
   const [schedule, setSchedule] = useState<DaySchedule[]>([]);
 
-  // const [selectedDays, setSelectedDays] = useState<Date[]>([]); //handles day selection
-  // const [selectedTimes, setSelectedTimes] = useState<string[]>([]); //handles the time
   const [dayToEdit, setDayToEdit] = useState<Date | null>(null);
 
   // set the time technician is available
-  const handleTimeClick = (time: string) => {
-    console.log('time click', time);
+  const handleTimeClick = (timeSlots: string[]) => {
+    // console.log('time click', timeSlots);
 
     //no day selected then update all days
     if (!dayToEdit) {
       setSchedule(prev => {
         const updatedSchedule = prev.map(day => {
           //filter times out of day
-          const hasTime = day.timeBlocks.includes(time);
-          if (hasTime) {
-            return { ...day, timeBlocks: [...day.timeBlocks.filter(t => t !== time)] };
-          } else {
-            return { ...day, timeBlocks: [...day.timeBlocks, time] };
-          }
+          return { ...day, timeBlocks: timeSlots };
         });
         return updatedSchedule;
       });
@@ -48,12 +32,8 @@ export default function TechAvailabilityForm() {
     setSchedule(prev => {
       const updated = prev.map(day => {
         if (day.date.getTime() === dayToEdit?.getTime()) {
-          const hasTime = day.timeBlocks.includes(time);
-          if (hasTime) {
-            return { ...day, timeBlocks: [...day.timeBlocks.filter(t => t !== time)] };
-          } else {
-            return { ...day, timeBlocks: [...day.timeBlocks, time] };
-          }
+          day.timeBlocks = timeSlots;
+          return day;
         }
         return day;
       });
@@ -68,7 +48,6 @@ export default function TechAvailabilityForm() {
       }
 
       // filter by label
-      // let list = prev.filter(d => d.value !== day.value);
       let list = prev.filter(scheduleForDay => scheduleForDay.date.getTime() !== day.getTime());
 
       //if list is same size then day was not in list, add it
@@ -80,6 +59,7 @@ export default function TechAvailabilityForm() {
     });
   };
 
+  //sets the day to apply changes
   const handleDayToEdit = (day: Date) => {
     setDayToEdit(prev => (prev === day ? null : day));
   };
@@ -87,10 +67,12 @@ export default function TechAvailabilityForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const scheduledDays = schedule.map(day => ({
-      availableDate: day.date,
-      timeBlock: day.timeBlocks,
-    }));
+    const scheduledDays = schedule
+      .map(day => ({
+        availableDate: day.date,
+        timeBlock: day.timeBlocks,
+      }))
+      .filter(day => day.timeBlock.length > 0);
 
     console.log('Schedule submitted:', scheduledDays);
   };
@@ -126,7 +108,7 @@ export default function TechAvailabilityForm() {
 
           <AvailableTimePicker
             editAll={!dayToEdit}
-            clickCallback={handleTimeClick}
+            valueChangeCallback={handleTimeClick}
             selections={AvailableTimePickerOptions}
           />
         </section>
