@@ -6,6 +6,7 @@ import EditDay from './EditDay';
 import { useAuthStore } from '@/features/auth';
 import { useUpdateTechAvailability } from '@/features/technicians/hooks/useUpdateTechAvailabilities';
 import LoadingIndicator from '../LoadingIndicator';
+import toast from 'react-hot-toast';
 
 interface DaySchedule {
   date: Date;
@@ -18,7 +19,7 @@ export default function TechAvailabilityForm() {
   const userId = useAuthStore(state => state.user.id);
 
   const {
-    mutate: updateAvailability,
+    mutateAsync: updateAvailability,
     // isSuccess: updateAvailabilitySuccess,
     isPending: updateAvailabilityPending,
   } = useUpdateTechAvailability(userToken);
@@ -77,7 +78,7 @@ export default function TechAvailabilityForm() {
     setDayToEdit(prev => (prev === day ? null : day));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const scheduledDays = schedule
@@ -103,7 +104,13 @@ export default function TechAvailabilityForm() {
     }
 
     // console.log('formated', formatSchedule);
-    updateAvailability({ availability: formatSchedule, userId });
+    try {
+      await updateAvailability({ availability: formatSchedule, userId });
+
+      toast.success('Successfully updated availability');
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
   };
 
   const AvailableTimePickerOptions = getAvailableTimePickerOptions(dayToEdit, schedule);
