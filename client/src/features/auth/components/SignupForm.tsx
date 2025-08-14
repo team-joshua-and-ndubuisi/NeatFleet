@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import toast from 'react-hot-toast';
+import { extractErrorMessage } from '@/lib/utils';
 
 interface SignupFormProps {
   apiCall: (userCredentials: SignupBodyT) => Promise<void>;
@@ -26,13 +28,19 @@ const SignupForm = ({ apiCall }: SignupFormProps) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
 
-        apiCall({
-          first_name: form.firstName.value,
-          last_name: form.lastName.value,
-          email: form.email.value,
-          password: form.password.value,
-          phone: form.phone.value,
-        });
+        try {
+          await apiCall({
+            first_name: form.firstName.value,
+            last_name: form.lastName.value,
+            email: form.email.value,
+            password: form.password.value,
+            phone: form.phone.value,
+          });
+          toast.success('Signup successful');
+        } catch (error) {
+          const errorMessage = extractErrorMessage(error);
+          toast.error(errorMessage);
+        }
       }}
     >
       <Card className='w-full max-w-sm'>
