@@ -4,9 +4,6 @@
 We’re solving the problem of market friction between service providers (technicians) and customers. It’s often hard for people to find trustworthy, available professionals, and for technicians to find steady work. Our app makes that connection seamless by offering booking, service management, and rating tools that build trust and convenience on both sides.
 
 ---
-
-## Features
-
 ### Customer Interface
 - Full booking process: select a service, choose from available dates, and pick a technician based on ratings.
 - Secure credit card payment during booking.
