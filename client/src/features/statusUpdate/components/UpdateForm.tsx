@@ -65,12 +65,15 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
       return;
     }
     if (currentStatusValue + 1 < nextStatusValue) {
-      setErrors(`Please Select next status before moving forward`);
+      setErrors(`Please select next status before moving forward`);
       return;
     }
     if (currentStatusValue > nextStatusValue) {
-      setErrors(`Client has already been updated. Please select next status update`);
+      setErrors(`Client has already been updated. Please select next status update.`);
       return;
+    }if(currentStatusValue== 3 && nextStatusValue==4 ){
+      setErrors('Booking has been marked as complete. Unable to cancel.')
+
     } else if (nextStatusValue == currentStatusValue + 1) {
       //Valid Selection
       setErrors('');
@@ -78,7 +81,7 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
     }
   };
   return (
-    <div className='mx-auto w-full md:w-3/4 flex flex-col items-center border rounded border-4 border-[#2DD4BF] shadow-md bg-white'>
+    <div className='mx-auto w-full md:w-3/4 flex flex-col items-center border bg-primary-50 rounded shadow-md '>
       <h1 className='my-10 text-2xl font-semibold '>Update Service Status</h1>
       {/* iterate through values of service status to create buttons */}
 
@@ -97,7 +100,7 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
             <Button
               onClick={() => handleStatusUpdate(key)}
               className={
-                currentStatusValue > index
+                (currentStatusValue > index || currentStatusValue == 3  )
                   ? 'opacity-50 cursor-not-allowed bg-[#2DD4BF]'
                   : currentStatusValue === index
                     ? ' border border-black bg-gradient-to-r from-[#2DD4BF] to-[#3B82F6] outline outline-offset-4 '

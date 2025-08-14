@@ -38,10 +38,13 @@ const UpcomingBookingsTable: React.FC<UpcomingBookingsTable> = ({ upcomingBookin
                 {profile?.role === 'customer' ? booking.technician_name : booking.client_name}
               </TableCell>
               <TableCell className='text-right'>
-                <Link to ={`status/${booking.booking_id}`}>
-                {booking.status}
-               </Link>
-                </TableCell>
+                <button className='w-full bg-primary-100 rounded md:w-1/2  text-white hover:opacity-50'>
+                  <Link to ={`status/${booking.booking_id}`}>
+                    {booking.status}
+                  </Link>
+                </button>
+
+              </TableCell>
             </TableRow>
           ))}
       </TableBody>

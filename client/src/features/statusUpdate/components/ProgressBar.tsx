@@ -14,7 +14,8 @@ const ProgressBar: React.FC<BookingProps> = ({ status }) => {
   const currentStatusIndex = ServiceStatusCode[status as keyof typeof ServiceStatusCode];
 
   return (
-    <div className='my-10 md:w-3/4 mx-auto border border-4 rounded border-[#2DD4BF] text-lg/7 bg-white'>
+
+    <div className='my-10 md:w-3/4 mx-auto rounded text-lg/7 border bg-primary-50'>
       <h2 className='text-2xl font-semibold text-gray-800 my-10 text-center '>
         Realtime Status Updates
       </h2>
@@ -87,6 +88,7 @@ const ProgressBar: React.FC<BookingProps> = ({ status }) => {
         </div>
       </div>
     </div>
+    
   );
 };
 
