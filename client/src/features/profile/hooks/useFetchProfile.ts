@@ -7,7 +7,7 @@ export const useFetchProfile = (userToken: string) => {
   const setProfile = useProfileStore(state => state.setProfile);
 
   const response = useQuery({
-    queryKey: ['profile', userToken], // Include userToken in queryKey for proper caching
+    queryKey: ['profile'], // Include userToken in queryKey for proper caching
     queryFn: () => fetchProfile(userToken),
     staleTime: 1000 * 60 * 60 * 1, // 1 hour
     retry: 1,
