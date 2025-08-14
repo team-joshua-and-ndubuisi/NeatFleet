@@ -79,10 +79,17 @@ export default function TechAvailabilityForm() {
     e.preventDefault();
 
     const scheduledDays = schedule
-      .map(day => ({
-        availableDate: `${day.date.getFullYear()}-${day.date.getMonth() + 1}-${day.date.toLocaleDateString().split('/')[1]}`, // Format date as YYYY-MM-DD
-        timeBlock: day.timeBlocks,
-      }))
+      .map(day => {
+        // console.log('day', day.date.toISOString());
+
+        const isoString = day.date.toISOString().split('T')[0];
+        console.log('isoString', isoString);
+
+        return {
+          availableDate: isoString, // Format date as YYYY-MM-DD
+          timeBlock: day.timeBlocks,
+        };
+      })
       .filter(day => day.timeBlock.length > 0);
 
     //TODO format should be different
