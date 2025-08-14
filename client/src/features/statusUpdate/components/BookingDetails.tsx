@@ -42,7 +42,6 @@ const BookingDetails: React.FC<BookingProps> = ({ bookingData,  serviceName, ser
         </p>
         <p className='col-span-full'>
           <span className='font-semibold text-primary'>Description: </span>
-          <span className='font-semibold '>Description: </span>
           <br />
           {serviceDescription}
         </p>
