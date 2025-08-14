@@ -23,6 +23,7 @@ import * as Yup from 'yup';
 import { PayButton } from '@/features/bookService';
 import { formatDate, stringifyDate } from '@/lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { SingleRating } from '@/features/ratings';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
@@ -255,7 +256,7 @@ const ServiceBookingForm: React.FC = () => {
               />
               <label
                 htmlFor={`service-${service.id}`}
-                className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+                className={`flex flex-col items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
                           ${
                             formData.service?.id === service.id
                               ? 'bg-primary-400 text-background border-primary-600'
@@ -263,7 +264,8 @@ const ServiceBookingForm: React.FC = () => {
                           }
                             `}
               >
-                {service.name}
+                <p>{service.name}</p>
+                <p>(${service.cost})</p>
               </label>
             </div>
           ))}
@@ -366,7 +368,7 @@ const ServiceBookingForm: React.FC = () => {
                 />
                 <label
                   htmlFor={`tech-${tech.id}`}
-                  className={`flex items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
+                  className={`flex flex-col items-center justify-center h-full px-4 py-2 rounded-lg border text-center cursor-pointer transition
                           ${
                             formData.technician?.id === tech.id
                               ? 'bg-primary-400 text-background border-primary-600'
@@ -374,7 +376,10 @@ const ServiceBookingForm: React.FC = () => {
                           }
                             `}
                 >
-                  {tech.user.first_name} {tech.user.last_name}
+                  <p>
+                    {tech.user.first_name} {tech.user.last_name}
+                  </p>
+                  <SingleRating rating={tech.current_rating} />
                 </label>
               </div>
             ))}
