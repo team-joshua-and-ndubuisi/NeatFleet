@@ -1,68 +1,82 @@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
-type TimeSlotT = {
-  date: Date;
-};
-
-type AvailableTimePickerPropT = {
-  timeSlots?: TimeSlotT[];
-  range?: { start: Date; end: Date };
-  clickCallback?: (time: Date) => void;
-};
-
-export default function AvailableTimePicker({ range, clickCallback }: AvailableTimePickerPropT) {
-  //if timeslots provided use them from props
-  let timeSelections: JSX.Element[] = [];
-
-  //if range provided then create the timeslots for the range
-  if (range) {
-    const timeSlotsForRange = createTimeSelectionFromRange(range.start, range.end);
-    timeSelections = timeSlotsForRange.map(time => {
-      return timeSelectionButton(time, clickCallback);
-    });
-  }
-
-  return <div className='columns-3 w-11/12 mx-auto'>{timeSelections}</div>;
+interface SelectionsI {
+  option: string;
+  isSelected: boolean;
+  value: string;
 }
 
-//generate the JSX for the date passed in
-function timeSelectionButton(time: Date, callback?: (time: Date) => void) {
-  const timeString = time.toLocaleTimeString();
-  time.setMinutes(0);
+type AvailableTimePickerPropT = {
+  selections?: SelectionsI[]; //options user can select
+  valueChangeCallback?: (time: string[]) => void;
+  editAll?: boolean;
+};
 
-  const hour = timeString.split(':').slice(0, 2).join(':');
-  const amPm = timeString.split(' ')[1];
+export default function AvailableTimePicker({
+  valueChangeCallback,
+  selections = [],
+  editAll,
+}: AvailableTimePickerPropT) {
+  //ui buttons for user to select time slots
+  let timeSelections: JSX.Element[] = [];
+
+  //filter by seleted items then return string array of the values to set as seleted in ui
+  const filteredSelections = selections.filter(slot => slot.isSelected);
+
+  //set up selected options by getting values for component to use
+  const selectedTimes =
+    filteredSelections.length > 0
+      ? filteredSelections.map(slot => slot.value)
+      : editAll
+        ? undefined
+        : [];
+
+  timeSelections = selections.map(slot => {
+    return (
+      <ToggleGroupItem
+        key={slot.value}
+        // onClick={() => {
+        //   if (valueChangeCallback) valueChangeCallback(slot.value);
+        // }}
+        value={slot.value}
+        aria-label='Toggle'
+        className='border-3'
+      >
+        <span>{slot.option}</span>
+      </ToggleGroupItem>
+    );
+  });
 
   return (
-    <ToggleGroup key={time.toUTCString()} variant='outline' type='multiple' className='w-full'>
-      <ToggleGroupItem
-        onClick={() => {
-          if (callback) callback(time);
+    <div className=''>
+      <ToggleGroup
+        variant='outline'
+        type='multiple'
+        className='columns-3 w-11/12 mx-auto'
+        value={selectedTimes}
+        onValueChange={value => {
+          if (valueChangeCallback) valueChangeCallback(value);
         }}
-        value={hour}
-        aria-label='Toggle'
       >
-        <span>{hour}</span>
-        <span>{amPm}</span>
-      </ToggleGroupItem>
-    </ToggleGroup>
+        {timeSelections}
+      </ToggleGroup>
+    </div>
   );
 }
 
-//create array of dates for start and end range one hour apart
-function createTimeSelectionFromRange(start: Date, end: Date) {
-  if (!start || !end) return [];
-
-  const currentDate = new Date(start);
-  currentDate.setMinutes(0);
-  const times: Date[] = [];
-
-  while (currentDate <= end) {
-    times.push(new Date(currentDate));
-
-    currentDate.setHours(currentDate.getHours() + 1);
-    currentDate.setMinutes(0);
-  }
-
-  return times;
-}
+// //generate the JSX for the date passed in
+// function timeSelectionButton(time: string, callback?: (time: string) => void) {
+//   return (
+//     <ToggleGroup key={time} variant='outline' type='multiple' className='w-full'>
+//       <ToggleGroupItem
+//         onClick={() => {
+//           if (callback) callback(time);
+//         }}
+//         value={time}
+//         aria-label='Toggle'
+//       >
+//         <span>{time}</span>
+//       </ToggleGroupItem>
+//     </ToggleGroup>
+//   );
+// }

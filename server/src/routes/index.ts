@@ -14,6 +14,6 @@ router.use('/users', isAuth, usersRoutes);
 router.use('/bookings', bookingsRoutes);
 router.use('/services', servicesRoutes);
 router.use('/availabilities', availabilityRoutes);
-router.use('/technicians', technicianRoutes);
+router.use('/technicians', isAuth, technicianRoutes);
 
 export default router;
