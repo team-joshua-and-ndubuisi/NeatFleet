@@ -66,6 +66,8 @@ export default function TechAvailabilityForm() {
         list = [...prev, { date: day, timeBlocks: [] }];
       }
 
+      if (list.length <= 0) setDayToEdit(null);
+
       return list.sort((a, b) => a.date.getTime() - b.date.getTime()); // Sort by dayOfWeek
     });
   };
@@ -100,7 +102,8 @@ export default function TechAvailabilityForm() {
       });
     }
 
-    updateAvailability({ availability: formatSchedule, userId });
+    console.log('formated', formatSchedule);
+    // updateAvailability({ availability: formatSchedule, userId });
   };
 
   const AvailableTimePickerOptions = getAvailableTimePickerOptions(dayToEdit, schedule);
@@ -122,8 +125,9 @@ export default function TechAvailabilityForm() {
               onSelected={handleDayToEdit}
               selections={schedule.map(scheduleForDay => scheduleForDay.date)}
             />
+            {schedule.length <= 0 && <div> Pick one or more days above</div>}
             {dayToEdit && <div>Editing: {dayToEdit.toLocaleDateString()} only</div>}
-            {!dayToEdit && <div>Editing: All</div>}
+            {!dayToEdit && schedule.length > 0 && <div>Editing: All</div>}
           </div>
         </section>
         <section>
@@ -135,8 +139,10 @@ export default function TechAvailabilityForm() {
             selections={AvailableTimePickerOptions}
           />
         </section>
-        <section className='mt-4'>
-          <Button type='submit'>Confirm availability</Button>
+        <section className='mt-4 flex justify-center'>
+          <Button className='w-1/4 ' type='submit'>
+            Confirm availability
+          </Button>
         </section>
 
         {updateAvailabilityPending ? (
