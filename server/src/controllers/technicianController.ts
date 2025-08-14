@@ -9,13 +9,20 @@ import {
 } from '../services/technicianService';
 
 type availabilityInput = { availableDate: string; timeBlock: TimeBlock };
-
+type requestWithUser = Request & {
+  user: {
+    role: string;
+    technicianId: string;
+  };
+};
 // @desc    Create new availability
 // @route   POST technicians/:technicianId/availabilities
 // @access  Private
 const addAvailabilities = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { technicianId } = req.params;
+    // const { technicianId } = req.params;
+
+    const technicianId = (req as requestWithUser).user.technicianId;
     validateId(technicianId);
 
     const newAvailabilities: availabilityInput[] = req.body;

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { updateAvailability } from '@/features/technicians/api';
-import { TechnicianAvailabilityI } from '../types/Technician';
+import { TechnicianAvailabilityFormatI } from '../types/Technician';
 
 export const useUpdateTechAvailability = (userToken: string) => {
   return useMutation({
@@ -8,7 +8,7 @@ export const useUpdateTechAvailability = (userToken: string) => {
       availability,
       userId,
     }: {
-      availability: TechnicianAvailabilityI[];
+      availability: TechnicianAvailabilityFormatI[];
       userId: string;
     }) => await updateAvailability(userToken, userId, availability),
   });

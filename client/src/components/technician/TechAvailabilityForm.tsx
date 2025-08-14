@@ -80,7 +80,7 @@ export default function TechAvailabilityForm() {
 
     const scheduledDays = schedule
       .map(day => ({
-        availableDate: day.date.toLocaleDateString().split('/').reverse().join('-'), // Format date as YYYY-MM-DD
+        availableDate: `${day.date.getFullYear()}-${day.date.getMonth() + 1}-${day.date.toLocaleDateString().split('/')[1]}`, // Format date as YYYY-MM-DD
         timeBlock: day.timeBlocks,
       }))
       .filter(day => day.timeBlock.length > 0);
@@ -97,10 +97,7 @@ export default function TechAvailabilityForm() {
       });
     }
 
-    console.log('formatSchedule', formatSchedule);
-
-    console.log('Schedule submitted:', scheduledDays);
-    updateAvailability({ availability: scheduledDays, userId });
+    updateAvailability({ availability: formatSchedule, userId });
   };
 
   const AvailableTimePickerOptions = getAvailableTimePickerOptions(dayToEdit, schedule);
