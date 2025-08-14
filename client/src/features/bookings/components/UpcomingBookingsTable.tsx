@@ -45,6 +45,7 @@ const UpcomingBookingsTable: React.FC<UpcomingBookingsTable> = ({ upcomingBookin
                 </button>
 
               </TableCell>
+
             </TableRow>
           ))}
       </TableBody>

@@ -73,7 +73,6 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
       return;
     }if(currentStatusValue== 3 && nextStatusValue==4 ){
       setErrors('Booking has been marked as complete. Unable to cancel.')
-
     } else if (nextStatusValue == currentStatusValue + 1) {
       //Valid Selection
       setErrors('');

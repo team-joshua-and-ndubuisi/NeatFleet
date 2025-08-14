@@ -88,7 +88,6 @@ const ProgressBar: React.FC<BookingProps> = ({ status }) => {
         </div>
       </div>
     </div>
-    
   );
 };
 
