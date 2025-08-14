@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchUserBookings } from '@/features/bookings';
 
-export const useFetchUserBookings = (userId: string) => {
+export const useFetchUserBookings = (userId: string | undefined) => {
   return useQuery({
     queryKey: ['technicianBookings'],
     queryFn: () => fetchUserBookings(userId),
