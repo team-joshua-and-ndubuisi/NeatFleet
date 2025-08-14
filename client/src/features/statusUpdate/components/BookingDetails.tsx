@@ -32,46 +32,46 @@ const BookingDetails: React.FC<BookingProps> = ({ bookingData,  serviceName, ser
   const date = `${booking.service_date}`;
 
   return (
-    <div className='my-10 md:w-3/4 mx-auto border border-4 rounded border-[#2DD4BF] text-lg/7 bg-white'>
+    <div className='my-10 md:w-3/4 mx-auto rounded border bg-primary-50 text-lg/7 '>
       <h3 className='text-2xl text-center font-semibold py-5'>Booking Details</h3>
       <div className='grid grid-cols-3 text-center gap-4 px-1'>
         <p className='col-span-full'>
-          <span className='text font-semibold '>Service: </span>
+          <span className='font-semibold text-primary'>Service: </span>
           <br />
           {serviceName}
         </p>
         <p className='col-span-full'>
-          <span className='font-semibold '>Description: </span>
+          <span className='font-semibold text-primary'>Description: </span>
           <br />
           {serviceDescription}
         </p>
         <p>
-          <span className='font-semibold '>Date: </span>
+          <span className='font-semibold text-primary'>Date: </span>
           <br />
           {date}
         </p>
         <p>
-          <span className='font-semibold '>Time Window: </span>
+          <span className='font-semibold text-primary'>Time Window: </span>
           <br />
           {timeblock}
         </p>
         <p>
-          <span className='font-semibold '>Customer: </span>
+          <span className='font-semibold text-primary'>Customer: </span>
           <br />
           {user}
         </p>
         <p>
-          <span className='font-semibold '>Technician: </span>
+          <span className='font-semibold text-primary'>Technician: </span>
           <br />
           {technician}
         </p>
         <p>
-          <span className='font-semibold '>Address: </span>
+          <span className='font-semibold text-primary'>Address: </span>
           <br />
           {address}
         </p>
         <p className='mb-10'>
-          <span className='font-semibold'>Payment Status: </span>
+          <span className='font-semibold text-primary'>Payment Status: </span>
           <br />
           {status}
         </p>
