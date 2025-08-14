@@ -102,8 +102,8 @@ export default function TechAvailabilityForm() {
       });
     }
 
-    console.log('formated', formatSchedule);
-    // updateAvailability({ availability: formatSchedule, userId });
+    // console.log('formated', formatSchedule);
+    updateAvailability({ availability: formatSchedule, userId });
   };
 
   const AvailableTimePickerOptions = getAvailableTimePickerOptions(dayToEdit, schedule);
