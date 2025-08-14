@@ -44,7 +44,7 @@ const PastBookingsTable: React.FC<PastBookingsTableProps> = ({ pastBookings }) =
               <TableCell>
                 <Link to={`booking/${booking.booking_id}/rating`}>
                   {!booking.rating_score ? (
-                    <Button className='w-full bg-primary-100 rounded md:w-1/2  text-white hover:opacity-50'>
+                    <Button className='w-full bg-primary-100 rounded text-white hover:opacity-50'>
                       Add
                     </Button>
                   ) : (
