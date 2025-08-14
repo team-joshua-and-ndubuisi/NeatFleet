@@ -1,30 +1,9 @@
 import { axiosInstance } from '@/api';
+import { Booking } from '@/features/statusUpdate';
 const serverUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 const url = '/bookings';
 
-interface Booking {
-  technician: {
-    user: {
-      first_name: string;
-      last_name: string;
-    };
-  };
-  user: {
-    first_name: string;
-    last_name: string;
-  };
-  address: string;
-  status: string;
-  date: string;
-  address_street: string;
-  address_city: string;
-  address_state: string;
-  address_zip: string;
-  time_block: string;
-  service_date: string;
-  payment_status: string;
-  service_status: string;
-}
+
 //get current service status
 export const fetchCurrentStatus = async (bookingId: string | null | undefined): Promise<string> => {
   if (!bookingId) throw new Error('Booking ID is required');

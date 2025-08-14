@@ -2,8 +2,10 @@
 import React from 'react';
 import {BookingProps, Booking} from '@/features/statusUpdate'
 
-const BookingDetails: React.FC<BookingProps> = ({ bookingData }) => {
+
+const BookingDetails: React.FC<BookingProps> = ({ bookingData,  serviceName, serviceDescription }) => {
   const booking = bookingData as Booking;
+
 
   const replaceFirstLetter = (str: string) => {
     if (!str) return str;
@@ -36,12 +38,12 @@ const BookingDetails: React.FC<BookingProps> = ({ bookingData }) => {
         <p className='col-span-full'>
           <span className='text font-semibold '>Service: </span>
           <br />
-          PlaceHolder: Standard Cleaning
+          {serviceName}
         </p>
         <p className='col-span-full'>
           <span className='font-semibold '>Description: </span>
           <br />
-          Placeholder: A standard cleaning service for homes.{' '}
+          {serviceDescription}
         </p>
         <p>
           <span className='font-semibold '>Date: </span>

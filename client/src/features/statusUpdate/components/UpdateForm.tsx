@@ -18,7 +18,6 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
         // Update local state when mutation succeeds
         const newStatusValue = ServiceStatusCode[status as keyof typeof ServiceStatusCode];
         setCurrentStatusValue(newStatusValue);
-        setStatus(''); // Reset form
         setErrors(''); // Clear any errors
       }
     }, [updateStatusMutation.isSuccess, status]);
@@ -40,7 +39,7 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
   //setting value of next status
   const handleSubmit = (e:React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    if (status != '') {
+    if (status !== '') {
       updateStatusMutation.mutate({
         bookingId: bookingId,
         newStatus: status,

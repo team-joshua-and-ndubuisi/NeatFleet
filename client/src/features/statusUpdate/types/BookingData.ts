@@ -11,7 +11,7 @@ export type Booking={
     last_name: string | undefined;
   };
   address: string | undefined;
-  status: string | undefined;
+  service_status: string | undefined;
   date: string | undefined;
   address_street: string | undefined;
   address_city: string | undefined;
@@ -20,6 +20,7 @@ export type Booking={
   time_block: string | undefined;
   service_date: string | undefined;
   payment_status: string | undefined;
+  service_id: string | undefined
 }
 
 export type BookingProps={
@@ -27,4 +28,6 @@ export type BookingProps={
     bookingData?: Booking;
     status?: string;
     data?: string;
+    serviceName?: string,
+    serviceDescription?: string
   }

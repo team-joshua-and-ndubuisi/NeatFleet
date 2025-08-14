@@ -3,34 +3,13 @@
 //Enabled: must have a status>previous status
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { fetchCurrentStatus, updateStatus, fetchCurrentBooking } from '@/features/statusUpdate';
+import { Booking } from '@/features/statusUpdate';
 
 interface StatusVariable {
   bookingId: string | undefined;
   newStatus: string;
 }
-interface Booking {
-  technician: {
-    user: {
-      first_name: string;
-      last_name: string;
-    };
-  };
-  user: {
-    first_name: string;
-    last_name: string;
-  };
-  address: string;
-  status: string;
-  date: string;
-  address_street: string;
-  address_city: string;
-  address_state: string;
-  address_zip: string;
-  time_block: string;
-  service_date: string;
-  payment_status: string;
-  service_status: string;
-}
+
 
 export const useFetchCurrentBooking = (bookingId?: string) => {
   return useQuery<Booking>({
