@@ -31,7 +31,7 @@ const ProfilePage: React.FC = () => {
   console.log(userProfileData);
 
   return (
-    <div>
+    <div className="bg-center bg-cover bg-[url(/images/background-design.svg)]">
       <ProfileContainer>
         <ProfileMain profile={userProfileData} />
         <ProfileStats stats={userProfileData?.stats} />
