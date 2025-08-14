@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { NavItemType } from '@/types';
 import { cn } from '@/lib/utils';
-import { SoapDispenserDroplet } from 'lucide-react';
+import { PocketKnife } from 'lucide-react';
 import { useLogout } from '@/features/auth/hooks/useLogout';
 
 interface NavBarProps {
@@ -66,7 +66,7 @@ const NavBar: React.FC<NavBarProps> = ({ heading, navItems }) => {
     <nav className='bg-blue-500 text-primary-foreground shadow-md'>
       <div className='flex justify-between items-center px-6 py-4'>
         <div className='flex items-center space-x-2'>
-          <SoapDispenserDroplet className='h-8 w-8' />
+          <PocketKnife className='h-8 w-8 scale-y-[-1]' />
           <h1 className='text-2xl md:text-4xl font-bold'>{heading}</h1>
         </div>
 
@@ -91,7 +91,7 @@ const NavBar: React.FC<NavBarProps> = ({ heading, navItems }) => {
             <SheetContent side='right' className='w-[300px] sm:w-[400px]'>
               <SheetHeader>
                 <SheetTitle className='flex items-center space-x-2 text-left'>
-                  <SoapDispenserDroplet />
+                  <PocketKnife className='scale-y-[-1]' />
                   <span>{heading}</span>
                 </SheetTitle>
               </SheetHeader>
