@@ -29,7 +29,7 @@ const AboutSection = () => {
       </div>
       {/* About section */}
       <div className='flex flex-col md:flex-row py-20'>
-        <div className='flex-3 my-auto md:mx-10 flex flex-col  md:gap-5 my-auto'>
+        <div className='flex-3 my-auto md:mx-10 flex flex-col mt-60 md:gap-5 my-auto'>
           <h2 className='text-3xl font-bold text-[#3B82F6]'>Fresh & Spotless - On the Go!</h2>
           <p className='tracking-wide'>
             In early 2025, founder Alex Rivera was running late for an important client meeting when

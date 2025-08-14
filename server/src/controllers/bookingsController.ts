@@ -39,6 +39,7 @@ const createPaymentIntent = asyncHandler(
         technician_id,
         ...metadata,
       },
+      payment_method_types: ['card'],
     });
     console.log(paymentIntent.client_secret);
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
