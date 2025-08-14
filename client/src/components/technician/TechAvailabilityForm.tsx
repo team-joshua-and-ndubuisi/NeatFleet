@@ -80,11 +80,7 @@ export default function TechAvailabilityForm() {
 
     const scheduledDays = schedule
       .map(day => {
-        // console.log('day', day.date.toISOString());
-
         const isoString = day.date.toISOString().split('T')[0];
-        console.log('isoString', isoString);
-
         return {
           availableDate: isoString, // Format date as YYYY-MM-DD
           timeBlock: day.timeBlocks,
