@@ -12,7 +12,11 @@ const SingleRating: React.FC<SingleRatingProps> = ({ rating, className, size = 1
   return (
     <Rating readOnly value={rating}>
       {Array.from({ length: 5 }).map((_, index) => (
-        <RatingButton key={index} className={cn('text-secondary-200', className)} size={size} />
+        <RatingButton
+          key={index}
+          className={cn('text-secondary-200 pointer-events-none', className)}
+          size={size}
+        />
       ))}
     </Rating>
   );

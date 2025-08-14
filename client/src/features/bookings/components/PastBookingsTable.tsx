@@ -8,8 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components';
 import { SingleRating } from '@/features/ratings';
 import { useProfileStore } from '@/features/profile';
+import { Link } from 'react-router-dom';
 
 interface PastBookingsTableProps {
   pastBookings: BookingT[];
@@ -40,7 +42,15 @@ const PastBookingsTable: React.FC<PastBookingsTableProps> = ({ pastBookings }) =
                 {profile?.role === 'customer' ? booking.technician_name : booking.client_name}
               </TableCell>
               <TableCell>
-                <SingleRating rating={Math.round(Number(booking.rating_score))} />
+                <Link to={`booking/${booking.booking_id}/rating`}>
+                  {!booking.rating_score ? (
+                    <Button className='w-full bg-primary-100 rounded text-white hover:opacity-50'>
+                      Add
+                    </Button>
+                  ) : (
+                    <SingleRating rating={Math.round(Number(booking.rating_score))} />
+                  )}
+                </Link>
               </TableCell>
               <TableCell>{booking.rating_comment}</TableCell>
               <TableCell className='text-right'>{booking.status}</TableCell>

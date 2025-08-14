@@ -46,6 +46,7 @@ const AppRoutes: React.FC = () => {
                 <Route index element={<ProfilePage />} />
                 <Route path='status/:bookingId' element={<StatusPage />} />
                 <Route path='rating' element={<RatingPage />} />
+                <Route path='booking/:booking_id/rating' element={<RatingPage />} />
                 <Route path='manage-technicians' element={<ManageTechniciansPage />} />
                 <Route path='/profile' element={<ProfilePage />} />
                 <Route path='manage-availability' element={<ManageAvailabilityPage />} />
