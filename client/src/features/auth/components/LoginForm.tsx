@@ -1,4 +1,3 @@
-import { AuthResponseT, LoginBodyT } from '../authTypes';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,7 +11,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
+import { AuthResponseT, LoginBodyT } from '../authTypes';
 import { useAuthStore } from '../stores';
+import toast from 'react-hot-toast';
+import { extractErrorMessage } from '@/lib/utils';
 
 interface LoginFormProps {
   apiCall: (userCredentials: LoginBodyT) => Promise<AuthResponseT>;
@@ -26,13 +28,17 @@ const LoginForm = ({ apiCall }: LoginFormProps) => {
       onSubmit={async e => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
-        console.log('form', form.email.value);
-
         const email = form.email.value;
         const password = form.password.value;
 
-        const data = await apiCall({ email, password });
-        initAuth(data);
+        try {
+          const data = await apiCall({ email, password });
+          initAuth(data);
+          toast.success('Login successful');
+        } catch (error) {
+          const errorMessage = extractErrorMessage(error);
+          toast.error(errorMessage);
+        }
       }}
     >
       <Card className='w-full max-w-sm'>
