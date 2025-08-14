@@ -69,7 +69,7 @@ const UpdateForm: React.FC<BookingProps> = ({ data, bookingId }) => {
       return;
     }
     if (currentStatusValue > nextStatusValue) {
-      setErrors(`Client has already been already been updated. Please select next status update`);
+      setErrors(`Client has already been updated. Please select next status update`);
       return;
     } else if (nextStatusValue == currentStatusValue + 1) {
       //Valid Selection
